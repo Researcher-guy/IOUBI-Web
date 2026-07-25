@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOUBI - Decentralized Human Time Protocol</title>
+    <meta name="description" content="IOUBI is a decentralized social protocol trading strictly in human time and 3-minute favors. Beyond money. Beyond scarcity.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+    <!-- Background Animated Grid / Particle Network -->
+    <div id="canvas-bg-container">
+        <canvas id="bg-canvas"></canvas>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="navbar" id="top-nav">
+        <div class="nav-container">
+            <a href="#landing" class="brand-logo" id="nav-brand" data-target="landing">
+                <svg class="deltar-icon" viewBox="0 0 100 100" width="36" height="36" aria-label="Deltar Symbol">
+                    <!-- Outer Hexagonal / Circular Halo -->
+                    <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="var(--accent-glow)" stroke-width="3" class="deltar-outer"/>
+                    <!-- Inner Triangle pointing to the LEFT as per Master Spec -->
+                    <polygon points="25,50 75,22 75,78" fill="var(--accent-color)" stroke="var(--accent-cyan)" stroke-width="2" class="deltar-inner"/>
+                </svg>
+                <div class="brand-text">
+                    <span class="brand-title">IOUBI</span>
+                    <span class="brand-subtitle">HUMAN TIME PROTOCOL</span>
+                </div>
+            </a>
+
+            <nav class="nav-links">
+                <button class="nav-btn active" data-target="landing">Narrative Hub</button>
+                <button class="nav-btn" data-target="blueprint">The Blueprint</button>
+                <button class="nav-btn" data-target="architecture">Architecture Map</button>
+                <button class="nav-btn" data-target="sandbox">The Sandbox</button>
+                <button class="nav-btn" data-target="assembly">Assembly Room</button>
+            </nav>
+
+            <div class="nav-actions">
+                <span class="status-pill"><span class="pulse-dot"></span> Phase 1: Mercury</span>
+            </div>
+        </div>
+    </header>
+
+    <main id="app-main">
+        <!-- =================================================================== -->
+        <!-- PAGE 1: THE LANDING PAGE (NARRATIVE HUB)                            -->
+        <!-- =================================================================== -->
+        <section id="page-landing" class="page-view active">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="hero-bg-glow"></div>
+                <div class="hero-deltar-wrapper">
+                    <svg class="deltar-hero-icon" viewBox="0 0 100 100" width="140" height="140">
+                        <polygon points="50,4 93,27 93,73 50,96 7,73 7,27" fill="none" stroke="var(--accent-cyan)" stroke-width="2" class="halo-spin"/>
+                        <!-- Inner Triangle strictly pointing to the LEFT -->
+                        <polygon points="22,50 78,18 78,82" fill="url(#deltar-grad)" stroke="var(--accent-cyan)" stroke-width="2"/>
+                        <defs>
+                            <linearGradient id="deltar-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="var(--accent-cyan)"/>
+                                <stop offset="100%" stop-color="var(--accent-indigo)"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+
+                <h1 class="hero-headline">Beyond Money. Beyond Scarcity.<br><span class="glow-text">Welcome to the Human Economy.</span></h1>
+                
+                <p class="hero-copy">
+                    As AI accelerates and traditional markets collapse into financialized rent-seeking, fighting over a shrinking pool of money is a game of musical cages—and the bots are removing the cages faster than humans. It’s time to opt out.
+                </p>
+
+                <div class="hero-cta-group">
+                    <button class="btn btn-primary" data-target="sandbox">
+                        <span>Test The Math Sandbox</span>
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                    <button class="btn btn-secondary" data-target="blueprint">
+                        <span>Explore The Blueprint</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- S-Curve Container -->
+            <div class="scurve-wrapper">
+                <!-- Section 2: The Pivot (Word Cloud S-Curve) -->
+                <div class="scurve-block scurve-left">
+                    <div class="scurve-visual">
+                        <div class="word-cloud-container" id="word-cloud">
+                            <span class="cloud-word w1" style="left: 15%; top: 20%;">Time Banking 2.0</span>
+                            <span class="cloud-word w2" style="left: 55%; top: 15%;">Post-Scarcity</span>
+                            <span class="cloud-word w3" style="left: 30%; top: 50%;">Opt-Out</span>
+                            <span class="cloud-word w4" style="left: 65%; top: 60%;">Human Protocol</span>
+                            <span class="cloud-word w5" style="left: 10%; top: 75%;">3-Minute Favors</span>
+                            <span class="cloud-word w6" style="left: 45%; top: 80%;">Equilibrium Ratio</span>
+                        </div>
+                    </div>
+                    <div class="scurve-text">
+                        <span class="section-tag">01 / THE PIVOT</span>
+                        <h2>Replacing Financial Distortions</h2>
+                        <p class="lead-text">We aren't fixing money; we are replacing it with human time.</p>
+                        <p>Traditional accounting systems measure artificial scarcity and speculative leverage. IOUBI anchors economic value strictly to the single non-renewable resource every human naturally possesses: time.</p>
+                    </div>
+                </div>
+
+                <!-- Section 3: The Mechanics -->
+                <div class="scurve-block scurve-right">
+                    <div class="scurve-text">
+                        <span class="section-tag">02 / THE MECHANICS</span>
+                        <h2>Immutable Value & Self-Scaling Contributions</h2>
+                        
+                        <div class="concept-card">
+                            <div class="concept-badge">Concept 1</div>
+                            <h3>The 3-Minute Favor</h3>
+                            <p>The unbreakable measure of value. Every task, unit of collaboration, or support is measured in standardized human effort units.</p>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="concept-badge">Concept 2</div>
+                            <h3>1% Per Zero Contribution</h3>
+                            <p>Users contribute 1% to the network for every zero in their balance. A scaling model where large liquidity holders naturally support the shared infrastructure they utilize.</p>
+                        </div>
+                    </div>
+                    <div class="scurve-visual">
+                        <div class="interactive-mechanic-preview">
+                            <div class="mechanic-card">
+                                <h4>Balance Contribution Scaling</h4>
+                                <div class="scale-item">
+                                    <span>10 Favors (1 Zero)</span>
+                                    <div class="bar-bg"><div class="bar-fill" style="width: 10%;"></div></div>
+                                    <span class="val">1%</span>
+                                </div>
+                                <div class="scale-item">
+                                    <span>100 Favors (2 Zeros)</span>
+                                    <div class="bar-bg"><div class="bar-fill" style="width: 20%;"></div></div>
+                                    <span class="val">2%</span>
+                                </div>
+                                <div class="scale-item">
+                                    <span>1,000 Favors (3 Zeros)</span>
+                                    <div class="bar-bg"><div class="bar-fill" style="width: 30%;"></div></div>
+                                    <span class="val">3%</span>
+                                </div>
+                                <div class="scale-item">
+                                    <span>10,000 Favors (4 Zeros)</span>
+                                    <div class="bar-bg"><div class="bar-fill" style="width: 40%;"></div></div>
+                                    <span class="val">4%</span>
+                                </div>
+                                <div class="preview-note">Logarithmic scaling guarantees systemic equilibrium.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: The Payoff -->
+                <div class="scurve-block scurve-left">
+                    <div class="scurve-visual">
+                        <div class="handshake-node-vis">
+                            <div class="node-box node-a">
+                                <div class="avatar">A</div>
+                                <span>User Alpha</span>
+                                <small>Initiates Favor</small>
+                            </div>
+
+                            <div class="flow-pipe">
+                                <svg class="pipe-svg" viewBox="0 0 200 60">
+                                    <path d="M 10 30 Q 100 0 190 30" fill="none" stroke="var(--accent-cyan)" stroke-width="3" stroke-dasharray="6,6" class="dash-flow"/>
+                                    <path d="M 100 15 L 100 55" fill="none" stroke="var(--accent-magenta)" stroke-width="2" stroke-dasharray="4,4"/>
+                                    <circle cx="100" cy="55" r="5" fill="var(--accent-magenta)"/>
+                                </svg>
+                                <div class="dividend-pool-badge">
+                                    <span>Automatic Dividend Pool</span>
+                                </div>
+                            </div>
+
+                            <div class="node-box node-b">
+                                <div class="avatar">B</div>
+                                <span>User Beta</span>
+                                <small>Receives Favor</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scurve-text">
+                        <span class="section-tag">03 / THE PAYOFF</span>
+                        <h2>Funding Collective Effort</h2>
+                        <p class="lead-text">Every transaction splits the contribution, funding the Automatic Dividend of Collective Efforts.</p>
+                        <p>Rather than funneling transaction slivers into private intermediaries, every favor exchange automatically feeds the baseline pool that sustains the entire community.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: The Router (Footer Navigation Cards) -->
+            <div class="router-section">
+                <h2 class="router-title">Explore The Protocol Deep Dives</h2>
+                <div class="router-grid">
+                    <div class="router-card" data-target="blueprint">
+                        <div class="card-icon">📐</div>
+                        <h3>The Blueprint</h3>
+                        <p>Mechanics, time pegs, and the Sankey macroeconomic timeline to abundance.</p>
+                        <span class="card-link">Read Blueprint &rarr;</span>
+                    </div>
+
+                    <div class="router-card" data-target="architecture">
+                        <div class="card-icon">🗺️</div>
+                        <h3>The Architecture Map</h3>
+                        <p>Interactive full-screen visual topology graph and guided network presets.</p>
+                        <span class="card-link">Launch Topology &rarr;</span>
+                    </div>
+
+                    <div class="router-card" data-target="sandbox">
+                        <div class="card-icon">🧪</div>
+                        <h3>The Sandbox</h3>
+                        <p>Test the 1% Per Zero calculator and simulate macroeconomic equilibrium ratios.</p>
+                        <span class="card-link">Run Simulators &rarr;</span>
+                    </div>
+
+                    <div class="router-card" data-target="assembly">
+                        <div class="card-icon">🏛️</div>
+                        <h3>The Assembly Room</h3>
+                        <p>Development status tracker, peer review gateways, and contribution avenues.</p>
+                        <span class="card-link">Enter Assembly &rarr;</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- PAGE 2: THE BLUEPRINT (MECHANICS & TIMELINE)                        -->
+        <!-- =================================================================== -->
+        <section id="page-blueprint" class="page-view">
+            <div class="page-header">
+                <span class="section-tag">DEEP ECONOMIC THEORY</span>
+                <h1>The Blueprint: Mechanics & Abundance Roadmap</h1>
+                <p class="header-desc">The mathematical architecture eliminating financial friction and sustaining human life through commercial velocity.</p>
+            </div>
+
+            <!-- Section 1: The Time Peg -->
+            <div class="blueprint-block glass-panel">
+                <div class="block-icon">⏳</div>
+                <div class="block-content">
+                    <h2>Section 1: The Time Peg ("Borrowing from Yourself")</h2>
+                    <p>In legacy accounting systems, accessing liquidity requires submitting to compounding financial burdens on future productivity. In IOUBI, drawing from the system is simply moving your own future time to the present, fundamentally neutralizing systemic friction and postponing repayment seamlessly.</p>
+                    <div class="timepeg-comparison">
+                        <div class="compare-col legacy">
+                            <h4>Legacy System</h4>
+                            <p>Accessing Liquidity = Bank Creates Financial Burdens (Compounding pressure on future work)</p>
+                        </div>
+                        <div class="compare-col ioubi">
+                            <h4>IOUBI Protocol</h4>
+                            <p>Borrowing from yourself = Reallocating your future 3-Minute Favors to present (Postponing repayment)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: The Unearthed Ratio of Equilibrium (Sankey Diagram) -->
+            <div class="blueprint-block glass-panel">
+                <h2>Section 2: The Unearthed Ratio of Equilibrium</h2>
+                <p class="lead-text">The machine sustains the network. The sheer velocity of commercial supply chains perfectly funds the human cost of living.</p>
+
+                <!-- Interactive Sankey Diagram Visualizer -->
+                <div class="sankey-wrapper">
+                    <div class="sankey-header">
+                        <h3>Macroeconomic Flow (Sankey Diagram)</h3>
+                        <div class="sankey-legend">
+                            <span class="leg-item"><span class="color-dot commercial"></span> Commercial Commerce (70 Parts)</span>
+                            <span class="leg-item"><span class="color-dot individual"></span> Individual Commerce (1 Part)</span>
+                            <span class="leg-item"><span class="color-dot dividend"></span> 1.4% Shared Contribution Pool</span>
+                        </div>
+                    </div>
+                    
+                    <div id="sankey-container" class="sankey-canvas-box">
+                        <!-- Rendered dynamically by app.js -->
+                    </div>
+
+                    <div class="sankey-stat-grid">
+                        <div class="stat-card">
+                            <span class="stat-val">70 : 1</span>
+                            <span class="stat-lbl">Commercial to Individual Ratio</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-val">1.4%</span>
+                            <span class="stat-lbl">Sliver Contribution Rate</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-val">100%</span>
+                            <span class="stat-lbl">Human Baseline Funded</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Evolutionary Timeline -->
+            <div class="blueprint-block glass-panel">
+                <h2>Section 3: The Path to Abundance (Evolutionary Timeline)</h2>
+                <p>The system does not support everyone instantly, but scales dynamically with commercial adoption across four distinct planetary phases.</p>
+
+                <div class="timeline-stepper">
+                    <div class="timeline-phase active-phase">
+                        <div class="phase-badge">Phase 1</div>
+                        <h3>Mercury — The Spark</h3>
+                        <p class="phase-sub">Peer-to-Peer Genesis</p>
+                        <p>Driven entirely by human-to-human time exchange. The dividend is small—proving the math and establishing organic trust among initial nodes.</p>
+                    </div>
+
+                    <div class="timeline-phase">
+                        <div class="phase-badge">Phase 2</div>
+                        <h3>Venus — Integration</h3>
+                        <p class="phase-sub">Local Commerce Loops In</p>
+                        <p>Small businesses and freelancers merge into the network, creating a sustainable environment where the dividend covers basic utilities and daily favors.</p>
+                    </div>
+
+                    <div class="timeline-phase">
+                        <div class="phase-badge">Phase 3</div>
+                        <h3>Earth — The Unearthed Equilibrium</h3>
+                        <p class="phase-sub">Commercial Parity</p>
+                        <p>Parity achieved. The 70x commercial engine fully sustains the human baseline. If a community desires a higher standard, they collectively grow the commercial economy that sustains it.</p>
+                    </div>
+
+                    <div class="timeline-phase">
+                        <div class="phase-badge">Phase 4</div>
+                        <h3>Beyond — Absolute Abundance</h3>
+                        <p class="phase-sub">Post-Scarcity AI Horizon</p>
+                        <p>The Star Trek economy. Automated AI commerce takes over the 70x engine. Humanity is freed from profit motives to boldly explore, create, and innovate.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- PAGE 3: ARCHITECTURE MAP (VISUAL TOPOLOGY)                          -->
+        <!-- =================================================================== -->
+        <section id="page-architecture" class="page-view">
+            <div class="topology-fullscreen-wrapper">
+                <div class="topology-sidebar">
+                    <h2>Architecture Map</h2>
+                    <p class="sidebar-subtitle">Visual Network Topology</p>
+                    
+                    <div class="preset-controls">
+                        <label>Guided Preset Views:</label>
+                        <button class="preset-btn active" id="preset-1" data-preset="deltar">
+                            <span class="preset-icon">◀</span>
+                            <div class="btn-info">
+                                <strong>Trace the Deltar</strong>
+                                <small>Highlights network flow vectors</small>
+                            </div>
+                        </button>
+
+                        <button class="preset-btn" id="preset-2" data-preset="multiplier">
+                            <span class="preset-icon">✖</span>
+                            <div class="btn-info">
+                                <strong>The Personal Multiplier</strong>
+                                <small>Zooms in on individual favor mechanics</small>
+                            </div>
+                        </button>
+
+                        <button class="preset-btn" id="preset-3" data-preset="dividend">
+                            <span class="preset-icon">⚙</span>
+                            <div class="btn-info">
+                                <strong>The Dividend Engine</strong>
+                                <small>Shows routing of split contribution</small>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="node-inspector glass-panel">
+                        <h4>Node Inspector</h4>
+                        <div id="inspector-content">
+                            <p class="inspect-hint">Hover over or click any node in the topology map to trace its protocol routing.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topology-canvas-container">
+                    <canvas id="topology-canvas"></canvas>
+                    <div class="canvas-overlay-controls">
+                        <button class="icon-btn" id="btn-zoom-in" title="Zoom In">+</button>
+                        <button class="icon-btn" id="btn-zoom-out" title="Zoom Out">-</button>
+                        <button class="icon-btn" id="btn-reset-view" title="Reset View">⟲</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- PAGE 4: THE SANDBOX (INTERACTIVE SIMULATORS)                        -->
+        <!-- =================================================================== -->
+        <section id="page-sandbox" class="page-view">
+            <div class="page-header">
+                <span class="section-tag">PROOF-OF-MATH SIMULATION</span>
+                <h1>The Sandbox: Interactive Mathematical Simulators</h1>
+                <p class="header-desc">Mathematically verify the protocol's systemic fairness and macroeconomic stability in real time.</p>
+            </div>
+
+            <div class="sandbox-grid">
+                <!-- Tool 1: 1% Per Zero Calculator -->
+                <div class="sandbox-card glass-panel">
+                    <div class="tool-header">
+                        <span class="tool-badge">Tool 01</span>
+                        <h2>The 1% Per Zero Calculator</h2>
+                    </div>
+                    <p class="tool-desc">Calculates the exact shared contribution generated by a transaction, demonstrating logarithmic fairness based on balance scale.</p>
+
+                    <div class="sim-form">
+                        <div class="form-group">
+                            <label for="input-bal-a">User A Balance (3-Min Favors):</label>
+                            <input type="number" id="input-bal-a" value="1250" min="1" step="10">
+                            <small class="hint">Log10 zeros: <span id="zeros-a">3.1</span></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-bal-b">User B Balance (3-Min Favors):</label>
+                            <input type="number" id="input-bal-b" value="300" min="1" step="10">
+                            <small class="hint">Log10 zeros: <span id="zeros-b">2.4</span></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-duration">Favor Duration (Minutes):</label>
+                            <input type="number" id="input-duration" value="30" min="3" step="3">
+                            <small class="hint">Equals <span id="favors-exchanged">10</span> Standard 3-Min Favors</small>
+                        </div>
+
+                        <div class="calc-results-box" id="calc-result">
+                            <div class="res-row">
+                                <span>Effective Contribution Rate:</span>
+                                <strong id="res-rate" class="glow-text">3.10%</strong>
+                            </div>
+                            <div class="res-row">
+                                <span>Shared Contribution Generated:</span>
+                                <strong id="res-contrib">0.31 Favors</strong>
+                            </div>
+                            <div class="res-row highlight-row">
+                                <span>Routed to Dividend Pool:</span>
+                                <strong id="res-dividend" class="magenta-text">0.155 Favors</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool 2: Test the Equilibrium Simulator -->
+                <div class="sandbox-card glass-panel">
+                    <div class="tool-header">
+                        <span class="tool-badge">Tool 02</span>
+                        <h2>Test the Macroeconomic Equilibrium</h2>
+                    </div>
+                    <p class="tool-desc">Adjust commercial velocity and friction parameters to prove that the Automatic Dividend covers basic living standards.</p>
+
+                    <div class="sim-form">
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>Commercial vs. Individual Ratio:</span>
+                                <strong id="val-ratio">70 : 1</strong>
+                            </div>
+                            <input type="range" id="slider-ratio" min="10" max="150" value="70" step="1">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>Effective System Friction (%):</span>
+                                <strong id="val-friction">1.40%</strong>
+                            </div>
+                            <input type="range" id="slider-friction" min="0.1" max="5.0" value="1.4" step="0.1">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>Active Community Nodes:</span>
+                                <strong id="val-nodes">10,000</strong>
+                            </div>
+                            <input type="range" id="slider-nodes" min="1000" max="100000" value="10000" step="1000">
+                        </div>
+
+                        <div class="calc-results-box" id="eq-result">
+                            <div class="res-row">
+                                <span>Daily Commercial Supply Velocity:</span>
+                                <strong id="eq-commercial-vol">700,000 Favors</strong>
+                            </div>
+                            <div class="res-row">
+                                <span>Daily Systemic Contribution Pool:</span>
+                                <strong id="eq-pool-total" class="glow-text">9,954 Favors/day</strong>
+                            </div>
+                            <div class="res-row highlight-row">
+                                <span>Automatic Dividend Per Node:</span>
+                                <strong id="eq-dividend-per-node" class="cyan-text">0.995 Favors/day</strong>
+                            </div>
+                            <div class="equilibrium-status-banner success" id="eq-status">
+                                ✓ Baseline Equilibrium Achieved: 100% of human basic living needs covered.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- PAGE 5: THE ASSEMBLY ROOM (COMMUNITY & BUILD STATUS)                -->
+        <!-- =================================================================== -->
+        <section id="page-assembly" class="page-view">
+            <div class="page-header">
+                <span class="section-tag">INNER CIRCLE WORKSPACE</span>
+                <h1>The Assembly Room</h1>
+                <p class="header-desc">Collaborative hub for thinkers, developers, and builders transitioning IOUBI from theory to reality.</p>
+            </div>
+
+            <div class="assembly-sections">
+                <!-- Section 1: Build Status -->
+                <div class="assembly-card glass-panel">
+                    <h2>Section 1: The Build Status</h2>
+                    <p class="lead-text">Professional coding is actively funded and underway, transitioning the system from theory to reality.</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-header">
+                            <span>Current Phase: <strong>Mercury Genesis Core Engine</strong></span>
+                            <span class="progress-pct">68% Complete</span>
+                        </div>
+                        <div class="track-bar">
+                            <div class="fill-bar" style="width: 68%;"></div>
+                        </div>
+                        <div class="milestone-markers">
+                            <span class="marker done">Math Spec</span>
+                            <span class="marker done">Web Portal</span>
+                            <span class="marker active">Protocol Node Engine</span>
+                            <span class="marker">Beta Network</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Peer Review & Discussion -->
+                <div class="assembly-card glass-panel">
+                    <h2>Section 2: Peer Review & Stress Testing</h2>
+                    <p>Direct gateways to chosen community platforms where members can stress-test the math and debate edge cases.</p>
+                    
+                    <div class="community-grid">
+                        <a href="javascript:void(0)" class="community-box">
+                            <div class="com-icon">💬</div>
+                            <h4>Discord Architecture Channel</h4>
+                            <p>Real-time technical discussions on protocol node mechanics.</p>
+                            <span class="btn-sm">Join Channel</span>
+                        </a>
+
+                        <a href="javascript:void(0)" class="community-box">
+                            <div class="com-icon">📜</div>
+                            <h4>Discourse Research Forum</h4>
+                            <p>Asynchronous deep-dive debates on economic equilibrium theory.</p>
+                            <span class="btn-sm">Visit Forum</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Section 3: Accelerate the Mission -->
+                <div class="assembly-card glass-panel">
+                    <h2>Section 3: Accelerate the Mission</h2>
+                    <p>Clear avenues for members to contribute—whether through reviewing the whitepaper, beta testing the early software, or providing infrastructure support.</p>
+                    
+                    <div class="action-list">
+                        <div class="action-item">
+                            <div class="act-num">01</div>
+                            <div class="act-details">
+                                <h3>Whitepaper Code Audit & Math Review</h3>
+                                <p>Help stress-test our time peg liquidity curves and logarithmic balance scaling proofs.</p>
+                            </div>
+                            <button class="btn btn-secondary">Download Spec PDF</button>
+                        </div>
+
+                        <div class="action-item">
+                            <div class="act-num">02</div>
+                            <div class="act-details">
+                                <h3>Early Beta Node Testing</h3>
+                                <p>Register your server or desktop node to participate in Phase 1 Mercury network genesis.</p>
+                            </div>
+                            <button class="btn btn-primary">Apply for Early Access</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <svg class="deltar-icon-sm" viewBox="0 0 100 100" width="24" height="24">
+                    <polygon points="25,50 75,22 75,78" fill="var(--accent-cyan)"/>
+                </svg>
+                <span>IOUBI Social Protocol</span>
+            </div>
+            <div class="footer-copy">
+                Strictly trading in Human Time & 3-Minute Favors. Postponing repayment naturally.
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
