@@ -17,6 +17,39 @@
         <canvas id="bg-canvas"></canvas>
     </div>
 
+    <!-- Floating Global Concept Tooltip Bubble -->
+    <div id="concept-bubble-tooltip" class="concept-tooltip">
+        <div class="tooltip-header">
+            <span class="tooltip-badge" id="tooltip-category">FOUNDATIONAL CONCEPT</span>
+            <h4 id="tooltip-title">Concept Title</h4>
+        </div>
+        <p id="tooltip-body">Concept description and explanation will appear here.</p>
+        <div class="tooltip-codependents">
+            <span class="codep-label">Co-Dependent Concepts:</span>
+            <div id="tooltip-codep-tags" class="tag-list"></div>
+        </div>
+        <div class="tooltip-footer">
+            <button id="tooltip-deepdive-btn" class="btn-xs">Deep-Dive Concept &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Deep Dive Concept Modal -->
+    <div id="concept-modal-overlay" class="modal-overlay">
+        <div class="modal-card glass-panel">
+            <button id="modal-close-btn" class="modal-close">&times;</button>
+            <span class="section-tag" id="modal-category">CATEGORY</span>
+            <h2 id="modal-title">Concept Title</h2>
+            <div class="modal-body" id="modal-content">
+                <!-- Injected via JavaScript -->
+            </div>
+            <div class="modal-codependent-box">
+                <h4>Interconnected Systemic Relations</h4>
+                <p>This concept relies upon and reinforces the following protocol mechanisms:</p>
+                <div id="modal-codependent-grid" class="codep-grid"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation Bar -->
     <header class="navbar" id="top-nav">
         <div class="nav-container">
@@ -72,7 +105,7 @@
                 <h1 class="hero-headline">Beyond Money. Beyond Scarcity.<br><span class="glow-text">Welcome to the Human Economy.</span></h1>
                 
                 <p class="hero-copy">
-                    As AI accelerates and traditional markets collapse into financialized rent-seeking, fighting over a shrinking pool of money is a game of musical cages—and the bots are removing the cages faster than humans. It’s time to opt out.
+                    As AI accelerates and traditional markets collapse into financialized rent-seeking, fighting over a shrinking pool of money is <span class="concept-term" data-concept="musical-cages">a game of musical cages</span>—and the bots are removing the cages faster than humans. It’s time to opt out.
                 </p>
 
                 <div class="hero-cta-group">
@@ -81,7 +114,7 @@
                         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
                     <button class="btn btn-secondary" data-target="blueprint">
-                        <span>Explore The Blueprint</span>
+                        <span>Explore Concept Matrix</span>
                     </button>
                 </div>
             </div>
@@ -92,19 +125,19 @@
                 <div class="scurve-block scurve-left">
                     <div class="scurve-visual">
                         <div class="word-cloud-container" id="word-cloud">
-                            <span class="cloud-word w1" style="left: 15%; top: 20%;">Time Banking 2.0</span>
-                            <span class="cloud-word w2" style="left: 55%; top: 15%;">Post-Scarcity</span>
-                            <span class="cloud-word w3" style="left: 30%; top: 50%;">Opt-Out</span>
-                            <span class="cloud-word w4" style="left: 65%; top: 60%;">Human Protocol</span>
-                            <span class="cloud-word w5" style="left: 10%; top: 75%;">3-Minute Favors</span>
-                            <span class="cloud-word w6" style="left: 45%; top: 80%;">Equilibrium Ratio</span>
+                            <span class="cloud-word w1" style="left: 15%; top: 20%;" data-concept="personal-conversion">Personal Conversion</span>
+                            <span class="cloud-word w2" style="left: 55%; top: 15%;" data-concept="rainwater-abundance">Rainwater Abundance</span>
+                            <span class="cloud-word w3" style="left: 30%; top: 50%;" data-concept="musical-cages">Opt-Out Paradigm</span>
+                            <span class="cloud-word w4" style="left: 65%; top: 60%;" data-concept="scl-donations">SCL Crowdfund</span>
+                            <span class="cloud-word w5" style="left: 10%; top: 75%;" data-concept="favors">3-Minute Favors</span>
+                            <span class="cloud-word w6" style="left: 45%; top: 80%;" data-concept="log10-fee">Log10 Scaling</span>
                         </div>
                     </div>
                     <div class="scurve-text">
                         <span class="section-tag">01 / THE PIVOT</span>
                         <h2>Replacing Financial Distortions</h2>
                         <p class="lead-text">We aren't fixing money; we are replacing it with human time.</p>
-                        <p>Traditional accounting systems measure artificial scarcity and speculative leverage. IOUBI anchors economic value strictly to the single non-renewable resource every human naturally possesses: time.</p>
+                        <p>Traditional accounting systems measure artificial scarcity and speculative leverage. IOUBI treats currency strictly as a <span class="concept-term" data-concept="money-iou">receipt of an IOU</span>, anchored to the ultimate root standard of value: <span class="concept-term" data-concept="human-labor-standard">human labor time</span>.</p>
                     </div>
                 </div>
 
@@ -116,14 +149,14 @@
                         
                         <div class="concept-card">
                             <div class="concept-badge">Concept 1</div>
-                            <h3>The 3-Minute Favor</h3>
+                            <h3>The <span class="concept-term" data-concept="favors">3-Minute Favor</span></h3>
                             <p>The unbreakable measure of value. Every task, unit of collaboration, or support is measured in standardized human effort units.</p>
                         </div>
 
                         <div class="concept-card">
                             <div class="concept-badge">Concept 2</div>
-                            <h3>1% Per Zero Contribution</h3>
-                            <p>Users contribute 1% to the network for every zero in their balance. A scaling model where large liquidity holders naturally support the shared infrastructure they utilize.</p>
+                            <h3><span class="concept-term" data-concept="log10-fee">1% Per Zero Contribution (Log10 Fee)</span></h3>
+                            <p>Users contribute 1% to 9% based on the number of zeros in their account balance, creating a self-balancing progressive engine that reduces systemic inequality.</p>
                         </div>
                     </div>
                     <div class="scurve-visual">
@@ -136,19 +169,19 @@
                                     <span class="val">1%</span>
                                 </div>
                                 <div class="scale-item">
-                                    <span>100 Favors (2 Zeros)</span>
-                                    <div class="bar-bg"><div class="bar-fill" style="width: 20%;"></div></div>
-                                    <span class="val">2%</span>
-                                </div>
-                                <div class="scale-item">
                                     <span>1,000 Favors (3 Zeros)</span>
                                     <div class="bar-bg"><div class="bar-fill" style="width: 30%;"></div></div>
                                     <span class="val">3%</span>
                                 </div>
                                 <div class="scale-item">
-                                    <span>10,000 Favors (4 Zeros)</span>
-                                    <div class="bar-bg"><div class="bar-fill" style="width: 40%;"></div></div>
-                                    <span class="val">4%</span>
+                                    <span>1,000,000 Favors (6 Zeros)</span>
+                                    <div class="bar-bg"><div class="bar-fill" style="width: 60%;"></div></div>
+                                    <span class="val">6%</span>
+                                </div>
+                                <div class="scale-item">
+                                    <span>1,000,000,000 (9 Zeros)</span>
+                                    <div class="bar-bg"><div class="bar-fill" style="width: 90%;"></div></div>
+                                    <span class="val">9%</span>
                                 </div>
                                 <div class="preview-note">Logarithmic scaling guarantees systemic equilibrium.</div>
                             </div>
@@ -173,7 +206,7 @@
                                     <circle cx="100" cy="55" r="5" fill="var(--accent-magenta)"/>
                                 </svg>
                                 <div class="dividend-pool-badge">
-                                    <span>Automatic Dividend Pool</span>
+                                    <span><span class="concept-term" data-concept="midnight-tally">Midnight Pool Tally</span></span>
                                 </div>
                             </div>
 
@@ -187,8 +220,8 @@
                     <div class="scurve-text">
                         <span class="section-tag">03 / THE PAYOFF</span>
                         <h2>Funding Collective Effort</h2>
-                        <p class="lead-text">Every transaction splits the contribution, funding the Automatic Dividend of Collective Efforts.</p>
-                        <p>Rather than funneling transaction slivers into private intermediaries, every favor exchange automatically feeds the baseline pool that sustains the entire community.</p>
+                        <p class="lead-text">Every transaction splits the contribution, funding the <span class="concept-term" data-concept="dividend-split">Automatic Dividend of Collective Efforts</span>.</p>
+                        <p>Contributions collected are deleted from circulation and recreated at midnight into a global pool, distributing 75% as universal daily baseline dividends and 20% to insurance/grants approved by <span class="concept-term" data-concept="jury-voting">Jury-Style Shift Voting</span>.</p>
                     </div>
                 </div>
             </div>
@@ -199,9 +232,9 @@
                 <div class="router-grid">
                     <div class="router-card" data-target="blueprint">
                         <div class="card-icon">📐</div>
-                        <h3>The Blueprint</h3>
-                        <p>Mechanics, time pegs, and the Sankey macroeconomic timeline to abundance.</p>
-                        <span class="card-link">Read Blueprint &rarr;</span>
+                        <h3>The Blueprint & Concept Matrix</h3>
+                        <p>Full repository of 15+ interconnected economic concepts, time pegs, and Sankey flow diagrams.</p>
+                        <span class="card-link">Explore Blueprint &rarr;</span>
                     </div>
 
                     <div class="router-card" data-target="architecture">
@@ -214,7 +247,7 @@
                     <div class="router-card" data-target="sandbox">
                         <div class="card-icon">🧪</div>
                         <h3>The Sandbox</h3>
-                        <p>Test the 1% Per Zero calculator and simulate macroeconomic equilibrium ratios.</p>
+                        <p>Simulate Log10 fees, macroeconomic ratios, and SCL Business Crowdfund decay.</p>
                         <span class="card-link">Run Simulators &rarr;</span>
                     </div>
 
@@ -229,20 +262,38 @@
         </section>
 
         <!-- =================================================================== -->
-        <!-- PAGE 2: THE BLUEPRINT (MECHANICS & TIMELINE)                        -->
+        <!-- PAGE 2: THE BLUEPRINT (MECHANICS, TIMELINE & CONCEPT MATRIX)       -->
         <!-- =================================================================== -->
         <section id="page-blueprint" class="page-view">
             <div class="page-header">
                 <span class="section-tag">DEEP ECONOMIC THEORY</span>
-                <h1>The Blueprint: Mechanics & Abundance Roadmap</h1>
-                <p class="header-desc">The mathematical architecture eliminating financial friction and sustaining human life through commercial velocity.</p>
+                <h1>The Blueprint & Concept Knowledge Matrix</h1>
+                <p class="header-desc">Explore the interconnected theoretical pillars of the IOUBI protocol. Click any concept card to inspect its co-dependent mechanisms.</p>
+            </div>
+
+            <!-- Interconnected Concept Knowledge Matrix -->
+            <div class="blueprint-block glass-panel">
+                <div class="matrix-header">
+                    <h2>Protocol Concept Repository</h2>
+                    <div class="cluster-filters">
+                        <button class="filter-btn active" data-filter="all">All Concepts</button>
+                        <button class="filter-btn" data-filter="value">1. Value & Time</button>
+                        <button class="filter-btn" data-filter="friction">2. Contribution Math</button>
+                        <button class="filter-btn" data-filter="commons">3. Commons Safety Net</button>
+                        <button class="filter-btn" data-filter="business">4. Business & SCL</button>
+                    </div>
+                </div>
+
+                <div class="concept-matrix-grid" id="concept-matrix">
+                    <!-- Rendered dynamically by app.js -->
+                </div>
             </div>
 
             <!-- Section 1: The Time Peg -->
             <div class="blueprint-block glass-panel">
                 <div class="block-icon">⏳</div>
                 <div class="block-content">
-                    <h2>Section 1: The Time Peg ("Borrowing from Yourself")</h2>
+                    <h2>Section 1: The Time Peg (<span class="concept-term" data-concept="time-peg">"Borrowing from Yourself"</span>)</h2>
                     <p>In legacy accounting systems, accessing liquidity requires submitting to compounding financial burdens on future productivity. In IOUBI, drawing from the system is simply moving your own future time to the present, fundamentally neutralizing systemic friction and postponing repayment seamlessly.</p>
                     <div class="timepeg-comparison">
                         <div class="compare-col legacy">
@@ -324,8 +375,8 @@
                     <div class="timeline-phase">
                         <div class="phase-badge">Phase 4</div>
                         <h3>Beyond — Absolute Abundance</h3>
-                        <p class="phase-sub">Post-Scarcity AI Horizon</p>
-                        <p>The Star Trek economy. Automated AI commerce takes over the 70x engine. Humanity is freed from profit motives to boldly explore, create, and innovate.</p>
+                        <p class="phase-sub"><span class="concept-term" data-concept="rainwater-abundance">Rainwater Abundance</span></p>
+                        <p>The Star Trek economy. Automated AI commerce takes over the 70x engine. Deltars become abundant rainwater falling on gardens, freeing humanity from profit motives.</p>
                     </div>
                 </div>
             </div>
@@ -393,7 +444,7 @@
             <div class="page-header">
                 <span class="section-tag">PROOF-OF-MATH SIMULATION</span>
                 <h1>The Sandbox: Interactive Mathematical Simulators</h1>
-                <p class="header-desc">Mathematically verify the protocol's systemic fairness and macroeconomic stability in real time.</p>
+                <p class="header-desc">Mathematically verify the protocol's systemic fairness, logarithmic zero scaling, and SCL crowdfund decay in real time.</p>
             </div>
 
             <div class="sandbox-grid">
@@ -401,9 +452,9 @@
                 <div class="sandbox-card glass-panel">
                     <div class="tool-header">
                         <span class="tool-badge">Tool 01</span>
-                        <h2>The 1% Per Zero Calculator</h2>
+                        <h2>The <span class="concept-term" data-concept="log10-fee">1% Per Zero Calculator</span></h2>
                     </div>
-                    <p class="tool-desc">Calculates the exact shared contribution generated by a transaction, demonstrating logarithmic fairness based on balance scale.</p>
+                    <p class="tool-desc">Calculates the exact shared contribution generated by a transaction based on payor/payee account zeros ($1\% \text{ to } 9\%$).</p>
 
                     <div class="sim-form">
                         <div class="form-group">
@@ -489,6 +540,70 @@
                             </div>
                             <div class="equilibrium-status-banner success" id="eq-status">
                                 ✓ Baseline Equilibrium Achieved: 100% of human basic living needs covered.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool 3: SCL Business Funding & Quarterly Decay Simulator -->
+                <div class="sandbox-card glass-panel span-full">
+                    <div class="tool-header">
+                        <span class="tool-badge">Tool 03</span>
+                        <h2><span class="concept-term" data-concept="scl-donations">Social Credit Limit (SCL) Crowdfund & Decay Simulator</span></h2>
+                    </div>
+                    <p class="tool-desc">Simulate how personal accounts donate 1/365th of their Personal Credit Limit (PCL) as SCL to expand a business overdraft limit, and observe the 25% quarterly decay schedule.</p>
+
+                    <div class="scl-sim-layout">
+                        <div class="sim-controls">
+                            <div class="form-group">
+                                <label for="input-pcl">Avg Personal Credit Limit (PCL):</label>
+                                <input type="number" id="input-pcl" value="36500" step="1000">
+                                <small class="hint">Daily SCL Generated: <span id="scl-daily-rate">100 SCL/day</span></small>
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Assembled Crowd Donors (Min 25):</span>
+                                    <strong id="val-donors">30 Donors</strong>
+                                </div>
+                                <input type="range" id="slider-donors" min="25" max="250" value="30" step="5">
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Quarterly Quarters Elapsed:</span>
+                                    <strong id="val-quarters">Q0 (Initial Raised)</strong>
+                                </div>
+                                <input type="range" id="slider-quarters" min="0" max="4" value="0" step="1">
+                            </div>
+                        </div>
+
+                        <div class="scl-results-display">
+                            <div class="scl-stat-pill">
+                                <span>Total Raised SCL Depth:</span>
+                                <strong id="scl-total-raised" class="glow-text">3,000 SCL</strong>
+                            </div>
+                            <div class="scl-stat-pill">
+                                <span>Active Overdraft Ceiling:</span>
+                                <strong id="scl-active-limit" class="cyan-text">3,000 SCL</strong>
+                            </div>
+                            <div class="scl-decay-bars">
+                                <div class="q-bar-group">
+                                    <span>Q1 (3 Mo): -25%</span>
+                                    <div class="q-bar-bg"><div id="bar-q1" class="q-bar-fill" style="width: 75%;"></div></div>
+                                </div>
+                                <div class="q-bar-group">
+                                    <span>Q2 (6 Mo): -50%</span>
+                                    <div class="q-bar-bg"><div id="bar-q2" class="q-bar-fill" style="width: 50%;"></div></div>
+                                </div>
+                                <div class="q-bar-group">
+                                    <span>Q3 (9 Mo): -75%</span>
+                                    <div class="q-bar-bg"><div id="bar-q3" class="q-bar-fill" style="width: 25%;"></div></div>
+                                </div>
+                                <div class="q-bar-group">
+                                    <span>Q4 (12 Mo): Expired</span>
+                                    <div class="q-bar-bg"><div id="bar-q4" class="q-bar-fill" style="width: 0%;"></div></div>
+                                </div>
                             </div>
                         </div>
                     </div>

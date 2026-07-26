@@ -63,6 +63,207 @@ html, body {
     height: 100%;
 }
 
+/* Interactive Concept Terms & Hover Bubbles */
+.concept-term {
+    color: var(--accent-cyan);
+    font-weight: 600;
+    border-bottom: 1px dashed var(--accent-cyan);
+    cursor: pointer;
+    position: relative;
+    transition: all var(--trans-fast);
+    padding: 0 2px;
+}
+
+.concept-term:hover {
+    background: rgba(0, 240, 255, 0.15);
+    border-bottom-style: solid;
+    box-shadow: 0 0 8px var(--accent-glow);
+    border-radius: 3px;
+}
+
+/* Floating Concept Tooltip Bubble */
+.concept-tooltip {
+    position: fixed;
+    z-index: 3000;
+    width: 320px;
+    background: rgba(12, 16, 26, 0.95);
+    border: 1px solid var(--accent-cyan);
+    backdrop-filter: blur(16px);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 15px var(--accent-glow);
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--trans-fast), transform var(--trans-fast);
+    pointer-events: auto;
+}
+
+.concept-tooltip.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tooltip-badge {
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    color: var(--accent-indigo);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.tooltip-header h4 {
+    font-size: 1.05rem;
+    color: #fff;
+    margin: 0.2rem 0 0.5rem 0;
+}
+
+.concept-tooltip p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin-bottom: 0.75rem;
+}
+
+.codep-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+
+.tag-item {
+    font-size: 0.7rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--accent-cyan);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    cursor: pointer;
+
+}
+
+.tag-item:hover {
+    background: rgba(0, 240, 255, 0.15);
+}
+
+.btn-xs {
+    background: var(--accent-cyan);
+    color: var(--bg-dark);
+    border: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-xs:hover {
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(4, 6, 10, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 4000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.modal-overlay.visible {
+    display: flex;
+}
+
+.modal-card {
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    background: rgba(16, 22, 34, 0.95);
+    border: 1px solid var(--accent-cyan);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px var(--accent-glow);
+    padding: 2.5rem;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.75rem;
+    cursor: pointer;
+}
+
+.modal-close:hover { color: #fff; }
+
+.modal-body {
+    margin: 1.25rem 0;
+    font-size: 1rem;
+    color: var(--text-main);
+    line-height: 1.7;
+}
+
+.modal-codependent-box {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.modal-codependent-box h4 {
+    font-size: 0.95rem;
+    color: var(--accent-cyan);
+    margin-bottom: 0.3rem;
+}
+
+.modal-codependent-box p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.codep-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+}
+
+.codep-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.codep-card:hover {
+    border-color: var(--accent-cyan);
+    background: rgba(0, 240, 255, 0.05);
+}
+
+.codep-card h5 { font-size: 0.85rem; color: #fff; }
+.codep-card small { font-size: 0.75rem; color: var(--text-muted); display: block; }
+
 /* Header & Navbar */
 .navbar {
     position: fixed;
@@ -240,7 +441,7 @@ main#app-main {
 .header-desc {
     color: var(--text-muted);
     font-size: 1.1rem;
-    max-width: 700px;
+    max-width: 750px;
     margin: 0 auto;
 }
 
@@ -289,6 +490,106 @@ main#app-main {
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: var(--accent-cyan);
+}
+
+/* Concept Knowledge Matrix Styling */
+.matrix-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.cluster-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all var(--trans-fast);
+}
+
+.filter-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+.filter-btn.active {
+    background: var(--accent-cyan);
+    color: var(--bg-dark);
+    font-weight: 700;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.concept-matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 1.25rem;
+}
+
+.matrix-concept-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all var(--trans-mid);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.matrix-concept-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 8px 20px var(--accent-glow);
+}
+
+.concept-cat-badge {
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+}
+
+.matrix-concept-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.matrix-concept-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin-bottom: 1rem;
+}
+
+.matrix-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 0.75rem;
+}
+
+.codep-count {
+    font-size: 0.75rem;
+    color: var(--accent-indigo);
+    font-weight: 600;
+}
+
+.inspect-link {
+    font-size: 0.75rem;
+    color: var(--accent-cyan);
+    font-weight: 700;
 }
 
 /* ==========================================================================
@@ -396,6 +697,7 @@ main#app-main {
     font-weight: 600;
     color: var(--accent-cyan);
     box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    cursor: pointer;
     animation: floatWord 6s ease-in-out infinite alternate;
 }
 
@@ -445,7 +747,7 @@ main#app-main {
 
 .scale-item {
     display: grid;
-    grid-template-columns: 140px 1fr 40px;
+    grid-template-columns: 170px 1fr 40px;
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 0.75rem;
@@ -877,6 +1179,8 @@ main#app-main {
     gap: 2rem;
 }
 
+.span-full { grid-column: 1 / -1; }
+
 .tool-header {
     display: flex;
     align-items: center;
@@ -981,6 +1285,63 @@ input[type="range"] {
     background: rgba(0, 240, 255, 0.15);
     border: 1px solid var(--accent-cyan);
     color: var(--accent-cyan);
+}
+
+/* SCL Crowdfund Simulator Layout */
+.scl-sim-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.sim-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.scl-results-display {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.scl-stat-pill {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+}
+
+.scl-decay-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.q-bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+}
+
+.q-bar-bg {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.q-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-indigo));
+    border-radius: 5px;
+    transition: width var(--trans-mid);
 }
 
 /* ==========================================================================
@@ -1118,6 +1479,7 @@ input[type="range"] {
     .topology-fullscreen-wrapper { grid-template-columns: 1fr; height: auto; }
     .topology-sidebar { border-right: none; border-bottom: 1px solid var(--bg-card-border); }
     .sandbox-grid { grid-template-columns: 1fr; }
+    .scl-sim-layout { grid-template-columns: 1fr; }
     .hero-headline { font-size: 2.25rem; }
     .community-grid { grid-template-columns: 1fr; }
 }

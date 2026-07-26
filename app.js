@@ -1,8 +1,145 @@
 /* ==========================================================================
-   IOUBI Web Portal - Central Application Engine & Simulators
+   IOUBI Web Portal - Central Engine, Concept Knowledge Matrix & Simulators
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // ----------------------------------------------------------------------
+    // Concept Repository Data Model (Parsed from Master Concept Document)
+    // ----------------------------------------------------------------------
+    const conceptRepo = {
+        'money-iou': {
+            id: 'money-iou',
+            category: 'value',
+            catName: '1. Value & Time',
+            title: 'Money is the Receipt of an IOU',
+            summary: 'Money is simply a standardized placeholder to track mismatches in trade timing or quantity.',
+            fullText: `Traditional barter fails because trades rarely match in value and timing. Money is not intrinsic wealth; it is a ledger receipt tracking who owes what to society. In IOUBI, currency standardizes trade imbalances while eliminating financial profit extraction on the ledger itself.`,
+            codependents: ['human-labor-standard', 'personal-conversion', 'time-peg']
+        },
+        'human-labor-standard': {
+            id: 'human-labor-standard',
+            category: 'value',
+            catName: '1. Value & Time',
+            title: 'Human Labor as the Root Standard',
+            summary: 'Physical goods and services are ultimately measured by the human effort required to produce them.',
+            fullText: `Whether gold, oil, or government decree, all historical currencies derive trust from human productive effort. IOUBI cuts out arbitrary middleman pegs by adopting human time directly as the global foundation of value.`,
+            codependents: ['money-iou', 'favors', 'personal-conversion']
+        },
+        'personal-conversion': {
+            id: 'personal-conversion',
+            category: 'value',
+            catName: '1. Value & Time',
+            title: 'Personal Delta Conversion Rate',
+            summary: 'Each individual chooses how much time their personal effort unit is worth to them.',
+            fullText: `While the Deltar remains a stable global benchmark, each human freely sets their personal conversion rate (e.g. a mechanic valuing their unit at 10 minutes vs. a surgeon at 2 seconds). Both pay identical Deltar prices for a loaf of bread, but their time effort reflects their personal decision. The global Deltar value settles at the collective average of everyone's choices.`,
+            codependents: ['human-labor-standard', 'favors', 'rainwater-abundance']
+        },
+        'favors': {
+            id: 'favors',
+            category: 'value',
+            catName: '1. Value & Time',
+            title: '3-Minute Favors',
+            summary: 'The standardized base unit of trade in the human economy.',
+            fullText: `The 3-Minute Favor is the unbreakable baseline metric. It anchors day-to-day exchanges to real, accessible human activity, eliminating financial abstraction.`,
+            codependents: ['human-labor-standard', 'personal-conversion', 'time-peg']
+        },
+        'time-peg': {
+            id: 'time-peg',
+            category: 'value',
+            catName: '1. Value & Time',
+            title: 'The Time Peg ("Borrowing from Yourself")',
+            summary: 'Drawing liquidity from the system is simply moving future personal time to the present.',
+            fullText: `In legacy finance, borrowing incurs compounding financial friction on future effort. IOUBI allows members to overdraft against their personal credit limit by borrowing from their future self and repaying by providing value to society later, naturally postponing repayment without financial traps.`,
+            codependents: ['money-iou', 'net-balance-ledger', 'scl-donations']
+        },
+        'rainwater-abundance': {
+            id: 'rainwater-abundance',
+            category: 'value',
+            catName: '1. Value & Time',
+            title: 'Rainwater Abundance (The End Game)',
+            summary: 'As automation replaces manual jobs, currency becomes like abundant rainwater falling on gardens.',
+            fullText: `IOUBI scales seamlessly from 1,000 users to 10 billion. As AI and automation take over physical supply chains, marginal costs fall to near zero. Deltars simply act as a production management metric for automated systems—abundant and free, like rainwater nourishing tomato gardens.`,
+            codependents: ['personal-conversion', 'dividend-split', 'musical-cages']
+        },
+        'log10-fee': {
+            id: 'log10-fee',
+            category: 'friction',
+            catName: '2. Contribution Math',
+            title: '1% Per Zero Log10 Contribution Surcharge',
+            summary: 'Transaction contribution rate scales logarithmically based on account balance zeros.',
+            fullText: `The system charges a minimum 1% shared contribution split equally between payor and payee. For larger balances, the contribution rate percentage equals the average of the Log10 zeros of both accounts: Rate% = average(Log10(max(10, Bal1)), Log10(max(10, Bal2))). A trade between two 1,000,000,000 Deltar accounts contributes 9%, incentivizing liquidity to trade with smaller accounts (dropping the contribution to 5%) and funding the commons pool.`,
+            codependents: ['midnight-tally', 'dividend-split', 'net-balance-ledger']
+        },
+        'net-balance-ledger': {
+            id: 'net-balance-ledger',
+            category: 'friction',
+            catName: '2. Contribution Math',
+            title: 'Lifetime Net Balance Ledger',
+            summary: 'Currency volume matches total active societal credit and vanishes upon repayment.',
+            fullText: `Currency is only created when individuals draw credit and is destroyed when repaid. Accounts with positive balances hold receipts for value provided; negative balances indicate time owed to society. If everyone repaid their net balance, total currency volume would collapse to zero, proving 100% economic equilibrium.`,
+            codependents: ['time-peg', 'log10-fee', 'scl-donations']
+        },
+        'musical-cages': {
+            id: 'musical-cages',
+            category: 'friction',
+            catName: '2. Contribution Math',
+            title: 'Opting Out of Musical Cages',
+            summary: 'Financialized rent-seeking traps every social class in a battle for shrinking resources.',
+            fullText: `Traditional financial competition forces corporations, individuals, and governments to optimize for pure extraction rather than physical utility. IOUBI eliminates systemic distortions, replacing the "race to the bottom" with a race to real product value.`,
+            codependents: ['money-iou', 'rainwater-abundance', 'human-labor-standard']
+        },
+        'midnight-tally': {
+            id: 'commons',
+            catName: '3. Commons Safety Net',
+            title: 'Midnight Pool Tally',
+            summary: 'Collected transaction contributions are deleted from circulation and recreated daily into a global pool.',
+            fullText: `Every transaction sliver is automatically tracked, destroyed, and recreated at midnight in a unified global pool. This pool instantly funds automatic dividends, healthcare insurance, and community grants with zero administrative overhead.`,
+            codependents: ['log10-fee', 'dividend-split', 'jury-voting']
+        },
+        'dividend-split': {
+            id: 'dividend-split',
+            category: 'commons',
+            catName: '3. Commons Safety Net',
+            title: '75 / 20 / 5 Automatic Dividend Pool Split',
+            summary: 'Daily pool is split into 75% Automatic Dividend, 20% Social/Grant pool, and 5% Government donations.',
+            fullText: `Initial global allocation distributes 75% directly to all individual account ledgers as usable baseline Automatic Dividend of Collective Efforts, 20% to an insurance/grant fund, and 5% to member-directed government accounts. Members can vote daily to shift these proportions.`,
+            codependents: ['midnight-tally', 'jury-voting', 'scl-donations']
+        },
+        'jury-voting': {
+            id: 'jury-voting',
+            category: 'commons',
+            catName: '3. Commons Safety Net',
+            title: 'Jury-Style Shift Voting & 0.001% Drift',
+            summary: 'Voluntary single-shift juries review insurance/grant claims and guide pool percentage voting.',
+            fullText: `Members serve voluntary one-shift jury duty to review insurance and grant applications. Upon completing their shift, their votes inform the global population. Unanimous global voting can drift pool allocation percentages by 0.001% per day (requiring 1,000 days for a 1% shift), ensuring extreme stability against volatility.`,
+            codependents: ['midnight-tally', 'dividend-split', 'rainwater-abundance']
+        },
+        'scl-donations': {
+            id: 'business',
+            catName: '4. Business & SCL',
+            title: 'Social Credit Limit (SCL) Crowdfunding',
+            summary: 'Personal accounts donate SCL to expand a business overdraft limit without financial leverage.',
+            fullText: `Business accounts do not receive daily Automatic Dividends or vote on pool rates. To fund capital expenses, businesses raise SCL donations from personal members. Each personal account generates 1/365th of their Personal Credit Limit daily as non-usable SCL, which can only be donated to support businesses they believe in.`,
+            codependents: ['time-peg', 'scl-decay', 'crowd-assembly']
+        },
+        'scl-decay': {
+            id: 'business',
+            catName: '4. Business & SCL',
+            title: '25% Quarterly SCL Decay',
+            summary: 'Donated business credit limit vanishes by 25% each quarter unless renewed or earned back.',
+            fullText: `To prevent stagnant corporate hoarders, donated SCL expires on a 3-month schedule—decaying 25% per quarter. If a business's revenue does not raise its net balance above the decaying limit, spending is halted until new crowd SCL is raised.`,
+            codependents: ['scl-donations', 'crowd-assembly', 'net-balance-ledger']
+        },
+        'crowd-assembly': {
+            id: 'business',
+            catName: '4. Business & SCL',
+            title: '25-Donor Minimum Assembly Rule',
+            summary: 'SCL donation events require a minimum crowd of 25 donors to enforce deliberation.',
+            fullText: `To prevent single wealthy accounts from dictating business creation, SCL donations must occur in groups of at least 25 people. Furthermore, the largest donor cannot contribute more than 4x the smallest donor in the assembly, guaranteeing democratic community discussion.`,
+            codependents: ['scl-donations', 'scl-decay', 'musical-cages']
+        }
+    };
+
     // ----------------------------------------------------------------------
     // 1. Navigation & View Routing
     // ----------------------------------------------------------------------
@@ -31,35 +168,183 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.hash = targetId;
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        // Trigger canvas resize if on topology view
         if (targetId === 'architecture') {
             setTimeout(resizeTopologyCanvas, 100);
         }
     }
 
-    // Event listeners for top nav
-    navButtons.forEach(btn => {
-        btn.addEventListener('click', () => switchPage(btn.dataset.target));
-    });
+    navButtons.forEach(btn => btn.addEventListener('click', () => switchPage(btn.dataset.target)));
+    routerCards.forEach(card => card.addEventListener('click', () => switchPage(card.dataset.target)));
+    ctaButtons.forEach(btn => btn.addEventListener('click', () => switchPage(btn.dataset.target)));
 
-    // Event listeners for footer router cards
-    routerCards.forEach(card => {
-        card.addEventListener('click', () => switchPage(card.dataset.target));
-    });
-
-    // CTA buttons
-    ctaButtons.forEach(btn => {
-        btn.addEventListener('click', () => switchPage(btn.dataset.target));
-    });
-
-    // Handle hash on page load
     const initialHash = window.location.hash.replace('#', '');
     if (initialHash && document.getElementById(`page-${initialHash}`)) {
         switchPage(initialHash);
     }
 
     // ----------------------------------------------------------------------
-    // 2. Background Particle Network Canvas Animation
+    // 2. Global Hover Tooltip & Modal System
+    // ----------------------------------------------------------------------
+    const tooltip = document.getElementById('concept-bubble-tooltip');
+    const tooltipCategory = document.getElementById('tooltip-category');
+    const tooltipTitle = document.getElementById('tooltip-title');
+    const tooltipBody = document.getElementById('tooltip-body');
+    const tooltipCodepTags = document.getElementById('tooltip-codep-tags');
+    const tooltipDeepdiveBtn = document.getElementById('tooltip-deepdive-btn');
+
+    const modalOverlay = document.getElementById('concept-modal-overlay');
+    const modalCategory = document.getElementById('modal-category');
+    const modalTitle = document.getElementById('modal-title');
+    const modalContent = document.getElementById('modal-content');
+    const modalCodepGrid = document.getElementById('modal-codependent-grid');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    let currentConceptId = null;
+
+    function showTooltip(conceptId, mouseEvent) {
+        const concept = conceptRepo[conceptId];
+        if (!concept) return;
+
+        currentConceptId = conceptId;
+        tooltipCategory.textContent = concept.catName;
+        tooltipTitle.textContent = concept.title;
+        tooltipBody.textContent = concept.summary;
+
+        // Render co-dependent tags
+        tooltipCodepTags.innerHTML = concept.codependents.map(depId => {
+            const dep = conceptRepo[depId];
+            return dep ? `<span class="tag-item" data-concept="${depId}">${dep.title}</span>` : '';
+        }).join('');
+
+        // Attach event listeners to tooltip tags
+        tooltipCodepTags.querySelectorAll('.tag-item').forEach(tag => {
+            tag.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openModal(tag.dataset.concept);
+            });
+        });
+
+        // Position tooltip
+        const x = Math.min(window.innerWidth - 340, Math.max(10, mouseEvent.clientX + 15));
+        const y = Math.min(window.innerHeight - 250, Math.max(10, mouseEvent.clientY + 15));
+
+        tooltip.style.left = `${x}px`;
+        tooltip.style.top = `${y}px`;
+        tooltip.classList.add('visible');
+    }
+
+    function hideTooltip() {
+        tooltip.classList.remove('visible');
+    }
+
+    function openModal(conceptId) {
+        const concept = conceptRepo[conceptId];
+        if (!concept) return;
+
+        hideTooltip();
+        modalCategory.textContent = concept.catName;
+        modalTitle.textContent = concept.title;
+        modalContent.innerHTML = `<p>${concept.fullText}</p>`;
+
+        modalCodepGrid.innerHTML = concept.codependents.map(depId => {
+            const dep = conceptRepo[depId];
+            if (!dep) return '';
+            return `
+                <div class="codep-card" data-concept="${depId}">
+                    <h5>${dep.title}</h5>
+                    <small>${dep.summary}</small>
+                </div>
+            `;
+        }).join('');
+
+        modalCodepGrid.querySelectorAll('.codep-card').forEach(card => {
+            card.addEventListener('click', () => openModal(card.dataset.concept));
+        });
+
+        modalOverlay.classList.add('visible');
+    }
+
+    if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', () => modalOverlay.classList.remove('visible'));
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) modalOverlay.classList.remove('visible');
+        });
+    }
+
+    if (tooltipDeepdiveBtn) {
+        tooltipDeepdiveBtn.addEventListener('click', () => {
+            if (currentConceptId) openModal(currentConceptId);
+        });
+    }
+
+    // Attach hover listeners to all concept terms across the site
+    document.addEventListener('mouseover', (e) => {
+        const target = e.target.closest('.concept-term, .cloud-word[data-concept]');
+        if (target && target.dataset.concept) {
+            showTooltip(target.dataset.concept, e);
+        }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+        const target = e.target.closest('.concept-term, .cloud-word[data-concept]');
+        if (target) {
+            // Delay hide to check if moving inside tooltip
+            setTimeout(() => {
+                if (!tooltip.matches(':hover')) hideTooltip();
+            }, 100);
+        }
+    });
+
+    tooltip.addEventListener('mouseleave', hideTooltip);
+
+    // ----------------------------------------------------------------------
+    // 3. Render Concept Knowledge Matrix (Blueprint Page)
+    // ----------------------------------------------------------------------
+    const conceptMatrixContainer = document.getElementById('concept-matrix');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    function renderConceptMatrix(filterCategory = 'all') {
+        if (!conceptMatrixContainer) return;
+
+        const filteredKeys = Object.keys(conceptRepo).filter(key => {
+            if (filterCategory === 'all') return true;
+            return conceptRepo[key].category === filterCategory;
+        });
+
+        conceptMatrixContainer.innerHTML = filteredKeys.map(key => {
+            const concept = conceptRepo[key];
+            return `
+                <div class="matrix-concept-card" data-concept="${concept.id}">
+                    <div>
+                        <span class="concept-cat-badge">${concept.catName}</span>
+                        <h3>${concept.title}</h3>
+                        <p>${concept.summary}</p>
+                    </div>
+                    <div class="matrix-card-footer">
+                        <span class="codep-count">${concept.codependents.length} Linked Nodes</span>
+                        <span class="inspect-link">Deep-Dive &rarr;</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        conceptMatrixContainer.querySelectorAll('.matrix-concept-card').forEach(card => {
+            card.addEventListener('click', () => openModal(card.dataset.concept));
+        });
+    }
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderConceptMatrix(btn.dataset.filter);
+        });
+    });
+
+    renderConceptMatrix('all');
+
+    // ----------------------------------------------------------------------
+    // 4. Background Particle Network Canvas Animation
     // ----------------------------------------------------------------------
     const bgCanvas = document.getElementById('bg-canvas');
     if (bgCanvas) {
@@ -71,9 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const particleCount = 45;
 
         class Particle {
-            constructor() {
-                this.reset();
-            }
+            constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
@@ -95,14 +378,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
+        for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 
         function animateBg() {
             ctx.clearRect(0, 0, width, height);
-
-            // Draw connections
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
                 particles[i].draw();
@@ -133,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 3. Interactive Sankey Diagram Visualizer Engine (Blueprint Page)
+    // 5. Interactive Sankey Diagram Visualizer Engine (Blueprint Page)
     // ----------------------------------------------------------------------
     const sankeyContainer = document.getElementById('sankey-container');
     if (sankeyContainer) {
@@ -176,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 4. Interactive Node Topology Canvas Engine (Architecture Map Page)
+    // 6. Interactive Node Topology Canvas Engine (Architecture Map Page)
     // ----------------------------------------------------------------------
     const topoCanvas = document.getElementById('topology-canvas');
     const inspectorContent = document.getElementById('inspector-content');
@@ -217,7 +496,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!width || !height) return;
             ctx.clearRect(0, 0, width, height);
 
-            // Draw Edges
             edges.forEach(edge => {
                 const source = nodes.find(n => n.id === edge.from);
                 const target = nodes.find(n => n.id === edge.to);
@@ -244,7 +522,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.stroke();
             });
 
-            // Draw Nodes
             nodes.forEach(node => {
                 const nx = node.x * width;
                 const ny = node.y * height;
@@ -262,7 +539,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.fill();
                 ctx.shadowBlur = 0;
 
-                // Label
                 ctx.fillStyle = '#ffffff';
                 ctx.font = '12px Inter';
                 ctx.textAlign = 'center';
@@ -294,7 +570,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Preset Button Listeners
         const presetBtns = document.querySelectorAll('.preset-btn');
         presetBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -309,7 +584,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 5. Interactive Tool 1: 1% Per Zero Calculator (Sandbox Page)
+    // 7. Interactive Tool 1: 1% Per Zero Calculator (Sandbox Page)
     // ----------------------------------------------------------------------
     const inputBalA = document.getElementById('input-bal-a');
     const inputBalB = document.getElementById('input-bal-b');
@@ -339,9 +614,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const favors = duration / 3;
         if (favorsExchanged) favorsExchanged.textContent = favors.toFixed(1);
 
-        // Effective contribution percentage: 1% * (1 + average zeros)
         const avgZeros = (logA + logB) / 2;
-        const effectiveRatePct = 1.0 + avgZeros;
+        const effectiveRatePct = Math.min(9.0, Math.max(1.0, 1.0 + avgZeros));
 
         const sharedContrib = favors * (effectiveRatePct / 100);
         const dividend = sharedContrib / 2;
@@ -359,7 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 6. Interactive Tool 2: Test the Equilibrium Simulator (Sandbox Page)
+    // 8. Interactive Tool 2: Test the Equilibrium Simulator (Sandbox Page)
     // ----------------------------------------------------------------------
     const sliderRatio = document.getElementById('slider-ratio');
     const sliderFriction = document.getElementById('slider-friction');
@@ -384,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (valFriction) valFriction.textContent = `${frictionPct.toFixed(2)}%`;
         if (valNodes) valNodes.textContent = nodesCount.toLocaleString();
 
-        const individualVolumePerDay = nodesCount * 1; // 1 favor per node per day
+        const individualVolumePerDay = nodesCount * 1;
         const commercialVolumePerDay = individualVolumePerDay * ratio;
 
         const totalSystemicVolume = individualVolumePerDay + commercialVolumePerDay;
@@ -401,5 +675,59 @@ document.addEventListener('DOMContentLoaded', () => {
             el.addEventListener('input', calculateEquilibrium);
         });
         calculateEquilibrium();
+    }
+
+    // ----------------------------------------------------------------------
+    // 9. Interactive Tool 3: SCL Business Crowdfund Simulator
+    // ----------------------------------------------------------------------
+    const inputPCL = document.getElementById('input-pcl');
+    const sliderDonors = document.getElementById('slider-donors');
+    const sliderQuarters = document.getElementById('slider-quarters');
+
+    const sclDailyRate = document.getElementById('scl-daily-rate');
+    const valDonors = document.getElementById('val-donors');
+    const valQuarters = document.getElementById('val-quarters');
+
+    const sclTotalRaised = document.getElementById('scl-total-raised');
+    const sclActiveLimit = document.getElementById('scl-active-limit');
+
+    const barQ1 = document.getElementById('bar-q1');
+    const barQ2 = document.getElementById('bar-q2');
+    const barQ3 = document.getElementById('bar-q3');
+    const barQ4 = document.getElementById('bar-q4');
+
+    function calculateSCL() {
+        if (!inputPCL || !sliderDonors || !sliderQuarters) return;
+
+        const pcl = parseFloat(inputPCL.value) || 36500;
+        const donors = parseInt(sliderDonors.value, 10);
+        const quarters = parseInt(sliderQuarters.value, 10);
+
+        const dailySCLPerPerson = pcl / 365;
+        if (sclDailyRate) sclDailyRate.textContent = `${dailySCLPerPerson.toFixed(1)} SCL/day`;
+        if (valDonors) valDonors.textContent = `${donors} Donors`;
+
+        const quarterLabels = ['Q0 (Initial Raised)', 'Q1 (3 Months Elapsed)', 'Q2 (6 Months Elapsed)', 'Q3 (9 Months Elapsed)', 'Q4 (12 Months - Expired)'];
+        if (valQuarters) valQuarters.textContent = quarterLabels[quarters];
+
+        const raisedPerPerson = dailySCLPerPerson * 1;
+        const totalRaised = raisedPerPerson * donors * 100; // Simulated donation pool
+        const decayFactor = Math.max(0, 1 - (quarters * 0.25));
+        const activeLimit = totalRaised * decayFactor;
+
+        if (sclTotalRaised) sclTotalRaised.textContent = `${Math.round(totalRaised).toLocaleString()} SCL`;
+        if (sclActiveLimit) sclActiveLimit.textContent = `${Math.round(activeLimit).toLocaleString()} SCL`;
+
+        if (barQ1) barQ1.style.width = quarters >= 1 ? '0%' : '75%';
+        if (barQ2) barQ2.style.width = quarters >= 2 ? '0%' : '50%';
+        if (barQ3) barQ3.style.width = quarters >= 3 ? '0%' : '25%';
+        if (barQ4) barQ4.style.width = '0%';
+    }
+
+    if (inputPCL) {
+        [inputPCL, sliderDonors, sliderQuarters].forEach(el => {
+            el.addEventListener('input', calculateSCL);
+        });
+        calculateSCL();
     }
 });
