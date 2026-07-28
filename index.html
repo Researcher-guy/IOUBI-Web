@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IOUBI - Decentralized Human Time Protocol</title>
-    <meta name="description" content="IOUBI is a decentralized social protocol trading strictly in human time and 3-minute favors. Beyond money. Beyond scarcity.">
+    <title>IOUBI - Zero-Interest Mutual Credit Protocol</title>
+    <meta name="description" content="IOUBI replaces interest-bearing debt with Just-In-Time 0% credit lines and a universal transaction-fee UBI—eliminating the 40% financial drag on real enterprise.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,434 +17,254 @@
         <canvas id="bg-canvas"></canvas>
     </div>
 
-    <!-- Floating Global Concept Tooltip Bubble -->
-    <div id="concept-bubble-tooltip" class="concept-tooltip">
-        <div class="tooltip-header">
-            <span class="tooltip-badge" id="tooltip-category">FOUNDATIONAL CONCEPT</span>
-            <h4 id="tooltip-title">Concept Title</h4>
-        </div>
-        <p id="tooltip-body">Concept description and explanation will appear here.</p>
-        <div class="tooltip-codependents">
-            <span class="codep-label">Co-Dependent Concepts:</span>
-            <div id="tooltip-codep-tags" class="tag-list"></div>
-        </div>
-        <div class="tooltip-footer">
-            <button id="tooltip-deepdive-btn" class="btn-xs">Deep-Dive Concept &rarr;</button>
-        </div>
-    </div>
-
-    <!-- Deep Dive Concept Modal -->
-    <div id="concept-modal-overlay" class="modal-overlay">
-        <div class="modal-card glass-panel">
-            <button id="modal-close-btn" class="modal-close">&times;</button>
-            <span class="section-tag" id="modal-category">CATEGORY</span>
-            <h2 id="modal-title">Concept Title</h2>
-            <div class="modal-body" id="modal-content">
-                <!-- Injected via JavaScript -->
-            </div>
-            <div class="modal-codependent-box">
-                <h4>Interconnected Systemic Relations</h4>
-                <p>This concept relies upon and reinforces the following protocol mechanisms:</p>
-                <div id="modal-codependent-grid" class="codep-grid"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- Navigation Bar -->
     <header class="navbar" id="top-nav">
         <div class="nav-container">
-            <a href="#landing" class="brand-logo" id="nav-brand" data-target="landing">
+            <a href="#hero" class="brand-logo">
                 <svg class="deltar-icon" viewBox="0 0 100 100" width="36" height="36" aria-label="Deltar Symbol">
-                    <!-- Outer Hexagonal / Circular Halo -->
                     <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="var(--accent-glow)" stroke-width="3" class="deltar-outer"/>
                     <!-- Inner Triangle pointing to the LEFT as per Master Spec -->
-                    <polygon points="25,50 75,22 75,78" fill="var(--accent-color)" stroke="var(--accent-cyan)" stroke-width="2" class="deltar-inner"/>
+                    <polygon points="25,50 75,22 75,78" fill="var(--accent-cyan)" stroke="var(--accent-cyan)" stroke-width="2" class="deltar-inner"/>
                 </svg>
                 <div class="brand-text">
                     <span class="brand-title">IOUBI</span>
-                    <span class="brand-subtitle">HUMAN TIME PROTOCOL</span>
+                    <span class="brand-subtitle">MUTUAL CREDIT PROTOCOL</span>
                 </div>
             </a>
 
             <nav class="nav-links">
-                <button class="nav-btn active" data-target="landing">Narrative Hub</button>
-                <button class="nav-btn" data-target="blueprint">The Blueprint</button>
-                <button class="nav-btn" data-target="architecture">Architecture Map</button>
-                <button class="nav-btn" data-target="sandbox">The Sandbox</button>
-                <button class="nav-btn" data-target="assembly">Assembly Room</button>
+                <a href="#specs" class="nav-link">Specifications</a>
+                <a href="#mechanics" class="nav-link">Core Mechanics</a>
+                <a href="#docs" class="nav-link">Documentation Hub</a>
+                <a href="#simulators" class="nav-link">Simulators</a>
+                <a href="#roadmap" class="nav-link">Roadmap</a>
             </nav>
 
             <div class="nav-actions">
-                <span class="status-pill"><span class="pulse-dot"></span> Phase 1: Mercury</span>
+                <span class="status-badge"><span class="pulse-dot"></span> Active Code: Week 18 of 35 | Pilot: Oct</span>
             </div>
         </div>
     </header>
 
     <main id="app-main">
         <!-- =================================================================== -->
-        <!-- PAGE 1: THE LANDING PAGE (NARRATIVE HUB)                            -->
+        <!-- 1. HERO SECTION (ABOVE THE FOLD)                                    -->
         <!-- =================================================================== -->
-        <section id="page-landing" class="page-view active">
-            <!-- Hero Section -->
-            <div class="hero-section">
-                <div class="hero-bg-glow"></div>
-                <div class="hero-deltar-wrapper">
-                    <svg class="deltar-hero-icon" viewBox="0 0 100 100" width="140" height="140">
-                        <polygon points="50,4 93,27 93,73 50,96 7,73 7,27" fill="none" stroke="var(--accent-cyan)" stroke-width="2" class="halo-spin"/>
-                        <!-- Inner Triangle strictly pointing to the LEFT -->
-                        <polygon points="22,50 78,18 78,82" fill="url(#deltar-grad)" stroke="var(--accent-cyan)" stroke-width="2"/>
-                        <defs>
-                            <linearGradient id="deltar-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="var(--accent-cyan)"/>
-                                <stop offset="100%" stop-color="var(--accent-indigo)"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
-
-                <h1 class="hero-headline">Beyond Money. Beyond Scarcity.<br><span class="glow-text">Welcome to the Human Economy.</span></h1>
-                
-                <p class="hero-copy">
-                    As AI accelerates and traditional markets collapse into financialized rent-seeking, fighting over a shrinking pool of money is <span class="concept-term" data-concept="musical-cages">a game of musical cages</span>—and the bots are removing the cages faster than humans. It’s time to opt out.
-                </p>
-
-                <div class="hero-cta-group">
-                    <button class="btn btn-primary" data-target="sandbox">
-                        <span>Test The Math Sandbox</span>
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </button>
-                    <button class="btn btn-secondary" data-target="blueprint">
-                        <span>Explore Concept Matrix</span>
-                    </button>
-                </div>
+        <section id="hero" class="hero-section">
+            <div class="hero-bg-glow"></div>
+            
+            <div class="engineering-badge">
+                <span class="badge-icon">⚡</span>
+                <span>Active Code: Week 18 of 35 | Target Pilot: October</span>
             </div>
 
-            <!-- S-Curve Container -->
-            <div class="scurve-wrapper">
-                <!-- Section 2: The Pivot (Word Cloud S-Curve) -->
-                <div class="scurve-block scurve-left">
-                    <div class="scurve-visual">
-                        <div class="word-cloud-container" id="word-cloud">
-                            <span class="cloud-word w1" style="left: 15%; top: 20%;" data-concept="personal-conversion">Personal Conversion</span>
-                            <span class="cloud-word w2" style="left: 55%; top: 15%;" data-concept="rainwater-abundance">Rainwater Abundance</span>
-                            <span class="cloud-word w3" style="left: 30%; top: 50%;" data-concept="musical-cages">Opt-Out Paradigm</span>
-                            <span class="cloud-word w4" style="left: 65%; top: 60%;" data-concept="scl-donations">SCL Crowdfund</span>
-                            <span class="cloud-word w5" style="left: 10%; top: 75%;" data-concept="favors">3-Minute Favors</span>
-                            <span class="cloud-word w6" style="left: 45%; top: 80%;" data-concept="log10-fee">Log10 Scaling</span>
-                        </div>
-                    </div>
-                    <div class="scurve-text">
-                        <span class="section-tag">01 / THE PIVOT</span>
-                        <h2>Replacing Financial Distortions</h2>
-                        <p class="lead-text">We aren't fixing money; we are replacing it with human time.</p>
-                        <p>Traditional accounting systems measure artificial scarcity and speculative leverage. IOUBI treats currency strictly as a <span class="concept-term" data-concept="money-iou">receipt of an IOU</span>, anchored to the ultimate root standard of value: <span class="concept-term" data-concept="human-labor-standard">human labor time</span>.</p>
-                    </div>
-                </div>
-
-                <!-- Section 3: The Mechanics -->
-                <div class="scurve-block scurve-right">
-                    <div class="scurve-text">
-                        <span class="section-tag">02 / THE MECHANICS</span>
-                        <h2>Immutable Value & Self-Scaling Contributions</h2>
-                        
-                        <div class="concept-card">
-                            <div class="concept-badge">Concept 1</div>
-                            <h3>The <span class="concept-term" data-concept="favors">3-Minute Favor</span></h3>
-                            <p>The unbreakable measure of value. Every task, unit of collaboration, or support is measured in standardized human effort units.</p>
-                        </div>
-
-                        <div class="concept-card">
-                            <div class="concept-badge">Concept 2</div>
-                            <h3><span class="concept-term" data-concept="log10-fee">1% Per Zero Contribution (Log10 Fee)</span></h3>
-                            <p>Users contribute 1% to 9% based on the number of zeros in their account balance, creating a self-balancing progressive engine that reduces systemic inequality.</p>
-                        </div>
-                    </div>
-                    <div class="scurve-visual">
-                        <div class="interactive-mechanic-preview">
-                            <div class="mechanic-card">
-                                <h4>Balance Contribution Scaling</h4>
-                                <div class="scale-item">
-                                    <span>10 Favors (1 Zero)</span>
-                                    <div class="bar-bg"><div class="bar-fill" style="width: 10%;"></div></div>
-                                    <span class="val">1%</span>
-                                </div>
-                                <div class="scale-item">
-                                    <span>1,000 Favors (3 Zeros)</span>
-                                    <div class="bar-bg"><div class="bar-fill" style="width: 30%;"></div></div>
-                                    <span class="val">3%</span>
-                                </div>
-                                <div class="scale-item">
-                                    <span>1,000,000 Favors (6 Zeros)</span>
-                                    <div class="bar-bg"><div class="bar-fill" style="width: 60%;"></div></div>
-                                    <span class="val">6%</span>
-                                </div>
-                                <div class="scale-item">
-                                    <span>1,000,000,000 (9 Zeros)</span>
-                                    <div class="bar-bg"><div class="bar-fill" style="width: 90%;"></div></div>
-                                    <span class="val">9%</span>
-                                </div>
-                                <div class="preview-note">Logarithmic scaling guarantees systemic equilibrium.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 4: The Payoff -->
-                <div class="scurve-block scurve-left">
-                    <div class="scurve-visual">
-                        <div class="handshake-node-vis">
-                            <div class="node-box node-a">
-                                <div class="avatar">A</div>
-                                <span>User Alpha</span>
-                                <small>Initiates Favor</small>
-                            </div>
-
-                            <div class="flow-pipe">
-                                <svg class="pipe-svg" viewBox="0 0 200 60">
-                                    <path d="M 10 30 Q 100 0 190 30" fill="none" stroke="var(--accent-cyan)" stroke-width="3" stroke-dasharray="6,6" class="dash-flow"/>
-                                    <path d="M 100 15 L 100 55" fill="none" stroke="var(--accent-magenta)" stroke-width="2" stroke-dasharray="4,4"/>
-                                    <circle cx="100" cy="55" r="5" fill="var(--accent-magenta)"/>
-                                </svg>
-                                <div class="dividend-pool-badge">
-                                    <span><span class="concept-term" data-concept="midnight-tally">Midnight Pool Tally</span></span>
-                                </div>
-                            </div>
-
-                            <div class="node-box node-b">
-                                <div class="avatar">B</div>
-                                <span>User Beta</span>
-                                <small>Receives Favor</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="scurve-text">
-                        <span class="section-tag">03 / THE PAYOFF</span>
-                        <h2>Funding Collective Effort</h2>
-                        <p class="lead-text">Every transaction splits the contribution, funding the <span class="concept-term" data-concept="dividend-split">Automatic Dividend of Collective Efforts</span>.</p>
-                        <p>Contributions collected are deleted from circulation and recreated at midnight into a global pool, distributing 75% as universal daily baseline dividends and 20% to insurance/grants approved by <span class="concept-term" data-concept="jury-voting">Jury-Style Shift Voting</span>.</p>
-                    </div>
-                </div>
+            <div class="hero-deltar-wrapper">
+                <svg class="deltar-hero-icon" viewBox="0 0 100 100" width="120" height="120">
+                    <polygon points="50,4 93,27 93,73 50,96 7,73 7,27" fill="none" stroke="var(--accent-cyan)" stroke-width="2" class="halo-spin"/>
+                    <!-- Inner Triangle pointing strictly to the LEFT -->
+                    <polygon points="22,50 78,18 78,82" fill="url(#deltar-grad)" stroke="var(--accent-cyan)" stroke-width="2"/>
+                    <defs>
+                        <linearGradient id="deltar-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent-cyan)"/>
+                            <stop offset="100%" stop-color="var(--accent-indigo)"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
             </div>
 
-            <!-- Section 5: The Router (Footer Navigation Cards) -->
-            <div class="router-section">
-                <h2 class="router-title">Explore The Protocol Deep Dives</h2>
-                <div class="router-grid">
-                    <div class="router-card" data-target="blueprint">
-                        <div class="card-icon">📐</div>
-                        <h3>The Blueprint & Concept Matrix</h3>
-                        <p>Full repository of 15+ interconnected economic concepts, time pegs, and Sankey flow diagrams.</p>
-                        <span class="card-link">Explore Blueprint &rarr;</span>
-                    </div>
+            <h1 class="hero-headline">Zero-Interest Mutual Credit<br><span class="glow-text">for Local Abundance</span></h1>
+            
+            <p class="hero-subheadline">
+                IOUBI replaces interest-bearing debt with Just-In-Time 0% credit lines and a universal transaction-fee UBI—eliminating the 40% financial drag on real enterprise.
+            </p>
 
-                    <div class="router-card" data-target="architecture">
-                        <div class="card-icon">🗺️</div>
-                        <h3>The Architecture Map</h3>
-                        <p>Interactive full-screen visual topology graph and guided network presets.</p>
-                        <span class="card-link">Launch Topology &rarr;</span>
-                    </div>
+            <div class="hero-cta-group">
+                <a href="#docs" class="btn btn-primary">
+                    <span>Read 5-Min Primer</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                </a>
+                <a href="#specs" class="btn btn-secondary">
+                    <span>Explore the Architecture</span>
+                </a>
+            </div>
+        </section>
 
-                    <div class="router-card" data-target="sandbox">
-                        <div class="card-icon">🧪</div>
-                        <h3>The Sandbox</h3>
-                        <p>Simulate Log10 fees, macroeconomic ratios, and SCL Business Crowdfund decay.</p>
-                        <span class="card-link">Run Simulators &rarr;</span>
-                    </div>
+        <!-- =================================================================== -->
+        <!-- 2. KEY SPECIFICATIONS GRID (4-BOX DISPLAY)                          -->
+        <!-- =================================================================== -->
+        <section id="specs" class="section-container">
+            <div class="section-header">
+                <span class="section-tag">CORE ARCHITECTURE</span>
+                <h2>Key Specifications Grid</h2>
+                <p class="section-desc">Four fundamental accounting mechanics driving zero-interest stability and systemic balance.</p>
+            </div>
 
-                    <div class="router-card" data-target="assembly">
-                        <div class="card-icon">🏛️</div>
-                        <h3>The Assembly Room</h3>
-                        <p>Development status tracker, peer review gateways, and contribution avenues.</p>
-                        <span class="card-link">Enter Assembly &rarr;</span>
-                    </div>
+            <div class="specs-grid">
+                <div class="spec-card glass-panel">
+                    <div class="spec-number">01</div>
+                    <h3>Zero-Sum Mutual Credit</h3>
+                    <p class="spec-formula">$\sum \text{Balances} = 0$</p>
+                    <p>Strict double-entry ledger invariant. Liquidity is generated between buyer and seller with zero central bank debt, zero money printing, and zero interest compounding.</p>
+                </div>
+
+                <div class="spec-card glass-panel">
+                    <div class="spec-number">02</div>
+                    <h3>0% JIT Overdrafts</h3>
+                    <p class="spec-formula">$\text{Credit Issued} \equiv \text{Real Demand}$</p>
+                    <p>Liquidity is created Just-In-Time (JIT) only as real commercial transactions occur and is naturally extinguished upon debt repayment back to society.</p>
+                </div>
+
+                <div class="spec-card glass-panel">
+                    <div class="spec-number">03</div>
+                    <h3>1.4% Universal Fee</h3>
+                    <p class="spec-formula">$\text{Fee} = f(\text{Transaction Velocity})$</p>
+                    <p>A smooth, automated velocity contribution on spending that continuously funds universal daily basic dividends, community healthcare, and emergency grant pools.</p>
+                </div>
+
+                <div class="spec-card glass-panel">
+                    <div class="spec-number">04</div>
+                    <h3>Local Social Governance</h3>
+                    <p class="spec-formula">$\text{Group Size} \ge 25 \text{ Donors}$</p>
+                    <p>25-person social approval loops set and bound business credit limits democratically without courting private venture investors or predatory lenders.</p>
                 </div>
             </div>
         </section>
 
         <!-- =================================================================== -->
-        <!-- PAGE 2: THE BLUEPRINT (MECHANICS, TIMELINE & CONCEPT MATRIX)       -->
+        <!-- 3. CORE MECHANICS BREAKDOWN (LINEAR TEXT SECTIONS)                 -->
         <!-- =================================================================== -->
-        <section id="page-blueprint" class="page-view">
-            <div class="page-header">
-                <span class="section-tag">DEEP ECONOMIC THEORY</span>
-                <h1>The Blueprint & Concept Knowledge Matrix</h1>
-                <p class="header-desc">Explore the interconnected theoretical pillars of the IOUBI protocol. Click any concept card to inspect its co-dependent mechanisms.</p>
+        <section id="mechanics" class="section-container">
+            <div class="section-header">
+                <span class="section-tag">DEEP SYSTEM ENGINE</span>
+                <h2>Core Mechanics Breakdown</h2>
+                <p class="section-desc">Comprehensive architectural breakdown of how IOUBI restructures monetary velocity and enterprise credit.</p>
             </div>
 
-            <!-- Interconnected Concept Knowledge Matrix -->
-            <div class="blueprint-block glass-panel">
-                <div class="matrix-header">
-                    <h2>Protocol Concept Repository</h2>
-                    <div class="cluster-filters">
-                        <button class="filter-btn active" data-filter="all">All Concepts</button>
-                        <button class="filter-btn" data-filter="value">1. Value & Time</button>
-                        <button class="filter-btn" data-filter="friction">2. Contribution Math</button>
-                        <button class="filter-btn" data-filter="commons">3. Commons Safety Net</button>
-                        <button class="filter-btn" data-filter="business">4. Business & SCL</button>
+            <div class="mechanics-linear-layout">
+                <!-- Section A: The Dual-Fix Framework -->
+                <article class="mechanic-block glass-panel">
+                    <div class="mech-header">
+                        <span class="mech-icon">⚖️</span>
+                        <h2>The Dual-Fix Framework</h2>
                     </div>
-                </div>
+                    <p class="lead-text">Why Universal Basic Income (UBI) without eliminating the 40% interest drag fails, and how IOUBI solves both simultaneously.</p>
+                    <div class="mech-content">
+                        <p>Traditional Universal Basic Income proposals fail because introducing cash infusions into an interest-bearing financial system causes immediate price inflation. Up to 40% of every dollar spent in traditional retail goods goes directly to paying hidden compound interest costs embedded across upstream supply chains.</p>
+                        <p>IOUBI implements a simultaneous dual-fix: replacing interest-bearing commercial credit with 0% Just-In-Time mutual credit lines while funding an Automatic Dividend of Collective Efforts from spending velocity. By removing the 40% financial drag, real living costs collapse toward zero marginal cost while daily basic dividends cover 100% of essential needs.</p>
+                    </div>
+                </article>
 
-                <div class="concept-matrix-grid" id="concept-matrix">
-                    <!-- Rendered dynamically by app.js -->
-                </div>
+                <!-- Section B: Demurrage & Credit Limits -->
+                <article class="mechanic-block glass-panel">
+                    <div class="mech-header">
+                        <span class="mech-icon">⏳</span>
+                        <h2>Demurrage & Credit Limits</h2>
+                    </div>
+                    <p class="lead-text">How 25% quarterly demurrage applies strictly to unused business credit lines to prevent corporate hoarding.</p>
+                    <div class="mech-content">
+                        <p>Personal accounts accumulate non-transferable Social Credit Limit (SCL) units daily at a rate equal to $\frac{1}{365}\text{th}$ of their Personal Credit Limit (PCL). Members donate SCL to local enterprise accounts to expand their zero-interest overdraft ceiling.</p>
+                        <p>To prevent business accounts from accumulating stagnant unused credit lines, a 25% quarterly demurrage applies strictly to donated business credit limits. Every 3 months (quarter), 25% of unearned credit expires, forcing enterprise accounts to deliver real product value or re-engage their 25-person community donor assembly.</p>
+                    </div>
+                </article>
+
+                <!-- Section C: Security & Self-Sovereignty -->
+                <article class="mechanic-block glass-panel">
+                    <div class="mech-header">
+                        <span class="mech-icon">🛡️</span>
+                        <h2>Security & Self-Sovereignty</h2>
+                    </div>
+                    <p class="lead-text">Peer-to-peer agent-centric validation and ledger integrity without energy-wasteful proof-of-work.</p>
+                    <div class="mech-content">
+                        <p>IOUBI utilizes an agent-centric cryptographic validation protocol. Rather than relying on global consensus bottlenecks or expensive proof-of-work mining, each transaction is validated locally between transacting agents using double-entry cryptographic signatures.</p>
+                        <p>Logarithmic balance zero fees ($\text{Fee} = \text{Average}(\log_{10}(\text{Bal}_1), \log_{10}(\text{Bal}_2))$) naturally penalize mega-account hoarding ($9\%$ for billion-Deltar transfers vs. $1\%$ for standard favors), creating an un-gameable economic security barrier against wealth concentration attacks.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- 4. THE DOCUMENTATION HUB (3-TIER FUNNEL)                             -->
+        <!-- =================================================================== -->
+        <section id="docs" class="section-container">
+            <div class="section-header">
+                <span class="section-tag">KNOWLEDGE BASE</span>
+                <h2>The Documentation Hub</h2>
+                <p class="section-desc">Explore the 3-tier reading funnel designed for newcomers, system architects, and economic theorists.</p>
             </div>
 
-            <!-- Section 1: The Time Peg -->
-            <div class="blueprint-block glass-panel">
-                <div class="block-icon">⏳</div>
-                <div class="block-content">
-                    <h2>Section 1: The Time Peg (<span class="concept-term" data-concept="time-peg">"Borrowing from Yourself"</span>)</h2>
-                    <p>In legacy accounting systems, accessing liquidity requires submitting to compounding financial burdens on future productivity. In IOUBI, drawing from the system is simply moving your own future time to the present, fundamentally neutralizing systemic friction and postponing repayment seamlessly.</p>
-                    <div class="timepeg-comparison">
-                        <div class="compare-col legacy">
-                            <h4>Legacy System</h4>
-                            <p>Accessing Liquidity = Bank Creates Financial Burdens (Compounding pressure on future work)</p>
-                        </div>
-                        <div class="compare-col ioubi">
-                            <h4>IOUBI Protocol</h4>
-                            <p>Borrowing from yourself = Reallocating your future 3-Minute Favors to present (Postponing repayment)</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 2: The Unearthed Ratio of Equilibrium (Sankey Diagram) -->
-            <div class="blueprint-block glass-panel">
-                <h2>Section 2: The Unearthed Ratio of Equilibrium</h2>
-                <p class="lead-text">The machine sustains the network. The sheer velocity of commercial supply chains perfectly funds the human cost of living.</p>
-
-                <!-- Interactive Sankey Diagram Visualizer -->
-                <div class="sankey-wrapper">
-                    <div class="sankey-header">
-                        <h3>Macroeconomic Flow (Sankey Diagram)</h3>
-                        <div class="sankey-legend">
-                            <span class="leg-item"><span class="color-dot commercial"></span> Commercial Commerce (70 Parts)</span>
-                            <span class="leg-item"><span class="color-dot individual"></span> Individual Commerce (1 Part)</span>
-                            <span class="leg-item"><span class="color-dot dividend"></span> 1.4% Shared Contribution Pool</span>
-                        </div>
-                    </div>
+            <div class="docs-funnel-grid">
+                <!-- Card 1: ELI5 Primer -->
+                <div class="doc-card glass-panel">
+                    <div class="doc-badge">TIER 1</div>
+                    <h3>ELI5 Primer</h3>
+                    <p class="doc-subtitle">New Here? Start Here (5-Minute Read)</p>
+                    <p class="doc-desc">A non-technical, plain-English breakdown explaining how zero-interest social credit and universal basic income create immediate local economic stability.</p>
                     
-                    <div id="sankey-container" class="sankey-canvas-box">
-                        <!-- Rendered dynamically by app.js -->
+                    <div class="primer-inline-box" id="primer-box">
+                        <details class="primer-accordion">
+                            <summary class="primer-summary"><span>Preview ELI5 Primer Content</span> <small>&darr;</small></summary>
+                            <div class="primer-text">
+                                <h4>Money is an IOU Receipt</h4>
+                                <p>When you work or provide value, society gives you a receipt. In the current system, banks charge interest on those receipts, making life 40% more expensive for everyone. IOUBI lets communities issue 0% credit to each other using human time as the standard.</p>
+                                <h4>How the Dividend Works</h4>
+                                <p>A tiny 1.4% fee on spending is collected and deleted. At midnight every day, it is recreated into a pool that pays a daily dividend to every living human equal to basic living costs.</p>
+                            </div>
+                        </details>
                     </div>
 
-                    <div class="sankey-stat-grid">
-                        <div class="stat-card">
-                            <span class="stat-val">70 : 1</span>
-                            <span class="stat-lbl">Commercial to Individual Ratio</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-val">1.4%</span>
-                            <span class="stat-lbl">Sliver Contribution Rate</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-val">100%</span>
-                            <span class="stat-lbl">Human Baseline Funded</span>
-                        </div>
-                    </div>
+                    <a href="#primer-box" class="btn btn-secondary w-full" onclick="document.querySelector('.primer-accordion').open = true;">
+                        <span>Read ELI5 Primer</span>
+                    </a>
                 </div>
-            </div>
 
-            <!-- Section 3: Evolutionary Timeline -->
-            <div class="blueprint-block glass-panel">
-                <h2>Section 3: The Path to Abundance (Evolutionary Timeline)</h2>
-                <p>The system does not support everyone instantly, but scales dynamically with commercial adoption across four distinct planetary phases.</p>
-
-                <div class="timeline-stepper">
-                    <div class="timeline-phase active-phase">
-                        <div class="phase-badge">Phase 1</div>
-                        <h3>Mercury — The Spark</h3>
-                        <p class="phase-sub">Peer-to-Peer Genesis</p>
-                        <p>Driven entirely by human-to-human time exchange. The dividend is small—proving the math and establishing organic trust among initial nodes.</p>
-                    </div>
-
-                    <div class="timeline-phase">
-                        <div class="phase-badge">Phase 2</div>
-                        <h3>Venus — Integration</h3>
-                        <p class="phase-sub">Local Commerce Loops In</p>
-                        <p>Small businesses and freelancers merge into the network, creating a sustainable environment where the dividend covers basic utilities and daily favors.</p>
-                    </div>
-
-                    <div class="timeline-phase">
-                        <div class="phase-badge">Phase 3</div>
-                        <h3>Earth — The Unearthed Equilibrium</h3>
-                        <p class="phase-sub">Commercial Parity</p>
-                        <p>Parity achieved. The 70x commercial engine fully sustains the human baseline. If a community desires a higher standard, they collectively grow the commercial economy that sustains it.</p>
-                    </div>
-
-                    <div class="timeline-phase">
-                        <div class="phase-badge">Phase 4</div>
-                        <h3>Beyond — Absolute Abundance</h3>
-                        <p class="phase-sub"><span class="concept-term" data-concept="rainwater-abundance">Rainwater Abundance</span></p>
-                        <p>The Star Trek economy. Automated AI commerce takes over the 70x engine. Deltars become abundant rainwater falling on gardens, freeing humanity from profit motives.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================================================================== -->
-        <!-- PAGE 3: ARCHITECTURE MAP (VISUAL TOPOLOGY)                          -->
-        <!-- =================================================================== -->
-        <section id="page-architecture" class="page-view">
-            <div class="topology-fullscreen-wrapper">
-                <div class="topology-sidebar">
-                    <h2>Architecture Map</h2>
-                    <p class="sidebar-subtitle">Visual Network Topology</p>
+                <!-- Card 2: Technical Whitepaper -->
+                <div class="doc-card glass-panel highlight-card">
+                    <div class="doc-badge accent">TIER 2</div>
+                    <h3>Technical Whitepaper</h3>
+                    <p class="doc-subtitle">For Developers & System Architects</p>
+                    <p class="doc-desc">Full double-entry accounting specifications, state machines, cryptographic threat models, and logarithmic fee equations.</p>
                     
-                    <div class="preset-controls">
-                        <label>Guided Preset Views:</label>
-                        <button class="preset-btn active" id="preset-1" data-preset="deltar">
-                            <span class="preset-icon">◀</span>
-                            <div class="btn-info">
-                                <strong>Trace the Deltar</strong>
-                                <small>Highlights network flow vectors</small>
-                            </div>
-                        </button>
+                    <ul class="doc-feature-list">
+                        <li>✓ Agent-Centric Cryptographic Ledger</li>
+                        <li>✓ Log10 Zero Balance Fee Equations</li>
+                        <li>✓ 25-Person Assembly Consensus State Machine</li>
+                    </ul>
 
-                        <button class="preset-btn" id="preset-2" data-preset="multiplier">
-                            <span class="preset-icon">✖</span>
-                            <div class="btn-info">
-                                <strong>The Personal Multiplier</strong>
-                                <small>Zooms in on individual favor mechanics</small>
-                            </div>
-                        </button>
-
-                        <button class="preset-btn" id="preset-3" data-preset="dividend">
-                            <span class="preset-icon">⚙</span>
-                            <div class="btn-info">
-                                <strong>The Dividend Engine</strong>
-                                <small>Shows routing of split contribution</small>
-                            </div>
-                        </button>
-                    </div>
-
-                    <div class="node-inspector glass-panel">
-                        <h4>Node Inspector</h4>
-                        <div id="inspector-content">
-                            <p class="inspect-hint">Hover over or click any node in the topology map to trace its protocol routing.</p>
-                        </div>
-                    </div>
+                    <a href="website specification-1.pdf" target="_blank" class="btn btn-primary w-full">
+                        <span>Read Technical Whitepaper (PDF)</span>
+                    </a>
                 </div>
 
-                <div class="topology-canvas-container">
-                    <canvas id="topology-canvas"></canvas>
-                    <div class="canvas-overlay-controls">
-                        <button class="icon-btn" id="btn-zoom-in" title="Zoom In">+</button>
-                        <button class="icon-btn" id="btn-zoom-out" title="Zoom Out">-</button>
-                        <button class="icon-btn" id="btn-reset-view" title="Reset View">⟲</button>
+                <!-- Card 3: "Healing Money" Book -->
+                <div class="doc-card glass-panel">
+                    <div class="doc-badge">TIER 3</div>
+                    <h3>"Healing Money"</h3>
+                    <p class="doc-subtitle">The Foundational Philosophy</p>
+                    <p class="doc-desc">The complete book exploring post-scarcity economics, non-debt monetary design, and democratic credit infrastructure for local abundance.</p>
+
+                    <div class="book-cover-preview">
+                        <div class="spine"></div>
+                        <div class="cover-content">
+                            <h4>HEALING MONEY</h4>
+                            <small>By Todd McKissick</small>
+                        </div>
                     </div>
+
+                    <a href="https://amazon.com" target="_blank" rel="noopener" class="btn btn-secondary w-full">
+                        <span>Purchase "Healing Money"</span>
+                    </a>
                 </div>
             </div>
         </section>
 
         <!-- =================================================================== -->
-        <!-- PAGE 4: THE SANDBOX (INTERACTIVE SIMULATORS)                        -->
+        <!-- 5. INTERACTIVE SIMULATORS                                           -->
         <!-- =================================================================== -->
-        <section id="page-sandbox" class="page-view">
-            <div class="page-header">
-                <span class="section-tag">PROOF-OF-MATH SIMULATION</span>
-                <h1>The Sandbox: Interactive Mathematical Simulators</h1>
-                <p class="header-desc">Mathematically verify the protocol's systemic fairness, logarithmic zero scaling, and SCL crowdfund decay in real time.</p>
+        <section id="simulators" class="section-container">
+            <div class="section-header">
+                <span class="section-tag">PROOF-OF-MATH SANDBOX</span>
+                <h2>Interactive Simulators</h2>
+                <p class="section-desc">Test protocol parameters, logarithmic balance fee scaling, and SCL business overdraft decay in real time.</p>
             </div>
 
             <div class="sandbox-grid">
@@ -452,7 +272,7 @@
                 <div class="sandbox-card glass-panel">
                     <div class="tool-header">
                         <span class="tool-badge">Tool 01</span>
-                        <h2>The <span class="concept-term" data-concept="log10-fee">1% Per Zero Calculator</span></h2>
+                        <h2>1% Per Zero Log10 Calculator</h2>
                     </div>
                     <p class="tool-desc">Calculates the exact shared contribution generated by a transaction based on payor/payee account zeros ($1\% \text{ to } 9\%$).</p>
 
@@ -496,7 +316,7 @@
                 <div class="sandbox-card glass-panel">
                     <div class="tool-header">
                         <span class="tool-badge">Tool 02</span>
-                        <h2>Test the Macroeconomic Equilibrium</h2>
+                        <h2>Test Macroeconomic Equilibrium</h2>
                     </div>
                     <p class="tool-desc">Adjust commercial velocity and friction parameters to prove that the Automatic Dividend covers basic living standards.</p>
 
@@ -549,7 +369,7 @@
                 <div class="sandbox-card glass-panel span-full">
                     <div class="tool-header">
                         <span class="tool-badge">Tool 03</span>
-                        <h2><span class="concept-term" data-concept="scl-donations">Social Credit Limit (SCL) Crowdfund & Decay Simulator</span></h2>
+                        <h2>Social Credit Limit (SCL) Crowdfund & Decay Simulator</h2>
                     </div>
                     <p class="tool-desc">Simulate how personal accounts donate 1/365th of their Personal Credit Limit (PCL) as SCL to expand a business overdraft limit, and observe the 25% quarterly decay schedule.</p>
 
@@ -612,82 +432,57 @@
         </section>
 
         <!-- =================================================================== -->
-        <!-- PAGE 5: THE ASSEMBLY ROOM (COMMUNITY & BUILD STATUS)                -->
+        <!-- 6. PROJECT ROADMAP & DEVELOPMENT PROGRESS                          -->
         <!-- =================================================================== -->
-        <section id="page-assembly" class="page-view">
-            <div class="page-header">
-                <span class="section-tag">INNER CIRCLE WORKSPACE</span>
-                <h1>The Assembly Room</h1>
-                <p class="header-desc">Collaborative hub for thinkers, developers, and builders transitioning IOUBI from theory to reality.</p>
+        <section id="roadmap" class="section-container">
+            <div class="section-header">
+                <span class="section-tag">ENGINEERING MILESTONES</span>
+                <h2>Project Roadmap & Progress</h2>
+                <p class="section-desc">Engineering trajectory transitioning zero-interest mutual credit from specification to live pilot launch.</p>
             </div>
 
-            <div class="assembly-sections">
-                <!-- Section 1: Build Status -->
-                <div class="assembly-card glass-panel">
-                    <h2>Section 1: The Build Status</h2>
-                    <p class="lead-text">Professional coding is actively funded and underway, transitioning the system from theory to reality.</p>
-                    
-                    <div class="progress-bar-container">
-                        <div class="progress-header">
-                            <span>Current Phase: <strong>Mercury Genesis Core Engine</strong></span>
-                            <span class="progress-pct">68% Complete</span>
-                        </div>
-                        <div class="track-bar">
-                            <div class="fill-bar" style="width: 68%;"></div>
-                        </div>
-                        <div class="milestone-markers">
-                            <span class="marker done">Math Spec</span>
-                            <span class="marker done">Web Portal</span>
-                            <span class="marker active">Protocol Node Engine</span>
-                            <span class="marker">Beta Network</span>
-                        </div>
+            <div class="roadmap-timeline-box glass-panel">
+                <div class="timeline-stepper-horizontal">
+                    <div class="timeline-step active">
+                        <div class="step-badge">CURRENT</div>
+                        <h4>Week 18</h4>
+                        <p class="step-title">Core Web Architecture & Math Models</p>
+                        <p class="step-desc">Linear web overhaul, Log10 scaling proofs, and 4-card accounting specification completion.</p>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="step-badge pending">MILESTONE 2</div>
+                        <h4>Week 25</h4>
+                        <p class="step-title">Core Engine & Node Cryptography</p>
+                        <p class="step-desc">Agent-centric peer ledger validation, double-entry signature verification, and p2p state machine.</p>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="step-badge target">TARGET PILOT</div>
+                        <h4>Week 35 / October</h4>
+                        <p class="step-title">Community Pilot Network Launch</p>
+                        <p>Deployment of live zero-interest credit loops with initial 25-person community assemblies.</p>
                     </div>
                 </div>
 
-                <!-- Section 2: Peer Review & Discussion -->
-                <div class="assembly-card glass-panel">
-                    <h2>Section 2: Peer Review & Stress Testing</h2>
-                    <p>Direct gateways to chosen community platforms where members can stress-test the math and debate edge cases.</p>
-                    
-                    <div class="community-grid">
-                        <a href="javascript:void(0)" class="community-box">
-                            <div class="com-icon">💬</div>
-                            <h4>Discord Architecture Channel</h4>
-                            <p>Real-time technical discussions on protocol node mechanics.</p>
-                            <span class="btn-sm">Join Channel</span>
-                        </a>
-
-                        <a href="javascript:void(0)" class="community-box">
-                            <div class="com-icon">📜</div>
-                            <h4>Discourse Research Forum</h4>
-                            <p>Asynchronous deep-dive debates on economic equilibrium theory.</p>
-                            <span class="btn-sm">Visit Forum</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Section 3: Accelerate the Mission -->
-                <div class="assembly-card glass-panel">
-                    <h2>Section 3: Accelerate the Mission</h2>
-                    <p>Clear avenues for members to contribute—whether through reviewing the whitepaper, beta testing the early software, or providing infrastructure support.</p>
-                    
-                    <div class="action-list">
-                        <div class="action-item">
-                            <div class="act-num">01</div>
-                            <div class="act-details">
-                                <h3>Whitepaper Code Audit & Math Review</h3>
-                                <p>Help stress-test our time peg liquidity curves and logarithmic balance scaling proofs.</p>
-                            </div>
-                            <button class="btn btn-secondary">Download Spec PDF</button>
+                <div class="bridge-funding-box">
+                    <h3>Help Accelerate the Pilot Launch</h3>
+                    <p>To reach our October Target Pilot deployment without compromise, we are actively onboarding:</p>
+                    <div class="needs-grid">
+                        <div class="need-item">
+                            <span class="need-icon">💰</span>
+                            <strong>$10k Development Bridge</strong>
+                            <small>Funding core cryptographic node security audits.</small>
                         </div>
-
-                        <div class="action-item">
-                            <div class="act-num">02</div>
-                            <div class="act-details">
-                                <h3>Early Beta Node Testing</h3>
-                                <p>Register your server or desktop node to participate in Phase 1 Mercury network genesis.</p>
-                            </div>
-                            <button class="btn btn-primary">Apply for Early Access</button>
+                        <div class="need-item">
+                            <span class="need-icon">🌱</span>
+                            <strong>Beta Communities</strong>
+                            <small>Local merchant hubs ready for 0% mutual credit trial.</small>
+                        </div>
+                        <div class="need-item">
+                            <span class="need-icon">🖥️</span>
+                            <strong>Seed Node Hosts</strong>
+                            <small>Infrastructure supporters hosting validation relay nodes.</small>
                         </div>
                     </div>
                 </div>
@@ -702,10 +497,17 @@
                 <svg class="deltar-icon-sm" viewBox="0 0 100 100" width="24" height="24">
                     <polygon points="25,50 75,22 75,78" fill="var(--accent-cyan)"/>
                 </svg>
-                <span>IOUBI Social Protocol</span>
+                <span>IOUBI Protocol — Zero-Interest Mutual Credit</span>
             </div>
+
+            <div class="footer-links">
+                <a href="https://github.com/Researcher-guy/IOUBI-Web" target="_blank" rel="noopener">GitHub Repository</a>
+                <a href="javascript:void(0)">Discord Community</a>
+                <a href="javascript:void(0)">MIT / Open Source License</a>
+            </div>
+
             <div class="footer-copy">
-                Strictly trading in Human Time & 3-Minute Favors. Postponing repayment naturally.
+                Strictly trading in Human Time & 3-Minute Favors. Zero interest. 100% Abundance.
             </div>
         </div>
     </footer>
