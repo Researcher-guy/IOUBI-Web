@@ -15,11 +15,38 @@
 .deltar-font {
     font-family: 'DeltarFont', var(--font-sans);
     display: inline-block;
-    vertical-align: -0.05em;
+    vertical-align: baseline;
     line-height: 1;
-    color: var(--accent-cyan);
-    margin: 0 0.12em;
+    color: inherit;
+    margin: 0;
     font-style: normal;
+}
+
+.logo-deltar-char {
+    font-size: 2.6rem;
+    color: var(--accent-cyan);
+    filter: drop-shadow(0 0 10px var(--accent-glow));
+    transition: transform var(--trans-mid);
+    line-height: 1;
+}
+
+.brand-logo:hover .logo-deltar-char {
+    transform: scale(1.15) rotate(-5deg);
+}
+
+.hero-deltar-symbol {
+    font-size: 8rem;
+    color: var(--accent-cyan);
+    text-shadow: 0 0 35px var(--accent-glow), 0 0 70px rgba(0, 240, 255, 0.4);
+    display: inline-block;
+    line-height: 1;
+    margin-bottom: 1rem;
+    animation: pulseSymbol 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulseSymbol {
+    0% { transform: scale(0.98); filter: drop-shadow(0 0 20px var(--accent-cyan)); }
+    100% { transform: scale(1.05); filter: drop-shadow(0 0 45px var(--accent-cyan)); }
 }
 
 :root {
