@@ -5,8 +5,8 @@
 /* Custom Deltar Symbol Font */
 @font-face {
     font-family: 'DeltarFont';
-    src: url('Deltar-symbol-Regular.woff2') format('woff2'),
-         url('Deltar-symbol-Regular.ttf') format('truetype');
+    src: url('Deltar-symbol-Regular.woff2?v=1.1') format('woff2'),
+         url('Deltar-symbol-Regular.ttf?v=1.1') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
