@@ -2,6 +2,23 @@
    IOUBI Web Portal - Single-Page Linear Scroll Stylesheet
    ========================================================================== */
 
+/* Custom Deltar Symbol Font */
+@font-face {
+    font-family: 'DeltarFont';
+    src: url('Deltar-symbol-Regular.woff2') format('woff2'),
+         url('Deltar-symbol-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.deltar-font {
+    font-family: 'DeltarFont', var(--font-sans);
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+}
+
 :root {
     /* Color Palette - Architectural Dark ReFi Aesthetic */
     --bg-dark: #07090e;
