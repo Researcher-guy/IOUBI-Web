@@ -109,8 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const dividend = sharedContrib / 2;
 
         if (resRate) resRate.textContent = `${effectiveRatePct.toFixed(2)}%`;
-        if (resContrib) resContrib.textContent = `${sharedContrib.toFixed(3)} Favors`;
-        if (resDividend) resDividend.textContent = `${dividend.toFixed(3)} Favors`;
+        if (resContrib) resContrib.innerHTML = `${sharedContrib.toFixed(3)} <span class="deltar-font">&#xE000;</span> Favors`;
+        if (resDividend) resDividend.innerHTML = `${dividend.toFixed(3)} <span class="deltar-font">&#xE000;</span> Favors`;
     }
 
     if (inputBalA) {
@@ -153,9 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const dailyPoolContribution = totalSystemicVolume * (frictionPct / 100);
         const dividendPerNode = dailyPoolContribution / nodesCount;
 
-        if (eqCommercialVol) eqCommercialVol.textContent = `${Math.round(commercialVolumePerDay).toLocaleString()} Favors/day`;
-        if (eqPoolTotal) eqPoolTotal.textContent = `${Math.round(dailyPoolContribution).toLocaleString()} Favors/day`;
-        if (eqDividendPerNode) eqDividendPerNode.textContent = `${dividendPerNode.toFixed(3)} Favors/day`;
+        if (eqCommercialVol) eqCommercialVol.innerHTML = `${Math.round(commercialVolumePerDay).toLocaleString()} <span class="deltar-font">&#xE000;</span>/day`;
+        if (eqPoolTotal) eqPoolTotal.innerHTML = `${Math.round(dailyPoolContribution).toLocaleString()} <span class="deltar-font">&#xE000;</span>/day`;
+        if (eqDividendPerNode) eqDividendPerNode.innerHTML = `${dividendPerNode.toFixed(3)} <span class="deltar-font">&#xE000;</span>/day`;
     }
 
     if (sliderRatio) {
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const quarters = parseInt(sliderQuarters.value, 10);
 
         const dailySCLPerPerson = pcl / 365;
-        if (sclDailyRate) sclDailyRate.textContent = `${dailySCLPerPerson.toFixed(1)} SCL/day`;
+        if (sclDailyRate) sclDailyRate.innerHTML = `${dailySCLPerPerson.toFixed(1)} SCL (<span class="deltar-font">&#xE000;</span>)/day`;
         if (valDonors) valDonors.textContent = `${donors} Donors`;
 
         const quarterLabels = ['Q0 (Initial Raised)', 'Q1 (3 Months Elapsed)', 'Q2 (6 Months Elapsed)', 'Q3 (9 Months Elapsed)', 'Q4 (12 Months - Expired)'];
@@ -203,8 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const decayFactor = Math.max(0, 1 - (quarters * 0.25));
         const activeLimit = totalRaised * decayFactor;
 
-        if (sclTotalRaised) sclTotalRaised.textContent = `${Math.round(totalRaised).toLocaleString()} SCL`;
-        if (sclActiveLimit) sclActiveLimit.textContent = `${Math.round(activeLimit).toLocaleString()} SCL`;
+        if (sclTotalRaised) sclTotalRaised.innerHTML = `${Math.round(totalRaised).toLocaleString()} SCL (<span class="deltar-font">&#xE000;</span>)`;
+        if (sclActiveLimit) sclActiveLimit.innerHTML = `${Math.round(activeLimit).toLocaleString()} SCL (<span class="deltar-font">&#xE000;</span>)`;
 
         if (barQ1) barQ1.style.width = quarters >= 1 ? '0%' : '75%';
         if (barQ2) barQ2.style.width = quarters >= 2 ? '0%' : '50%';

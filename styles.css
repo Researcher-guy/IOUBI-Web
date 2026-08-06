@@ -15,8 +15,11 @@
 .deltar-font {
     font-family: 'DeltarFont', var(--font-sans);
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: -0.05em;
     line-height: 1;
+    color: var(--accent-cyan);
+    margin: 0 0.12em;
+    font-style: normal;
 }
 
 :root {
