@@ -395,48 +395,152 @@ main#app-main {
 }
 
 /* ==========================================================================
-   2. KEY SPECIFICATIONS GRID (4-BOX DISPLAY)
+   2. KEY SPECIFICATIONS: THE FIVE FUNDAMENTAL ACCOUNTING MECHANICS
    ========================================================================== */
 
-.specs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.75rem;
+.specs-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
-.spec-card {
+.spec-card-full {
+    display: flex;
+    flex-direction: column;
+    padding: 2.25rem;
+    border-radius: 1rem;
+    border: 1px solid var(--bg-card-border);
+    background: var(--bg-card);
     position: relative;
+    transition: all var(--trans-mid);
+}
+
+.spec-card-full:hover {
+    border-color: rgba(0, 240, 255, 0.35);
+    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.1);
+}
+
+.spec-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1rem;
+}
+
+.spec-card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.spec-number-badge {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid var(--accent-cyan);
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+}
+
+.spec-card-header h3 {
+    font-size: 1.45rem;
+    color: #fff;
+    margin: 0;
+}
+
+.spec-perspectives-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+    align-items: stretch;
+}
+
+.perspective-panel {
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     flex-direction: column;
 }
 
-.spec-number {
+.perspective-personal {
+    border-left: 3px solid var(--accent-cyan);
+}
+
+.perspective-economic {
+    border-left: 3px solid #818cf8;
+}
+
+.perspective-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     font-family: var(--font-mono);
-    font-size: 1.5rem;
-    font-weight: 800;
+}
+
+.perspective-personal .perspective-header {
     color: var(--accent-cyan);
+}
+
+.perspective-economic .perspective-header {
+    color: #818cf8;
+}
+
+.perspective-body {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+}
+
+.perspective-body p {
     margin-bottom: 0.75rem;
 }
 
-.spec-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.35rem;
+.perspective-body p:last-child {
+    margin-bottom: 0;
 }
 
-.spec-formula {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--accent-indigo);
-    background: rgba(99, 102, 241, 0.1);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    display: inline-block;
-    margin-bottom: 1rem;
+.practice-callout {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 0.5rem;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    border: 1px dashed rgba(0, 240, 255, 0.25);
 }
 
-.spec-card p {
-    font-size: 0.9rem;
-    color: var(--text-muted);
+.practice-callout ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-top: 0.5rem;
+}
+
+.practice-callout li {
+    position: relative;
+    padding-left: 1.3rem;
+}
+
+.practice-callout li::before {
+    content: "→";
+    color: var(--accent-cyan);
+    position: absolute;
+    left: 0;
+    font-weight: 700;
 }
 
 /* ==========================================================================
@@ -1094,6 +1198,7 @@ input[type="range"] {
 @media (max-width: 900px) {
     .nav-links { display: none; }
     .hero-headline { font-size: 2.25rem; }
+    .spec-perspectives-grid { grid-template-columns: 1fr; }
     .comparison-row { grid-template-columns: 1fr; }
     .sandbox-grid, .scl-sim-layout { grid-template-columns: 1fr; }
     .roadmap-timeline-box { padding: 1.5rem; }
