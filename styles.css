@@ -440,50 +440,225 @@ main#app-main {
 }
 
 /* ==========================================================================
-   3. CORE MECHANICS BREAKDOWN (LINEAR TEXT SECTIONS)
+   3. CORE MECHANICS BREAKDOWN (PAIRED SIDE-BY-SIDE COMPARISON GRID)
    ========================================================================== */
 
-.mechanics-linear-layout {
+.comparison-grid-container {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 2rem;
 }
 
-.mechanic-block {
-    padding: 2.5rem;
+.comparison-row-header {
+    margin-bottom: 0.5rem;
 }
 
-.mech-header {
+.row-indicator {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid #f59e0b;
+    color: #f59e0b;
+    padding: 0.2rem 0.65rem;
+    border-radius: 4px;
+    margin-bottom: 0.4rem;
+}
+
+.comparison-row-header h3 {
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: -0.01em;
+}
+
+.comparison-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: stretch;
+}
+
+.comparison-card {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
+    flex-direction: column;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    position: relative;
 }
 
-.mech-icon {
-    font-size: 2rem;
+.problem-card {
+    border-top: 4px solid #f43f5e;
+    background: rgba(20, 24, 38, 0.85);
+    border-color: rgba(244, 63, 94, 0.2);
 }
 
-.mech-header h2 {
-    font-size: 1.75rem;
+.problem-card:hover {
+    border-color: rgba(244, 63, 94, 0.4);
+    box-shadow: 0 12px 35px rgba(244, 63, 94, 0.2);
 }
 
-.lead-text {
-    font-size: 1.15rem;
+.solution-card {
+    border-top: 4px solid #10b981;
+    background: rgba(16, 30, 36, 0.85);
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+.solution-card:hover {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 35px rgba(16, 185, 129, 0.2);
+}
+
+.card-status-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.65rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 1rem;
+    width: fit-content;
+}
+
+.problem-badge {
+    background: rgba(244, 63, 94, 0.15);
+    border: 1px solid #f43f5e;
+    color: #fb7185;
+}
+
+.solution-badge {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid #10b981;
+    color: #34d399;
+}
+
+.comparison-card h3 {
+    font-size: 1.6rem;
+    color: #fff;
+    margin-bottom: 0.2rem;
+}
+
+.card-subtitle {
+    font-size: 1.05rem;
     color: var(--accent-cyan);
-    font-weight: 500;
-    margin-bottom: 1.25rem;
-}
-
-.mech-content p {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.7;
+    font-weight: 600;
     margin-bottom: 1rem;
 }
 
-.mech-content p:last-child {
-    margin-bottom: 0;
+.comparison-card p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 0.85rem;
+}
+
+.breakdown-box {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.breakdown-title {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 0.75rem;
+}
+
+.breakdown-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.breakdown-list li {
+    position: relative;
+    padding-left: 1.3rem;
+}
+
+.problem-list li::before {
+    content: "•";
+    color: #f43f5e;
+    position: absolute;
+    left: 0;
+    font-size: 1.3rem;
+    line-height: 1;
+}
+
+.solution-list li::before {
+    content: "✓";
+    color: #10b981;
+    position: absolute;
+    left: 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.breakdown-list strong {
+    color: var(--text-main);
+}
+
+.accent-metric {
+    color: #fb7185;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.accent-metric-green {
+    color: #34d399;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.card-callout-footer {
+    margin-top: auto;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.problem-footer {
+    background: rgba(244, 63, 94, 0.08);
+    border: 1px solid rgba(244, 63, 94, 0.2);
+    color: var(--text-main);
+}
+
+.problem-footer strong {
+    color: #fb7185;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.solution-footer {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: var(--text-main);
+}
+
+.solution-footer strong {
+    color: #34d399;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.highlight-metric {
+    color: #fb7185;
+    font-weight: 700;
+}
+
+.highlight-metric-green {
+    color: #34d399;
+    font-weight: 700;
 }
 
 /* ==========================================================================
@@ -919,6 +1094,7 @@ input[type="range"] {
 @media (max-width: 900px) {
     .nav-links { display: none; }
     .hero-headline { font-size: 2.25rem; }
+    .comparison-row { grid-template-columns: 1fr; }
     .sandbox-grid, .scl-sim-layout { grid-template-columns: 1fr; }
     .roadmap-timeline-box { padding: 1.5rem; }
     .footer-container { flex-direction: column; text-align: center; }
