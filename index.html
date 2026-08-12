@@ -699,54 +699,101 @@
                         </div>
                         <p class="tool-desc">Compare how today's debt-backed system fares against a 1.4% zero-interest velocity fee.</p>
 
-                        <div class="macro-controls-bar">
-                            <!-- Control 1: Target Annual Living Floor per Person -->
+                <!-- Macroeconomic Balance & Dividend Engine (Full Width Row) -->
+                <div class="sandbox-card glass-panel span-full macro-engine-card">
+                    <!-- Block 1: Header & Shared Inputs (Full-Width Top Panel) -->
+                    <div class="macro-header-panel">
+                        <div class="tool-header">
+                            <h2>Macroeconomic Balance & Dividend Engine</h2>
+                        </div>
+                        <p class="tool-desc">Compare how today's debt-backed system fares against a 1.4% zero-interest velocity fee.</p>
+
+                        <div class="macro-controls-grid">
+                            <!-- Control 1: Target Annual Cost of Living Slider ($L$) -->
                             <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-living-cost">Target Annual Living Floor per Person:</label>
+                                    <label for="slider-living-cost">Target Annual Living Floor ($L$):</label>
                                     <span class="ctrl-val-badge" id="val-living-cost">$24,000 / yr <small>($65.75 / day)</small></span>
                                 </div>
                                 <input type="range" id="slider-living-cost" min="12000" max="48000" value="24000" step="1000" class="balance-slider">
+                                <div class="slider-milestones">
+                                    <span>$12k: "Basic Survival Floor"</span>
+                                    <span>$24k: "Median Developed Living"</span>
+                                    <span>$48k: "High Comfort Standard"</span>
+                                </div>
                             </div>
 
-                            <!-- Control 2: Daily Money Circulation Speed -->
+                            <!-- Control 2: Active Money Supply / Credit Limit per Capita ($M$) -->
                             <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-velocity">Daily Money Circulation Speed (Turnover / Day):</label>
-                                    <span class="ctrl-val-badge cyan" id="val-velocity">1.35 turns / day</span>
+                                    <label for="slider-money-supply">Active Money Supply / Credit Limit ($M$):</label>
+                                    <span class="ctrl-val-badge cyan" id="val-money-supply">$24,000 / person</span>
                                 </div>
-                                <input type="range" id="slider-velocity" min="0.1" max="8.0" value="1.35" step="0.05" class="balance-slider cyan-slider">
+                                <input type="range" id="slider-money-supply" min="1000" max="60000" value="24000" step="1000" class="balance-slider cyan-slider">
+                                <div class="slider-milestones">
+                                    <span>$1.5k: "Lean Active Credit"</span>
+                                    <span>$24k: "Standard IOUBI Baseline"</span>
+                                    <span>$60k: "Today's Debt-Stock Level"</span>
+                                </div>
                             </div>
 
-                            <!-- Primary Action Button -->
-                            <div class="macro-ctrl-action">
-                                <button type="button" id="btn-solve-coverage" class="btn btn-primary solve-btn">
-                                    <span>⚡ SOLVE FOR 100% COVERAGE</span>
-                                </button>
+                            <!-- Control 3: Supply Chain Multiplier ($S$) -->
+                            <div class="macro-ctrl-item">
+                                <div class="ctrl-label-row">
+                                    <label for="slider-supply-chain">Supply Chain Multiplier ($S$):</label>
+                                    <span class="ctrl-val-badge" id="val-supply-chain">70 : 1</span>
+                                </div>
+                                <input type="range" id="slider-supply-chain" min="10" max="100" value="70" step="5" class="balance-slider">
+                                <div class="slider-milestones">
+                                    <span>10:1: "Simple Local Economy"</span>
+                                    <span>40:1: "Standard Industrial"</span>
+                                    <span>70:1: "Deep Modern Supply Chain"</span>
+                                </div>
                             </div>
+
+                            <!-- Control 4: Daily Money Circulation Speed / Velocity ($V$) -->
+                            <div class="macro-ctrl-item">
+                                <div class="ctrl-label-row">
+                                    <label for="slider-velocity">Daily Circulation Speed / Velocity ($V$):</label>
+                                    <span class="ctrl-val-badge cyan" id="val-velocity">1.35 turns/day (492 turns/yr)</span>
+                                </div>
+                                <input type="range" id="slider-velocity" min="0.005" max="5.0" value="1.35" step="0.005" class="balance-slider cyan-slider">
+                                <div class="slider-milestones">
+                                    <span>0.005/day: "Today's Debt Economy (2 turns/yr)"</span>
+                                    <span>0.5/day: "Transition Velocity (182 turns/yr)"</span>
+                                    <span>1.35/day: "IOUBI Full Equilibrium (492 turns/yr)"</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Primary Action Button -->
+                        <div class="macro-solve-action-bar">
+                            <button type="button" id="btn-solve-coverage" class="btn btn-primary solve-btn">
+                                <span>⚡ SOLVE VELOCITY FOR 100% COVERAGE</span>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Block 2: Side-by-Side Comparison Grid (Dual Full-Width Columns) -->
                     <div class="macro-dual-grid">
-                        <!-- LEFT CARD: Legacy Debt & Tax System -->
+                        <!-- LEFT CARD: Status Quo (Legacy Debt & Tax System) -->
                         <div class="macro-card legacy-card">
-                            <div class="macro-card-tag legacy-tag">Status Quo | High Interest | Stagnant Velocity</div>
-                            <h3 class="macro-card-title">Legacy Debt & Tax System</h3>
+                            <div class="macro-card-tag legacy-tag">Status Quo | High Interest Drag | Slow Velocity</div>
+                            <h3 class="macro-card-title">Status Quo (Legacy Debt & Tax System)</h3>
 
                             <div class="macro-metrics-block">
                                 <div class="macro-metric-row">
                                     <div class="metric-info">
                                         <span class="metric-label">Real Cost of Living:</span>
-                                        <small class="metric-subtext">Includes 40% compound interest overhead across supply chains.</small>
+                                        <small class="metric-subtext" id="legacy-col-subtext">Includes 16.0% compound interest overhead from $24,000 debt stock.</small>
                                     </div>
-                                    <div class="metric-value legacy-val" id="legacy-daily-cost">$65.75/day</div>
+                                    <div class="metric-value legacy-val" id="legacy-daily-cost">$78.28/day</div>
                                 </div>
 
                                 <div class="macro-metric-row">
                                     <div class="metric-info">
                                         <span class="metric-label">Daily Payout Generated:</span>
-                                        <small class="metric-subtext">Based on fragmented taxes and slow legacy circulation.</small>
+                                        <small class="metric-subtext">Yield under 1.4% fee levy on slow legacy turnover.</small>
                                     </div>
                                     <div class="metric-value legacy-val red-text" id="legacy-daily-yield">$2.56/day</div>
                                 </div>
@@ -756,39 +803,39 @@
                             <div class="macro-progress-container">
                                 <div class="progress-label-row">
                                     <span>Coverage of Living Needs:</span>
-                                    <strong class="red-text">3.9% Covered</strong>
+                                    <strong class="red-text" id="legacy-coverage-text">3.3% Covered</strong>
                                 </div>
                                 <div class="progress-track">
-                                    <div class="progress-fill legacy-fill" style="width: 3.9%;"></div>
+                                    <div class="progress-fill legacy-fill" id="legacy-progress-fill" style="width: 3.3%;"></div>
                                 </div>
                             </div>
 
                             <!-- Key System Bullet Points -->
                             <ul class="macro-bullet-list legacy-bullets">
                                 <li>
-                                    <strong>Funding Mechanism:</strong> Fragmented income, sales, payroll taxes + continuous public debt.
+                                    <strong>Funding & Structural Reality:</strong> Requires 20%–40% income/payroll taxes + federal borrowing to fund safety nets.
                                 </li>
                                 <li>
-                                    <strong>Public Floor:</strong> Social Security, Medicare, and welfare face perpetual deficits and funding crises.
+                                    <strong>Debt Drag:</strong> Money supply is bloated with debt, creating ongoing interest tribute to banks.
                                 </li>
                                 <li>
-                                    <strong>Outcome:</strong> Systemic wealth drain to financial lenders; velocity remains too slow to support life.
+                                    <strong>Stagnant Flow:</strong> Slow velocity (2 turns/year) fails to generate enough natural fee volume.
                                 </li>
                             </ul>
                         </div>
 
                         <!-- RIGHT CARD: IOUBI Zero-Interest System -->
                         <div class="macro-card ioubi-card">
-                            <div class="macro-card-tag ioubi-tag">IOUBI Protocol | Zero Interest | High Velocity</div>
+                            <div class="macro-card-tag ioubi-tag">IOUBI Protocol | Zero Interest | High Velocity Circulation</div>
                             <h3 class="macro-card-title">IOUBI Zero-Interest System</h3>
 
                             <div class="macro-metrics-block">
                                 <div class="macro-metric-row">
                                     <div class="metric-info">
                                         <span class="metric-label">Real Cost of Living:</span>
-                                        <small class="metric-subtext">40% compound interest overhead completely eliminated.</small>
+                                        <small class="metric-subtext">Interest overhead completely eliminated; prices drop to pure productive cost.</small>
                                     </div>
-                                    <div class="metric-value ioubi-val" id="ioubi-daily-cost"><span class="deltar-font">&#xE002;</span>39.45/day</div>
+                                    <div class="metric-value ioubi-val" id="ioubi-daily-cost"><span class="deltar-font">&#xE002;</span>65.75/day</div>
                                 </div>
 
                                 <div class="macro-metric-row">
@@ -796,7 +843,7 @@
                                         <span class="metric-label">Daily Dividend Payout:</span>
                                         <small class="metric-subtext">Automated 1.4% circulation contribution from 70:1 supply chain velocity.</small>
                                     </div>
-                                    <div class="metric-value ioubi-val emerald-text" id="ioubi-daily-ubi"><span class="deltar-font">&#xE002;</span>39.70/day</div>
+                                    <div class="metric-value ioubi-val emerald-text" id="ioubi-daily-ubi"><span class="deltar-font">&#xE002;</span>340.20/day</div>
                                 </div>
                             </div>
 
@@ -804,7 +851,7 @@
                             <div class="macro-progress-container">
                                 <div class="progress-label-row">
                                     <span>Coverage of Living Needs:</span>
-                                    <strong class="emerald-text" id="ioubi-coverage-text">100.6% Covered</strong>
+                                    <strong class="emerald-text" id="ioubi-coverage-text">517.4% Covered</strong>
                                 </div>
                                 <div class="progress-track">
                                     <div class="progress-fill ioubi-fill" id="ioubi-progress-fill" style="width: 100%;"></div>
@@ -813,27 +860,27 @@
 
                             <!-- Pool Breakdown Card (75 / 20 / 5 Split) -->
                             <div class="macro-pool-box">
-                                <div class="pool-box-header">Systemic Fee Pool Breakdown (75 / 20 / 5 Split)</div>
+                                <div class="pool-box-header">Fee Pool Allocation Breakdown (1.4% Total Velocity Levy)</div>
                                 <div class="pool-item ubi-item">
                                     <div class="pool-item-title">
                                         <span class="badge ubi-badge">75%</span>
-                                        <strong>Daily UBI Dividend (<span class="deltar-font">&#xE002;</span><span id="ioubi-pool-ubi">39.70</span>/day):</strong>
+                                        <strong>Daily UBI Dividend (<span class="deltar-font">&#xE002;</span><span id="ioubi-pool-ubi">340.20</span>/day):</strong>
                                     </div>
-                                    <p class="pool-item-desc">Fully funds daily living needs. Replaces Social Security, food assistance, and traditional welfare.</p>
+                                    <p class="pool-item-desc">Replaces Social Security, food assistance, and welfare.</p>
                                 </div>
                                 <div class="pool-item social-item">
                                     <div class="pool-item-title">
                                         <span class="badge social-badge">20%</span>
-                                        <strong>Social Pool (<span class="deltar-font">&#xE002;</span><span id="ioubi-pool-social">10.59</span>/day):</strong>
+                                        <strong>Social Pool (<span class="deltar-font">&#xE002;</span><span id="ioubi-pool-social">90.72</span>/day):</strong>
                                     </div>
-                                    <p class="pool-item-desc">Funds healthcare security, emergency relief, and community grants. Replaces Medicare, Medicaid, and municipal debt.</p>
+                                    <p class="pool-item-desc">Replaces Medicare, Medicaid, disaster relief, and municipal debt.</p>
                                 </div>
                                 <div class="pool-item gov-item">
                                     <div class="pool-item-title">
                                         <span class="badge gov-badge">5%</span>
-                                        <strong>Government Operations (<span class="deltar-font">&#xE002;</span><span id="ioubi-pool-gov">2.65</span>/day):</strong>
+                                        <strong>Government Operations (<span class="deltar-font">&#xE002;</span><span id="ioubi-pool-gov">22.68</span>/day):</strong>
                                     </div>
-                                    <p class="pool-item-desc">Funds regulation, compliance, and legal administration without income taxes.</p>
+                                    <p class="pool-item-desc">Replaces income tax for funding public administration, regulation, and enforcement.</p>
                                 </div>
                             </div>
 
@@ -847,23 +894,23 @@
                     <div class="macro-accordion-box">
                         <details class="macro-details">
                             <summary class="macro-summary">
-                                <span>🔍 Inspect the Plumbing: The Mathematics of Velocity vs. Debt</span>
+                                <span>🔍 Inspect the Plumbing: The Quantity Theory of Money (M × V)</span>
                                 <span class="accordion-arrow">&darr;</span>
                             </summary>
                             <div class="macro-accordion-content">
-                                <pre class="terminal-proof-box"><code>QUANTITY THEORY OF MONEY (M × V) MACROECONOMIC PROOF
+                                <pre class="terminal-proof-box"><code>QUANTITY THEORY OF MONEY IN PRACTICE: M × V = GROSS VOLUME
 
 1. LEGACY DEBT SYSTEM
-   • Money Supply (M): ~$60,000 per capita (Bloated debt stock carrying 6.5% interest)
-   • Daily Velocity (V): ~0.02 turns / day (Stagnant circulation)
-   • Annual Interest Drag: $24,000/yr per person built into prices (40% Overhead)
-   • Verdict: A 1.4% tax on slow velocity yields only 3.9% of living needs while debt drains wealth.
+   • Money Supply (M): $60,000 per capita (Bloated debt stock)
+   • Velocity (V): ~0.005 turns / day (2 turns / year)
+   • Annual Interest Overhead: ~$24,000/yr per person built into prices (40% Overhead)
+   • Verdict: Slow velocity on a debt-heavy money supply drains wealth to lenders while yielding less than 4% coverage under a transaction fee.
 
 2. IOUBI ZERO-INTEREST SYSTEM
-   • Money Supply (M): ~$1,500 per capita (Compact active zero-interest credit line)
-   • Daily Velocity (V): ~1.35 to 4.0 turns / day (High JIT circulation)
-   • Annual Interest Drag: &#xE002;0.00 (Zero debt)
-   • Verdict: High velocity on zero-interest credit easily generates 100% of UBI, Social Insurance, and Government funding with a single 1.4% fee.</code></pre>
+   • Money Supply (M): $1,500 - $24,000 per capita (Zero-interest active credit)
+   • Daily Velocity (V): 1.35 turns / day (492 turns / year)
+   • Annual Interest Overhead: &#xE002;0.00 (Zero debt)
+   • Verdict: High velocity on zero-interest credit generates 100% of UBI, Social Insurance, and Government funding with a single 1.4% fee—without taxes or debt.</code></pre>
                             </div>
                         </details>
                     </div>

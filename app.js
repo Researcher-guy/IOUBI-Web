@@ -394,16 +394,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 5. Macroeconomic Balance & Dividend Engine (Full Width Component)
+    // 5. Macroeconomic Simulator & Dividend Engine (Revised V2 Engine)
     // ----------------------------------------------------------------------
     const sliderLivingCost = document.getElementById('slider-living-cost');
+    const sliderMoneySupply = document.getElementById('slider-money-supply');
+    const sliderSupplyChain = document.getElementById('slider-supply-chain');
     const sliderVelocity = document.getElementById('slider-velocity');
+
     const valLivingCost = document.getElementById('val-living-cost');
+    const valMoneySupply = document.getElementById('val-money-supply');
+    const valSupplyChain = document.getElementById('val-supply-chain');
     const valVelocity = document.getElementById('val-velocity');
     const btnSolveCoverage = document.getElementById('btn-solve-coverage');
 
     const legacyDailyCostEl = document.getElementById('legacy-daily-cost');
     const legacyDailyYieldEl = document.getElementById('legacy-daily-yield');
+    const legacyColSubtext = document.getElementById('legacy-col-subtext');
+    const legacyCoverageText = document.getElementById('legacy-coverage-text');
+    const legacyProgressFill = document.getElementById('legacy-progress-fill');
 
     const ioubiDailyCostEl = document.getElementById('ioubi-daily-cost');
     const ioubiDailyUbiEl = document.getElementById('ioubi-daily-ubi');
@@ -415,71 +423,99 @@ document.addEventListener('DOMContentLoaded', () => {
     const ioubiPoolGov = document.getElementById('ioubi-pool-gov');
     const ioubiOutcomeBanner = document.getElementById('ioubi-outcome-banner');
 
-    function calculateMacroEngine() {
-        if (!sliderLivingCost || !sliderVelocity) return;
+    function calculateMacroEngineV2() {
+        if (!sliderLivingCost || !sliderMoneySupply || !sliderSupplyChain || !sliderVelocity) return;
 
-        const annualCost = parseFloat(sliderLivingCost.value) || 24000;
-        const velocity = parseFloat(sliderVelocity.value) || 1.35;
+        const targetAnnualCOL = parseFloat(sliderLivingCost.value) || 24000;
+        const moneySupplyM = parseFloat(sliderMoneySupply.value) || 24000;
+        const supplyChainS = parseFloat(sliderSupplyChain.value) || 70;
+        const velocityV = parseFloat(sliderVelocity.value) || 1.35;
 
-        const legacyDailyCost = annualCost / 365;
-        const ioubiDailyCost = legacyDailyCost * 0.60;
+        // Display labels for control sliders
+        const legacyDailyCOL = targetAnnualCOL / 365;
+        const annualTurns = Math.round(velocityV * 365);
 
-        // Update control labels
         if (valLivingCost) {
-            valLivingCost.innerHTML = `$${annualCost.toLocaleString()} / yr <small>($${legacyDailyCost.toFixed(2)} / day)</small>`;
+            valLivingCost.innerHTML = `$${targetAnnualCOL.toLocaleString()} / yr <small>($${legacyDailyCOL.toFixed(2)} / day)</small>`;
+        }
+        if (valMoneySupply) {
+            valMoneySupply.textContent = `$${moneySupplyM.toLocaleString()} / person`;
+        }
+        if (valSupplyChain) {
+            valSupplyChain.textContent = `${supplyChainS} : 1`;
         }
         if (valVelocity) {
-            valVelocity.textContent = `${velocity.toFixed(2)} turns / day`;
+            valVelocity.textContent = `${velocityV.toFixed(3)} turns/day (${annualTurns.toLocaleString()} turns/yr)`;
         }
 
-        // Legacy calculations (locked at ~3.9% coverage)
-        const legacyDailyYield = (legacyDailyCost * 71 * 0.04) * 0.014 * 0.75;
-        if (legacyDailyCostEl) legacyDailyCostEl.textContent = `$${legacyDailyCost.toFixed(2)}/day`;
-        if (legacyDailyYieldEl) legacyDailyYieldEl.textContent = `$${legacyDailyYield.toFixed(2)}/day`;
+        // 1. Legacy System Calculations
+        const legacyInterestOverheadRate = Math.min(0.40, (moneySupplyM / 60000) * 0.40);
+        const legacyDailyCOLWithInterest = legacyDailyCOL / Math.max(0.01, (1 - legacyInterestOverheadRate));
+        const legacyGrossDailyVolume = moneySupplyM * velocityV * (supplyChainS / 70);
+        const legacyDailyFeeYield = legacyGrossDailyVolume * 0.014 * 0.75;
+        const legacyCoveragePercent = (legacyDailyFeeYield / legacyDailyCOLWithInterest) * 100;
 
-        // IOUBI calculations
-        const ioubiGrossVol = ioubiDailyCost * 71 * velocity;
-        const ioubiFeePool = ioubiGrossVol * 0.014;
-        const ioubiDailyUbi = ioubiFeePool * 0.75;
-        const ioubiDailySocial = ioubiFeePool * 0.20;
-        const ioubiDailyGov = ioubiFeePool * 0.05;
+        if (legacyDailyCostEl) legacyDailyCostEl.textContent = `$${legacyDailyCOLWithInterest.toFixed(2)}/day`;
+        if (legacyDailyYieldEl) legacyDailyYieldEl.textContent = `$${legacyDailyFeeYield.toFixed(2)}/day`;
+        if (legacyColSubtext) {
+            legacyColSubtext.textContent = `Includes ${(legacyInterestOverheadRate * 100).toFixed(1)}% compound interest overhead from $${moneySupplyM.toLocaleString()} debt stock.`;
+        }
+        if (legacyCoverageText) {
+            legacyCoverageText.textContent = `${legacyCoveragePercent.toFixed(1)}% Covered`;
+        }
+        if (legacyProgressFill) {
+            legacyProgressFill.style.width = `${Math.min(100, Math.max(0, legacyCoveragePercent))}%`;
+        }
 
-        const coveragePct = (ioubiDailyUbi / ioubiDailyCost) * 100;
+        // 2. IOUBI Zero-Interest System Calculations
+        const ioubiDailyCOL = legacyDailyCOL; // Zero interest overhead
+        const ioubiGrossDailyVolume = moneySupplyM * velocityV * (supplyChainS / 70);
+        const ioubiDailyFeePool = ioubiGrossDailyVolume * 0.014;
+        const ioubiDailyUBI = ioubiDailyFeePool * 0.75;
+        const ioubiDailySocial = ioubiDailyFeePool * 0.20;
+        const ioubiDailyGov = ioubiDailyFeePool * 0.05;
+        const ioubiCoveragePercent = (ioubiDailyUBI / ioubiDailyCOL) * 100;
 
-        if (ioubiDailyCostEl) ioubiDailyCostEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${ioubiDailyCost.toFixed(2)}/day`;
-        if (ioubiDailyUbiEl) ioubiDailyUbiEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${ioubiDailyUbi.toFixed(2)}/day`;
+        if (ioubiDailyCostEl) ioubiDailyCostEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${ioubiDailyCOL.toFixed(2)}/day`;
+        if (ioubiDailyUbiEl) ioubiDailyUbiEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${ioubiDailyUBI.toFixed(2)}/day`;
 
         if (ioubiCoverageText) {
-            ioubiCoverageText.textContent = `${coveragePct.toFixed(1)}% Covered`;
-            if (coveragePct >= 100) {
+            ioubiCoverageText.textContent = `${ioubiCoveragePercent.toFixed(1)}% Covered`;
+            if (ioubiCoveragePercent >= 100) {
                 ioubiCoverageText.className = 'emerald-text';
+            } else if (ioubiCoveragePercent >= 80) {
+                ioubiCoverageText.className = 'amber-text';
             } else {
-                ioubiCoverageText.className = 'cyan-text';
-            }
-        }
-        if (ioubiProgressFill) {
-            ioubiProgressFill.style.width = `${Math.min(100, Math.max(0, coveragePct))}%`;
-            if (coveragePct >= 100) {
-                ioubiProgressFill.style.background = '#00ff9d';
-                ioubiProgressFill.style.boxShadow = '0 0 14px rgba(0, 255, 157, 0.6)';
-            } else {
-                ioubiProgressFill.style.background = 'var(--accent-cyan)';
-                ioubiProgressFill.style.boxShadow = '0 0 14px rgba(0, 240, 255, 0.6)';
+                ioubiCoverageText.className = 'red-text';
             }
         }
 
-        if (ioubiPoolUbi) ioubiPoolUbi.textContent = ioubiDailyUbi.toFixed(2);
+        if (ioubiProgressFill) {
+            ioubiProgressFill.style.width = `${Math.min(100, Math.max(0, ioubiCoveragePercent))}%`;
+            if (ioubiCoveragePercent >= 100) {
+                ioubiProgressFill.style.background = '#00ff9d';
+                ioubiProgressFill.style.boxShadow = '0 0 14px rgba(0, 255, 157, 0.6)';
+            } else if (ioubiCoveragePercent >= 80) {
+                ioubiProgressFill.style.background = '#f59e0b';
+                ioubiProgressFill.style.boxShadow = '0 0 14px rgba(245, 158, 11, 0.6)';
+            } else {
+                ioubiProgressFill.style.background = '#ff4d4d';
+                ioubiProgressFill.style.boxShadow = '0 0 10px rgba(255, 77, 77, 0.5)';
+            }
+        }
+
+        if (ioubiPoolUbi) ioubiPoolUbi.textContent = ioubiDailyUBI.toFixed(2);
         if (ioubiPoolSocial) ioubiPoolSocial.textContent = ioubiDailySocial.toFixed(2);
         if (ioubiPoolGov) ioubiPoolGov.textContent = ioubiDailyGov.toFixed(2);
 
         if (ioubiOutcomeBanner) {
-            if (coveragePct >= 100) {
-                ioubiOutcomeBanner.innerHTML = `✓ ${coveragePct.toFixed(0)}% funded living floor with zero income taxes and zero systemic debt.`;
+            if (ioubiCoveragePercent >= 100) {
+                ioubiOutcomeBanner.innerHTML = `✓ ${ioubiCoveragePercent.toFixed(0)}% funded living floor with zero income taxes and zero systemic debt.`;
                 ioubiOutcomeBanner.style.borderColor = '#00ff9d';
                 ioubiOutcomeBanner.style.color = '#00ff9d';
                 ioubiOutcomeBanner.style.background = 'rgba(0, 255, 157, 0.12)';
             } else {
-                ioubiOutcomeBanner.innerHTML = `⚡ ${coveragePct.toFixed(0)}% of basic living floor covered. Adjust velocity or click "⚡ Solve for 100% Coverage".`;
+                ioubiOutcomeBanner.innerHTML = `⚡ ${ioubiCoveragePercent.toFixed(0)}% of basic living floor covered. Adjust velocity or click "⚡ Solve Velocity for 100% Coverage".`;
                 ioubiOutcomeBanner.style.borderColor = 'var(--accent-cyan)';
                 ioubiOutcomeBanner.style.color = 'var(--accent-cyan)';
                 ioubiOutcomeBanner.style.background = 'rgba(0, 240, 255, 0.12)';
@@ -487,21 +523,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (sliderLivingCost) {
-        sliderLivingCost.addEventListener('input', calculateMacroEngine);
-    }
-    if (sliderVelocity) {
-        sliderVelocity.addEventListener('input', calculateMacroEngine);
-    }
+    [sliderLivingCost, sliderMoneySupply, sliderSupplyChain, sliderVelocity].forEach(el => {
+        if (el) el.addEventListener('input', calculateMacroEngineV2);
+    });
 
     if (btnSolveCoverage && sliderVelocity) {
         btnSolveCoverage.addEventListener('click', () => {
-            // Solve velocity: 1 / (71 * 0.014 * 0.75) ≈ 1.3414
-            const targetVelocity = 1 / (71 * 0.014 * 0.75);
-            sliderVelocity.value = targetVelocity.toFixed(2);
-            calculateMacroEngine();
+            const targetAnnualCOL = parseFloat(sliderLivingCost.value) || 24000;
+            const moneySupplyM = parseFloat(sliderMoneySupply.value) || 24000;
+            const supplyChainS = parseFloat(sliderSupplyChain.value) || 70;
+
+            const ioubiDailyCOL = targetAnnualCOL / 365;
+            // Solve V: ioubiDailyCOL = moneySupplyM * V * (supplyChainS / 70) * 0.014 * 0.75
+            // V = ioubiDailyCOL / (moneySupplyM * (supplyChainS / 70) * 0.0105)
+            const denominator = moneySupplyM * (supplyChainS / 70) * 0.0105;
+            const targetV = denominator > 0 ? (ioubiDailyCOL / denominator) : 1.35;
+
+            sliderVelocity.value = Math.min(5.0, Math.max(0.005, targetV)).toFixed(3);
+            calculateMacroEngineV2();
         });
     }
 
-    calculateMacroEngine();
+    calculateMacroEngineV2();
 });
