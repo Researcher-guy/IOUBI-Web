@@ -426,51 +426,53 @@
         </section>
 
         <!-- =================================================================== -->
-        <!-- 4. THE DOCUMENTATION HUB (3-TIER FUNNEL)                             -->
+        <!-- 4. THE DOCUMENTATION HUB                                            -->
         <!-- =================================================================== -->
         <section id="docs" class="section-container">
             <div class="section-header">
                 <span class="section-tag">KNOWLEDGE BASE</span>
                 <h2>The Documentation Hub</h2>
-                <p class="section-desc">Explore the 3-tier reading funnel designed for newcomers, system architects, and economic theorists.</p>
+                <p class="section-desc">Explore the documentation resources designed for newcomers, system architects, and economic theorists.</p>
             </div>
 
             <div class="docs-funnel-grid">
                 <!-- Card 1: ELI5 Primer -->
                 <div class="doc-card glass-panel">
-                    <div class="doc-badge">TIER 1</div>
                     <h3>ELI5 Primer</h3>
-                    <p class="doc-subtitle">New Here? Start Here (5-Minute Read)</p>
-                    <p class="doc-desc">A non-technical, plain-English breakdown explaining how zero-interest social credit and universal basic income create immediate local economic stability.</p>
+                    <p class="doc-desc">A plain English breakdown explaning how zero-interest credit and UBI create prosperity and stability.</p>
                     
-                    <div class="primer-inline-box" id="primer-box">
-                        <details class="primer-accordion">
-                            <summary class="primer-summary"><span>Preview ELI5 Primer Content</span> <small>&darr;</small></summary>
-                            <div class="primer-text">
-                                <h4>Money is an IOU Receipt</h4>
-                                <p>When you work or provide value, society gives you a receipt. In the current system, banks charge interest on those receipts, making life 40% more expensive for everyone. IOUBI lets communities issue 0% credit (<span class="deltar-font">&#xE002;</span>) to each other using human time as the standard.</p>
-                                <h4>How the Dividend Works</h4>
-                                <p>A tiny 1.4% contribution on spending is collected and deleted. At midnight every day, it is recreated into a pool that pays a daily dividend to every living human equal to basic living costs.</p>
-                            </div>
-                        </details>
+                    <div class="primer-full-box">
+                        <h4>Money is a Record of Value, Not Debt</h4>
+                        <p>In the legacy economy, banks print money as interest-bearing debt, adding a 40% hidden drag to everything we buy. In IOUBI, money is simply a receipt of human value exchanged. Zero central debt, zero compound interest.</p>
+                        
+                        <h4>0% Just-In-Time Credit</h4>
+                        <p>Everyone receives an interest-free overdraft limit. When you spend, liquidity is created Just-In-Time; when you earn, your negative balance clears naturally before you accumulate positive savings.</p>
+                        
+                        <h4>The Daily Living Dividend</h4>
+                        <p>A tiny ~1% fee on spending is pooled and redistributed per capita every 24 hours to provide a guaranteed floor covering 100% of essential living costs.</p>
+                        
+                        <h4>Democratized Business Credit</h4>
+                        <p>Enterprises receive zero-interest credit lines approved by 25-person community assemblies, with 25% quarterly demurrage preventing credit hoarding.</p>
+                        
+                        <h4>Universal Community Protection</h4>
+                        <p>Shared insurance and emergency project pools replace predatory debt collection and prevent cascading supply chain defaults.</p>
                     </div>
 
-                    <a href="#primer-box" class="btn btn-secondary w-full" onclick="document.querySelector('.primer-accordion').open = true;">
-                        <span>Read ELI5 Primer</span>
+                    <a href="The Why and What.pdf" target="_blank" class="btn btn-secondary w-full">
+                        <span>Read ELI5 Primer (PDF)</span>
                     </a>
                 </div>
 
                 <!-- Card 2: Technical Whitepaper -->
                 <div class="doc-card glass-panel highlight-card">
-                    <div class="doc-badge accent">TIER 2</div>
                     <h3>Technical Whitepaper</h3>
-                    <p class="doc-subtitle">For Developers & System Architects</p>
-                    <p class="doc-desc">Full double-entry accounting specifications, state machines, cryptographic threat models, and logarithmic fee equations.</p>
+                    <p class="doc-desc">Decentralized personalized ledgers, biometric ID, cryptographic exchange, algorithmic credit equations.</p>
                     
-                    <ul class="doc-feature-list">
-                        <li>✓ Agent-Centric Cryptographic Ledger</li>
-                        <li>✓ Log10 Zero Balance Fee Equations</li>
-                        <li>✓ 25-Person Assembly Consensus State Machine</li>
+                    <ul class="doc-whitepaper-list">
+                        <li>Decentralized Cryptographic Ledger</li>
+                        <li>Logarithmic fee Equations</li>
+                        <li>Business credit social approval</li>
+                        <li>More...</li>
                     </ul>
 
                     <a href="website specification-1.pdf" target="_blank" class="btn btn-primary w-full">
@@ -480,7 +482,6 @@
 
                 <!-- Card 3: "Healing Money" Book -->
                 <div class="doc-card glass-panel">
-                    <div class="doc-badge">TIER 3</div>
                     <h3>"Healing Money"</h3>
                     <p class="doc-subtitle">The Foundational Philosophy</p>
                     <p class="doc-desc">The complete book exploring post-scarcity economics, non-debt monetary design, and democratic credit infrastructure for local abundance.</p>
@@ -511,54 +512,86 @@
             </div>
 
             <div class="sandbox-grid">
-                <!-- Tool 1: 1% Per Zero Calculator -->
+                <!-- 1% Per Zero Log10 Calculator -->
                 <div class="sandbox-card glass-panel">
                     <div class="tool-header">
-                        <span class="tool-badge">Tool 01</span>
                         <h2>1% Per Zero Log10 Calculator</h2>
                     </div>
-                    <p class="tool-desc">Calculates the exact shared contribution generated by a transaction based on payor/payee account zeros (1% to 9%).</p>
+                    <p class="tool-desc">Calculates the fee % based on the balance of the two accounts.</p>
 
                     <div class="sim-form">
-                        <div class="form-group">
-                            <label for="input-bal-a">User A Balance:</label>
-                            <input type="number" id="input-bal-a" value="1250" min="1" step="10">
-                            <small class="hint">Log10 zeros: <span id="zeros-a">3.1</span></small>
+                        <div class="two-col-inputs">
+                            <div class="form-group">
+                                <label for="input-bal-a">Payor Balance:</label>
+                                <input type="number" id="input-bal-a" value="1250" min="0" step="10">
+                                <div class="fee-contrib-badge" id="contrib-a">Fee contribution: 3.10%</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-bal-b">Payee Balance:</label>
+                                <input type="number" id="input-bal-b" value="300" min="0" step="10">
+                                <div class="fee-contrib-badge" id="contrib-b">Fee contribution: 2.48%</div>
+                            </div>
+                        </div>
+
+                        <div class="average-fee-box">
+                            <div class="average-fee-title">Average Fee For Transaction</div>
+                            <div class="average-fee-value" id="res-rate">2.79%</div>
+                            <div class="average-fee-formula">Fee % = average(log10(max(10, Balance₁)), log10(max(10, Balance₂))) / 100</div>
                         </div>
 
                         <div class="form-group">
-                            <label for="input-bal-b">User B Balance:</label>
-                            <input type="number" id="input-bal-b" value="300" min="1" step="10">
-                            <small class="hint">Log10 zeros: <span id="zeros-b">2.4</span></small>
+                            <label for="input-conversion-rate">Personal Time to Deltar Conversion (Deltars/hr). This is only used by you to equate your time to Deltar prices.</label>
+                            <input type="number" id="input-conversion-rate" value="20" min="0.1" step="1">
                         </div>
 
                         <div class="form-group">
-                            <label for="input-duration">Favor Duration (Minutes):</label>
-                            <input type="number" id="input-duration" value="30" min="3" step="3">
-                            <small class="hint">Equals <span id="favors-exchanged">10</span> Standard Units</small>
+                            <label for="input-tx-amount">Transaction Payment (<span class="deltar-font">&#xE002;</span>):</label>
+                            <div class="input-with-badge">
+                                <input type="number" id="input-tx-amount" value="50" min="0" step="5">
+                                <div class="time-equiv-badge" id="tx-time-equiv">2 hrs 30 mins</div>
+                            </div>
                         </div>
 
                         <div class="calc-results-box" id="calc-result">
-                            <div class="res-row">
-                                <span>Effective Contribution Rate:</span>
-                                <strong id="res-rate" class="glow-text">3.10%</strong>
+                            <div class="single-line-fee-summary" id="single-line-summary">
+                                <span class="fee-label">Fee Charged:</span>
+                                <span id="summary-rate">2.79%</span>,
+                                <span id="summary-currency"><span class="deltar-font">&#xE002;</span>1.40</span>,
+                                <span id="summary-time">4.2 minutes</span>
                             </div>
-                            <div class="res-row">
-                                <span>Shared Contribution Generated:</span>
-                                <strong id="res-contrib"><span class="deltar-font">&#xE002;</span>0.310</strong>
-                            </div>
-                            <div class="res-row highlight-row">
-                                <span>Routed to Dividend Pool:</span>
-                                <strong id="res-dividend" class="magenta-text"><span class="deltar-font">&#xE002;</span>0.155</strong>
+
+                            <div class="pool-table-container">
+                                <table class="pool-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Payment</th>
+                                            <th>Fee subtracted</th>
+                                            <th>Total Pool</th>
+                                            <th>UBI</th>
+                                            <th>Social</th>
+                                            <th>Gov</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td id="tbl-payment"><span class="deltar-font">&#xE002;</span>50.00</td>
+                                            <td id="tbl-fee"><span class="deltar-font">&#xE002;</span>1.40</td>
+                                            <td id="tbl-pool"><span class="deltar-font">&#xE002;</span>1.40</td>
+                                            <td id="tbl-ubi" class="ubi-cell"><span class="deltar-font">&#xE002;</span>0.70</td>
+                                            <td id="tbl-social" class="social-cell"><span class="deltar-font">&#xE002;</span>0.35</td>
+                                            <td id="tbl-gov" class="gov-cell"><span class="deltar-font">&#xE002;</span>0.35</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tool 2: Test the Equilibrium Simulator -->
+                <!-- Test the Equilibrium Simulator -->
                 <div class="sandbox-card glass-panel">
                     <div class="tool-header">
-                        <span class="tool-badge">Tool 02</span>
                         <h2>Test Macroeconomic Equilibrium</h2>
                     </div>
                     <p class="tool-desc">Adjust commercial velocity and friction parameters to prove that the Automatic Dividend covers basic living standards.</p>
@@ -608,10 +641,9 @@
                     </div>
                 </div>
 
-                <!-- Tool 3: SCL Business Funding & Quarterly Decay Simulator -->
+                <!-- SCL Business Funding & Quarterly Decay Simulator -->
                 <div class="sandbox-card glass-panel span-full">
                     <div class="tool-header">
-                        <span class="tool-badge">Tool 03</span>
                         <h2>Social Credit Limit (SCL) Crowdfund & Decay Simulator</h2>
                     </div>
                     <p class="tool-desc">Simulate how personal accounts donate 1/365th of their Personal Credit Limit (PCL) as SCL to expand a business overdraft limit, and observe the 25% quarterly decay schedule.</p>

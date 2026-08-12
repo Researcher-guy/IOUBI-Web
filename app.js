@@ -72,56 +72,90 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 2. Interactive Tool 1: 1% Per Zero Calculator (Sandbox)
+    // 2. 1% Per Zero Log10 Calculator
     // ----------------------------------------------------------------------
     const inputBalA = document.getElementById('input-bal-a');
     const inputBalB = document.getElementById('input-bal-b');
-    const inputDuration = document.getElementById('input-duration');
-
-    const zerosA = document.getElementById('zeros-a');
-    const zerosB = document.getElementById('zeros-b');
-    const favorsExchanged = document.getElementById('favors-exchanged');
-
+    const contribA = document.getElementById('contrib-a');
+    const contribB = document.getElementById('contrib-b');
     const resRate = document.getElementById('res-rate');
-    const resContrib = document.getElementById('res-contrib');
-    const resDividend = document.getElementById('res-dividend');
+
+    const inputConversionRate = document.getElementById('input-conversion-rate');
+    const inputTxAmount = document.getElementById('input-tx-amount');
+    const txTimeEquiv = document.getElementById('tx-time-equiv');
+
+    const summaryRate = document.getElementById('summary-rate');
+    const summaryCurrency = document.getElementById('summary-currency');
+    const summaryTime = document.getElementById('summary-time');
+
+    const tblPayment = document.getElementById('tbl-payment');
+    const tblFee = document.getElementById('tbl-fee');
+    const tblPool = document.getElementById('tbl-pool');
+    const tblUbi = document.getElementById('tbl-ubi');
+    const tblSocial = document.getElementById('tbl-social');
+    const tblGov = document.getElementById('tbl-gov');
+
+    function formatTimeDuration(hours) {
+        if (isNaN(hours) || hours <= 0) return '0 mins';
+        const totalMinutes = hours * 60;
+        if (totalMinutes < 60) {
+            return `${totalMinutes.toFixed(1)} mins`;
+        }
+        const h = Math.floor(hours);
+        const m = Math.round((hours - h) * 60);
+        if (m === 0) return `${h} hr${h > 1 ? 's' : ''}`;
+        return `${h} hr${h > 1 ? 's' : ''} ${m} min${m > 1 ? 's' : ''}`;
+    }
 
     function calculatePerZero() {
-        if (!inputBalA || !inputBalB || !inputDuration) return;
+        if (!inputBalA || !inputBalB) return;
 
-        const balA = parseFloat(inputBalA.value) || 1;
-        const balB = parseFloat(inputBalB.value) || 1;
-        const duration = parseFloat(inputDuration.value) || 3;
+        const rawBalA = parseFloat(inputBalA.value) || 0;
+        const rawBalB = parseFloat(inputBalB.value) || 0;
 
-        const logA = Math.max(0, Math.log10(balA));
-        const logB = Math.max(0, Math.log10(balB));
+        // Floor of 10 for log function resulting in log floor of 1.00
+        const logA = Math.log10(Math.max(10, rawBalA));
+        const logB = Math.log10(Math.max(10, rawBalB));
 
-        if (zerosA) zerosA.textContent = logA.toFixed(2);
-        if (zerosB) zerosB.textContent = logB.toFixed(2);
+        if (contribA) contribA.textContent = `Fee contribution: ${logA.toFixed(2)}%`;
+        if (contribB) contribB.textContent = `Fee contribution: ${logB.toFixed(2)}%`;
 
-        const favors = duration / 3;
-        if (favorsExchanged) favorsExchanged.textContent = favors.toFixed(1);
+        // Average of log results with floor of 1.00% and no upper ceiling
+        const avgFeePct = (logA + logB) / 2;
+        if (resRate) resRate.textContent = `${avgFeePct.toFixed(2)}%`;
 
-        const avgZeros = (logA + logB) / 2;
-        const effectiveRatePct = Math.min(9.0, Math.max(1.0, 1.0 + avgZeros));
+        // Time conversion and transaction fee calculations
+        const convRate = parseFloat(inputConversionRate ? inputConversionRate.value : 20) || 20;
+        const txAmount = parseFloat(inputTxAmount ? inputTxAmount.value : 50) || 0;
 
-        const sharedContrib = favors * (effectiveRatePct / 100);
-        const dividend = sharedContrib / 2;
+        const txHours = txAmount / convRate;
+        if (txTimeEquiv) txTimeEquiv.textContent = formatTimeDuration(txHours);
 
-        if (resRate) resRate.textContent = `${effectiveRatePct.toFixed(2)}%`;
-        if (resContrib) resContrib.innerHTML = `<span class="deltar-font">&#xE002;</span>${sharedContrib.toFixed(3)}`;
-        if (resDividend) resDividend.innerHTML = `<span class="deltar-font">&#xE002;</span>${dividend.toFixed(3)}`;
+        const feeAmount = txAmount * (avgFeePct / 100);
+        const feeHours = feeAmount / convRate;
+        const feeMinutes = feeHours * 60;
+
+        if (summaryRate) summaryRate.textContent = `${avgFeePct.toFixed(2)}%`;
+        if (summaryCurrency) summaryCurrency.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(2)}`;
+        if (summaryTime) summaryTime.textContent = `${feeMinutes.toFixed(1)} minutes`;
+
+        if (tblPayment) tblPayment.innerHTML = `<span class="deltar-font">&#xE002;</span>${txAmount.toFixed(2)}`;
+        if (tblFee) tblFee.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(2)}`;
+        if (tblPool) tblPool.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(2)}`;
+        if (tblUbi) tblUbi.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.50).toFixed(2)}`;
+        if (tblSocial) tblSocial.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.25).toFixed(2)}`;
+        if (tblGov) tblGov.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.25).toFixed(2)}`;
     }
 
     if (inputBalA) {
-        [inputBalA, inputBalB, inputDuration].forEach(el => {
-            el.addEventListener('input', calculatePerZero);
+        [inputBalA, inputBalB, inputConversionRate, inputTxAmount].forEach(el => {
+            if (el) el.addEventListener('input', calculatePerZero);
         });
         calculatePerZero();
     }
 
     // ----------------------------------------------------------------------
-    // 3. Interactive Tool 2: Test Equilibrium Simulator (Sandbox)
+    // 3. Test Equilibrium Simulator (Sandbox)
     // ----------------------------------------------------------------------
     const sliderRatio = document.getElementById('slider-ratio');
     const sliderFriction = document.getElementById('slider-friction');
@@ -166,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 4. Interactive Tool 3: SCL Business Crowdfund Simulator
+    // 4. SCL Business Crowdfund Simulator
     // ----------------------------------------------------------------------
     const inputPCL = document.getElementById('input-pcl');
     const sliderDonors = document.getElementById('slider-donors');
