@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 5. Macroeconomic Simulator & Dividend Engine (Revised V2 Engine)
+    // 5. Macroeconomic Simulator & Dividend Engine (Dynamic Benchmarks & Units)
     // ----------------------------------------------------------------------
     const sliderLivingCost = document.getElementById('slider-living-cost');
     const sliderMoneySupply = document.getElementById('slider-money-supply');
@@ -406,6 +406,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const valSupplyChain = document.getElementById('val-supply-chain');
     const valVelocity = document.getElementById('val-velocity');
     const btnSolveCoverage = document.getElementById('btn-solve-coverage');
+
+    // Dynamic Tier Benchmark Text Elements
+    const tierLivingCostName = document.getElementById('tier-living-cost-name');
+    const tierLivingCostDesc = document.getElementById('tier-living-cost-desc');
+    const tierMoneySupplyName = document.getElementById('tier-money-supply-name');
+    const tierMoneySupplyDesc = document.getElementById('tier-money-supply-desc');
+    const tierSupplyChainName = document.getElementById('tier-supply-chain-name');
+    const tierSupplyChainDesc = document.getElementById('tier-supply-chain-desc');
+    const tierVelocityName = document.getElementById('tier-velocity-name');
+    const tierVelocityDesc = document.getElementById('tier-velocity-desc');
 
     const legacyDailyCostEl = document.getElementById('legacy-daily-cost');
     const legacyDailyYieldEl = document.getElementById('legacy-daily-yield');
@@ -423,6 +433,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const ioubiPoolGov = document.getElementById('ioubi-pool-gov');
     const ioubiOutcomeBanner = document.getElementById('ioubi-outcome-banner');
 
+    function getLivingCostTier(cost) {
+        if (cost < 18000) return { name: "Basic Survival Floor", desc: "(Minimal Nutrition & Shelter)" };
+        if (cost < 30000) return { name: "Median Developed Living", desc: "(Essential Stability & Healthcare)" };
+        if (cost < 40000) return { name: "Comfortable Standard", desc: "(Full Mobility & Abundance)" };
+        return { name: "High Comfort Standard", desc: "(Premium Quality of Life)" };
+    }
+
+    function getMoneySupplyTier(supply) {
+        if (supply < 5000) return { name: "Lean Active Credit", desc: "(Ultra-Compact JIT Buffer)" };
+        if (supply < 20000) return { name: "Agile Community Credit", desc: "(Standard Working Liquidity)" };
+        if (supply < 40000) return { name: "Standard IOUBI Baseline", desc: "(Universal Living Floor Coverage)" };
+        return { name: "Today's Debt-Stock Level", desc: "(Bloated Legacy Fiat Standard)" };
+    }
+
+    function getSupplyChainTier(multiplier) {
+        if (multiplier < 25) return { name: "Simple Local Economy", desc: "(Direct Farmer-to-Consumer)" };
+        if (multiplier < 50) return { name: "Standard Industrial", desc: "(Regional Manufacturing & Wholesale)" };
+        if (multiplier < 80) return { name: "Deep Modern Supply Chain", desc: "(Global Multi-Tier Distribution, 70:1)" };
+        return { name: "Advanced Fabrication Economy", desc: "(Complex High-Tech Multi-Tier Network)" };
+    }
+
+    function getVelocityTier(velocity) {
+        if (velocity < 0.05) return { name: "Today's Debt Economy", desc: "(Stagnant Central Bank Velocity, ~2 turns/yr)" };
+        if (velocity < 0.5) return { name: "Transition Velocity", desc: "(Accelerated Trade Circulation)" };
+        if (velocity < 2.0) return { name: "IOUBI Full Equilibrium", desc: "(Healthy Daily JIT Clearing)" };
+        return { name: "High-Throughput Digital Commercial Mesh", desc: "(Rapid Automated Settlements)" };
+    }
+
     function calculateMacroEngineV2() {
         if (!sliderLivingCost || !sliderMoneySupply || !sliderSupplyChain || !sliderVelocity) return;
 
@@ -433,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Display labels for control sliders
         const legacyDailyCOL = targetAnnualCOL / 365;
-        const annualTurns = Math.round(velocityV * 365);
+        const annualTurns = velocityV * 365;
 
         if (valLivingCost) {
             valLivingCost.innerHTML = `$${targetAnnualCOL.toLocaleString()} / yr <small>($${legacyDailyCOL.toFixed(2)} / day)</small>`;
@@ -444,9 +482,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (valSupplyChain) {
             valSupplyChain.textContent = `${supplyChainS} : 1`;
         }
+
+        // Smart dynamic unit display for velocity
         if (valVelocity) {
-            valVelocity.textContent = `${velocityV.toFixed(3)} turns/day (${annualTurns.toLocaleString()} turns/yr)`;
+            if (velocityV < 0.1) {
+                valVelocity.textContent = `${annualTurns.toFixed(1)} turns/year`;
+            } else {
+                valVelocity.textContent = `${velocityV.toFixed(3)} turns/day (${Math.round(annualTurns).toLocaleString()} turns/yr)`;
+            }
         }
+
+        // Update Dynamic Tier Benchmark Descriptors
+        const tierLiving = getLivingCostTier(targetAnnualCOL);
+        if (tierLivingCostName) tierLivingCostName.textContent = tierLiving.name;
+        if (tierLivingCostDesc) tierLivingCostDesc.textContent = tierLiving.desc;
+
+        const tierMoney = getMoneySupplyTier(moneySupplyM);
+        if (tierMoneySupplyName) tierMoneySupplyName.textContent = tierMoney.name;
+        if (tierMoneySupplyDesc) tierMoneySupplyDesc.textContent = tierMoney.desc;
+
+        const tierSupply = getSupplyChainTier(supplyChainS);
+        if (tierSupplyChainName) tierSupplyChainName.textContent = tierSupply.name;
+        if (tierSupplyChainDesc) tierSupplyChainDesc.textContent = tierSupply.desc;
+
+        const tierVel = getVelocityTier(velocityV);
+        if (tierVelocityName) tierVelocityName.textContent = tierVel.name;
+        if (tierVelocityDesc) tierVelocityDesc.textContent = tierVel.desc;
 
         // 1. Legacy System Calculations
         const legacyInterestOverheadRate = Math.min(0.40, (moneySupplyM / 60000) * 0.40);
@@ -523,8 +584,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Attach both 'input' and 'change' listeners to all 4 sliders
     [sliderLivingCost, sliderMoneySupply, sliderSupplyChain, sliderVelocity].forEach(el => {
-        if (el) el.addEventListener('input', calculateMacroEngineV2);
+        if (el) {
+            el.addEventListener('input', calculateMacroEngineV2);
+            el.addEventListener('change', calculateMacroEngineV2);
+        }
     });
 
     if (btnSolveCoverage && sliderVelocity) {

@@ -1300,22 +1300,37 @@ main#app-main {
     border-color: rgba(0, 240, 255, 0.3);
 }
 
-.slider-milestones {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.72rem;
-    color: var(--text-dim);
+.macro-tier-badge {
+    margin-top: 0.35rem;
     font-family: var(--font-mono);
-    margin-top: 0.25rem;
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.35rem 0.65rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    line-height: 1.35;
+    opacity: 0.88;
+    transition: all 0.2s ease;
 }
 
-.slider-milestones span {
-    white-space: nowrap;
+.macro-tier-badge .tier-tag {
+    color: var(--accent-cyan);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    opacity: 0.9;
 }
 
-.slider-milestones span:first-child { text-align: left; }
-.slider-milestones span:nth-child(2) { text-align: center; }
-.slider-milestones span:last-child { text-align: right; }
+.macro-tier-badge strong {
+    color: #cbd5e1;
+    font-weight: 600;
+}
 
 .macro-solve-action-bar {
     display: flex;

@@ -699,15 +699,6 @@
                         </div>
                         <p class="tool-desc">Compare how today's debt-backed system fares against a 1.4% zero-interest velocity fee.</p>
 
-                <!-- Macroeconomic Balance & Dividend Engine (Full Width Row) -->
-                <div class="sandbox-card glass-panel span-full macro-engine-card">
-                    <!-- Block 1: Header & Shared Inputs (Full-Width Top Panel) -->
-                    <div class="macro-header-panel">
-                        <div class="tool-header">
-                            <h2>Macroeconomic Balance & Dividend Engine</h2>
-                        </div>
-                        <p class="tool-desc">Compare how today's debt-backed system fares against a 1.4% zero-interest velocity fee.</p>
-
                         <div class="macro-controls-grid">
                             <!-- Control 1: Target Annual Cost of Living Slider ($L$) -->
                             <div class="macro-ctrl-item">
@@ -716,10 +707,8 @@
                                     <span class="ctrl-val-badge" id="val-living-cost">$24,000 / yr <small>($65.75 / day)</small></span>
                                 </div>
                                 <input type="range" id="slider-living-cost" min="12000" max="48000" value="24000" step="1000" class="balance-slider">
-                                <div class="slider-milestones">
-                                    <span>$12k: "Basic Survival Floor"</span>
-                                    <span>$24k: "Median Developed Living"</span>
-                                    <span>$48k: "High Comfort Standard"</span>
+                                <div class="macro-tier-badge" id="tier-living-cost">
+                                    <span class="tier-tag">Standard:</span> <strong id="tier-living-cost-name">Median Developed Living</strong> <span id="tier-living-cost-desc">(Essential Stability & Healthcare)</span>
                                 </div>
                             </div>
 
@@ -730,10 +719,8 @@
                                     <span class="ctrl-val-badge cyan" id="val-money-supply">$24,000 / person</span>
                                 </div>
                                 <input type="range" id="slider-money-supply" min="1000" max="60000" value="24000" step="1000" class="balance-slider cyan-slider">
-                                <div class="slider-milestones">
-                                    <span>$1.5k: "Lean Active Credit"</span>
-                                    <span>$24k: "Standard IOUBI Baseline"</span>
-                                    <span>$60k: "Today's Debt-Stock Level"</span>
+                                <div class="macro-tier-badge" id="tier-money-supply">
+                                    <span class="tier-tag">Standard:</span> <strong id="tier-money-supply-name">Standard IOUBI Baseline</strong> <span id="tier-money-supply-desc">(Universal Living Floor Coverage)</span>
                                 </div>
                             </div>
 
@@ -744,24 +731,20 @@
                                     <span class="ctrl-val-badge" id="val-supply-chain">70 : 1</span>
                                 </div>
                                 <input type="range" id="slider-supply-chain" min="10" max="100" value="70" step="5" class="balance-slider">
-                                <div class="slider-milestones">
-                                    <span>10:1: "Simple Local Economy"</span>
-                                    <span>40:1: "Standard Industrial"</span>
-                                    <span>70:1: "Deep Modern Supply Chain"</span>
+                                <div class="macro-tier-badge" id="tier-supply-chain">
+                                    <span class="tier-tag">Standard:</span> <strong id="tier-supply-chain-name">Deep Modern Supply Chain</strong> <span id="tier-supply-chain-desc">(Global Multi-Tier Distribution, 70:1)</span>
                                 </div>
                             </div>
 
                             <!-- Control 4: Daily Money Circulation Speed / Velocity ($V$) -->
                             <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-velocity">Daily Circulation Speed / Velocity ($V$):</label>
-                                    <span class="ctrl-val-badge cyan" id="val-velocity">1.35 turns/day (492 turns/yr)</span>
+                                    <label for="slider-velocity">Circulation Speed / Velocity ($V$):</label>
+                                    <span class="ctrl-val-badge cyan" id="val-velocity">1.350 turns/day (493 turns/yr)</span>
                                 </div>
                                 <input type="range" id="slider-velocity" min="0.005" max="5.0" value="1.35" step="0.005" class="balance-slider cyan-slider">
-                                <div class="slider-milestones">
-                                    <span>0.005/day: "Today's Debt Economy (2 turns/yr)"</span>
-                                    <span>0.5/day: "Transition Velocity (182 turns/yr)"</span>
-                                    <span>1.35/day: "IOUBI Full Equilibrium (492 turns/yr)"</span>
+                                <div class="macro-tier-badge" id="tier-velocity">
+                                    <span class="tier-tag">Standard:</span> <strong id="tier-velocity-name">IOUBI Full Equilibrium</strong> <span id="tier-velocity-desc">(Healthy Daily JIT Clearing)</span>
                                 </div>
                             </div>
                         </div>
