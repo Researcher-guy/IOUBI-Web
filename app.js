@@ -540,6 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const legacyDailyTaxExtracted = legacyDailyCOL * 0.30; // ~30% taxes extracted
         const legacyDailyWelfareYield = (dailyConsumerSpend * totalMultiplier * (1.2 / 365)) * 0.014 * 0.75;
         const legacyNetPayout = legacyDailyWelfareYield - legacyDailyTaxExtracted; // Net negative tax drain
+        const legacyNetDrainPct = (Math.abs(legacyNetPayout) / legacyDailyCOL) * 100;
 
         if (legacyDailyCostEl) legacyDailyCostEl.textContent = `$${legacyDailyCOL.toFixed(2)}/day`;
         if (legacyColSubtext) {
@@ -555,10 +556,12 @@ document.addEventListener('DOMContentLoaded', () => {
             legacyInterestCostEl.textContent = `$${legacyDailyInterest.toFixed(2)}/day ($${Math.round(legacyAnnualInterest).toLocaleString()}/yr)`;
         }
         if (legacyCoverageText) {
-            legacyCoverageText.textContent = `0.0% Net Dividend (Net Tax Drain)`;
+            legacyCoverageText.textContent = `-$${Math.abs(legacyNetPayout).toFixed(2)}/day (-${legacyNetDrainPct.toFixed(1)}% Net Tax Drain)`;
         }
         if (legacyProgressFill) {
-            legacyProgressFill.style.width = `0%`;
+            // Scale fill where 50% max tax drag equals 100% bar width
+            const legacyBarFill = Math.min(100, Math.max(0, (legacyNetDrainPct / 50) * 100));
+            legacyProgressFill.style.width = `${legacyBarFill}%`;
         }
 
         // 3. IOUBI Zero-Interest System Calculations:
@@ -589,7 +592,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (ioubiProgressFill) {
-            ioubiProgressFill.style.width = `${Math.min(100, Math.max(0, ioubiCoveragePercent))}%`;
+            // Range 0% to 300% where 100% target is at 33.33% of the track
+            const ioubiBarFill = Math.min(100, Math.max(0, (ioubiCoveragePercent / 300) * 100));
+            ioubiProgressFill.style.width = `${ioubiBarFill}%`;
             if (ioubiCoveragePercent >= 100) {
                 ioubiProgressFill.style.background = '#00ff9d';
                 ioubiProgressFill.style.boxShadow = '0 0 14px rgba(0, 255, 157, 0.6)';

@@ -1502,32 +1502,80 @@ main#app-main {
     font-size: 1.45rem;
 }
 
-/* Progress Bars */
+/* Progress Bars & Metric Graphs */
 .macro-progress-container {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.85rem 1.1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.macro-progress-container.legacy-progress-box {
+    border-color: rgba(255, 77, 77, 0.25);
+    background: rgba(255, 77, 77, 0.05);
+}
+
+.macro-progress-container.ioubi-progress-box {
+    border-color: rgba(0, 240, 255, 0.3);
+    background: rgba(0, 240, 255, 0.05);
 }
 
 .progress-label-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 0.85rem;
     font-weight: 600;
 }
 
 .progress-track {
-    height: 12px;
+    height: 14px;
     background: rgba(255, 255, 255, 0.06);
-    border-radius: 6px;
+    border-radius: 7px;
     overflow: hidden;
     position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.progress-track .target-line-100 {
+    position: absolute;
+    left: 33.333%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 6px #fff;
+    z-index: 2;
+}
+
+.progress-scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    margin-top: 0.15rem;
+    padding: 0 2px;
+}
+
+.progress-scale-labels .marker-100 {
+    color: #00ff9d;
+    font-weight: 700;
+}
+
+.progress-scale-labels .marker-drain {
+    color: #ff8080;
+    font-weight: 700;
 }
 
 .progress-fill.legacy-fill {
     height: 100%;
-    background: #ff4d4d;
+    background: linear-gradient(90deg, #ff4d4d, #b91c1c);
     box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+    transition: width 0.3s ease;
 }
 
 .progress-fill.ioubi-fill {
