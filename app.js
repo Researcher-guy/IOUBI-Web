@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 2. 1% Per Zero Log10 Calculator
+    // 2. Transaction Fee Calculator
     // ----------------------------------------------------------------------
     const inputBalA = document.getElementById('input-bal-a');
     const sliderBalA = document.getElementById('slider-bal-a');
@@ -87,31 +87,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputTxAmount = document.getElementById('input-tx-amount');
     const txTimeEquiv = document.getElementById('tx-time-equiv');
 
-    const summaryRate = document.getElementById('summary-rate');
-    const summaryCurrency = document.getElementById('summary-currency');
-    const summaryTime = document.getElementById('summary-time');
-
     const tblPaid = document.getElementById('tbl-paid');
+    const tblPaidTime = document.getElementById('tbl-paid-time');
     const tblFee = document.getElementById('tbl-fee');
+    const tblFeeTime = document.getElementById('tbl-fee-time');
     const tblReceived = document.getElementById('tbl-received');
+    const tblReceivedTime = document.getElementById('tbl-received-time');
+
     const tblPool = document.getElementById('tbl-pool');
+    const tblPoolTime = document.getElementById('tbl-pool-time');
     const tblUbi = document.getElementById('tbl-ubi');
+    const tblUbiTime = document.getElementById('tbl-ubi-time');
     const tblSocial = document.getElementById('tbl-social');
+    const tblSocialTime = document.getElementById('tbl-social-time');
     const tblGov = document.getElementById('tbl-gov');
+    const tblGovTime = document.getElementById('tbl-gov-time');
 
     function formatTimeDuration(hours) {
-        if (isNaN(hours) || hours <= 0) return '0 mins';
+        if (isNaN(hours) || hours <= 0) return '0.00 mins';
         const totalMinutes = hours * 60;
-        if (totalMinutes < 1) {
-            return `${(totalMinutes * 60).toFixed(1)} secs`;
-        }
         if (totalMinutes < 60) {
             return `${totalMinutes.toFixed(2)} mins`;
         }
         const h = Math.floor(hours);
-        const m = Math.round((hours - h) * 60);
-        if (m === 0) return `${h} hr${h > 1 ? 's' : ''}`;
-        return `${h} hr${h > 1 ? 's' : ''} ${m} min${m > 1 ? 's' : ''}`;
+        const remainingMinutes = (hours - h) * 60;
+        if (remainingMinutes < 0.01) {
+            return `${h} hr${h > 1 ? 's' : ''}`;
+        }
+        return `${h} hr${h > 1 ? 's' : ''} ${remainingMinutes.toFixed(2)} mins`;
     }
 
     function calculatePerZero() {
@@ -140,24 +143,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const feeAmount = txAmount * (avgFeePct / 100);
         const receivedAmount = txAmount - feeAmount;
+
         const feeHours = feeAmount / convRate;
-        const feeMinutes = feeHours * 60;
+        const receivedHours = receivedAmount / convRate;
 
-        if (summaryRate) summaryRate.textContent = `${avgFeePct.toFixed(2)}%`;
-        if (summaryCurrency) summaryCurrency.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(3)}`;
-        if (summaryTime) summaryTime.textContent = `${feeMinutes.toFixed(2)} mins`;
+        // Unified table population (only pure numbers under Deltars, and clean time under Your Time)
+        if (tblPaid) tblPaid.textContent = txAmount.toFixed(3);
+        if (tblPaidTime) tblPaidTime.textContent = formatTimeDuration(txHours);
 
-        // Pool breakdown: UBI (75%), Social (20%), Gov (5%)
-        if (tblPaid) tblPaid.innerHTML = `<span class="deltar-font">&#xE002;</span>${txAmount.toFixed(3)}`;
-        if (tblFee) tblFee.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(3)}`;
-        if (tblReceived) tblReceived.innerHTML = `<span class="deltar-font">&#xE002;</span>${receivedAmount.toFixed(3)}`;
-        if (tblPool) tblPool.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(3)}`;
-        if (tblUbi) tblUbi.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.75).toFixed(3)}`;
-        if (tblSocial) tblSocial.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.20).toFixed(3)}`;
-        if (tblGov) tblGov.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.05).toFixed(3)}`;
+        if (tblFee) tblFee.textContent = feeAmount.toFixed(3);
+        if (tblFeeTime) tblFeeTime.textContent = formatTimeDuration(feeHours);
+
+        if (tblReceived) tblReceived.textContent = receivedAmount.toFixed(3);
+        if (tblReceivedTime) tblReceivedTime.textContent = formatTimeDuration(receivedHours);
+
+        // Pool breakdown: 100% Pool, UBI (75%), Social (20%), Gov (5%)
+        const ubiFee = feeAmount * 0.75;
+        const socialFee = feeAmount * 0.20;
+        const govFee = feeAmount * 0.05;
+
+        if (tblPool) tblPool.textContent = feeAmount.toFixed(3);
+        if (tblPoolTime) tblPoolTime.textContent = formatTimeDuration(feeHours);
+
+        if (tblUbi) tblUbi.textContent = ubiFee.toFixed(3);
+        if (tblUbiTime) tblUbiTime.textContent = formatTimeDuration(ubiFee / convRate);
+
+        if (tblSocial) tblSocial.textContent = socialFee.toFixed(3);
+        if (tblSocialTime) tblSocialTime.textContent = formatTimeDuration(socialFee / convRate);
+
+        if (tblGov) tblGov.textContent = govFee.toFixed(3);
+        if (tblGovTime) tblGovTime.textContent = formatTimeDuration(govFee / convRate);
     }
 
-    // Sync input and range slider for Payor Balance
+    // Bidirectional sync for Payor Balance input and slider
     if (inputBalA && sliderBalA) {
         inputBalA.addEventListener('input', () => {
             sliderBalA.value = inputBalA.value;
@@ -169,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Sync input and range slider for Payee Balance
+    // Bidirectional sync for Payee Balance input and slider
     if (inputBalB && sliderBalB) {
         inputBalB.addEventListener('input', () => {
             sliderBalB.value = inputBalB.value;

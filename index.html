@@ -512,10 +512,10 @@
             </div>
 
             <div class="sandbox-grid">
-                <!-- 1% Per Zero Log10 Calculator -->
+                <!-- Transaction Fee Calculator -->
                 <div class="sandbox-card glass-panel">
                     <div class="tool-header">
-                        <h2>1% Per Zero Log10 Calculator</h2>
+                        <h2>Transaction Fee Calculator</h2>
                     </div>
                     <p class="tool-desc">Calculates the fee % based on the balance of the two accounts.</p>
 
@@ -543,8 +543,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="input-conversion-rate">Personal Time to Deltar Conversion (Deltars/hr). This is only used by you to equate your time to Deltar prices.</label>
-                            <input type="number" id="input-conversion-rate" value="20" min="0.1" step="1">
+                            <label for="input-conversion-rate">Set your time's value. <small class="hint-inline">For viewing prices in your personal time.</small></label>
+                            <div class="input-suffix-group">
+                                <input type="number" id="input-conversion-rate" value="20" min="0.1" step="1">
+                                <span class="input-suffix"><span class="deltar-font">&#xE002;</span> / hr</span>
+                            </div>
                         </div>
 
                         <div class="two-col-inputs">
@@ -560,53 +563,61 @@
                         </div>
 
                         <div class="calc-results-box" id="calc-result">
-                            <div class="fee-charged-card">
-                                <div class="fee-charged-header">Fee Charged</div>
-                                <div class="fee-charged-grid">
-                                    <div class="fee-charged-col">
-                                        <span class="fee-col-label">% rate</span>
-                                        <strong class="fee-col-val" id="summary-rate">2.79%</strong>
-                                    </div>
-                                    <div class="fee-charged-col">
-                                        <span class="fee-col-label">Deltars</span>
-                                        <strong class="fee-col-val" id="summary-currency"><span class="deltar-font">&#xE002;</span>1.394</strong>
-                                    </div>
-                                    <div class="fee-charged-col">
-                                        <span class="fee-col-label">Your Time</span>
-                                        <strong class="fee-col-val" id="summary-time">4.18 mins</strong>
-                                    </div>
+                            <div class="unified-table-box">
+                                <div class="unified-table-header">Fee Charged on this transaction</div>
+                                <div class="unified-table-container">
+                                    <table class="unified-fee-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-metric">Item</th>
+                                                <th>Deltars</th>
+                                                <th>Your Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="row-label">Paid</td>
+                                                <td id="tbl-paid" class="val-deltars">50.000</td>
+                                                <td id="tbl-paid-time" class="val-time">2 hrs 30 mins</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="row-label">Fee</td>
+                                                <td id="tbl-fee" class="val-deltars">1.394</td>
+                                                <td id="tbl-fee-time" class="val-time">4.18 mins</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="row-label">Received</td>
+                                                <td id="tbl-received" class="val-deltars">48.606</td>
+                                                <td id="tbl-received-time" class="val-time">2 hrs 25.82 mins</td>
+                                            </tr>
+                                            
+                                            <tr class="separator-row">
+                                                <td colspan="3">Pool Allocation Breakdown (from fee above)</td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td class="row-label">Pool Total (from fee above)</td>
+                                                <td id="tbl-pool" class="val-deltars">1.394</td>
+                                                <td id="tbl-pool-time" class="val-time">4.18 mins</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="row-label ubi-cell">UBI contribution (75%)</td>
+                                                <td id="tbl-ubi" class="val-deltars ubi-cell">1.045</td>
+                                                <td id="tbl-ubi-time" class="val-time ubi-cell">3.14 mins</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="row-label social-cell">Social Contribution (20%)</td>
+                                                <td id="tbl-social" class="val-deltars social-cell">0.279</td>
+                                                <td id="tbl-social-time" class="val-time social-cell">0.84 mins</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="row-label gov-cell">Gov Contribution (5%)</td>
+                                                <td id="tbl-gov" class="val-deltars gov-cell">0.070</td>
+                                                <td id="tbl-gov-time" class="val-time gov-cell">0.21 mins</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>
-
-                            <div class="pool-table-container">
-                                <table class="pool-table">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="3" class="pool-group-header">Transaction Settlement</th>
-                                            <th colspan="4" class="pool-group-header">Fee Allocation Breakdown</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Paid</th>
-                                            <th>Fee</th>
-                                            <th>Received</th>
-                                            <th class="pool-cell">Pool</th>
-                                            <th>UBI (75%)</th>
-                                            <th>Social (20%)</th>
-                                            <th>Gov (5%)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td id="tbl-paid"><span class="deltar-font">&#xE002;</span>50.000</td>
-                                            <td id="tbl-fee"><span class="deltar-font">&#xE002;</span>1.394</td>
-                                            <td id="tbl-received"><span class="deltar-font">&#xE002;</span>48.606</td>
-                                            <td id="tbl-pool" class="pool-cell"><span class="deltar-font">&#xE002;</span>1.394</td>
-                                            <td id="tbl-ubi" class="ubi-cell"><span class="deltar-font">&#xE002;</span>1.045</td>
-                                            <td id="tbl-social" class="social-cell"><span class="deltar-font">&#xE002;</span>0.279</td>
-                                            <td id="tbl-gov" class="gov-cell"><span class="deltar-font">&#xE002;</span>0.070</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
