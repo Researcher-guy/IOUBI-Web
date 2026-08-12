@@ -706,21 +706,25 @@
                                     <label for="slider-living-cost">Target Cost of Living:</label>
                                     <span class="ctrl-val-badge" id="val-living-cost">$24,000 / yr <small>($65.75 / day)</small></span>
                                 </div>
-                                <input type="range" id="slider-living-cost" min="12000" max="48000" value="24000" step="1000" class="balance-slider" oninput="window.calculateMacroEngineV3 && window.calculateMacroEngineV3()">
-                                <div class="macro-tier-badge" id="tier-living-cost">
-                                    <span class="tier-tag">Category:</span> <strong id="tier-living-cost-name">Median Developed Living</strong> <span id="tier-living-cost-desc">(Essential Stability & Healthcare)</span>
+                                <div class="macro-slider-wrapper">
+                                    <input type="range" id="slider-living-cost" min="12000" max="48000" value="24000" step="1000" class="balance-slider" oninput="window.calculateMacroEngineV3 && window.calculateMacroEngineV3()">
+                                    <div class="macro-floating-tier" id="tier-living-cost">
+                                        <span class="tier-main" id="tier-living-cost-name">Median Developed Living</span> <span class="tier-desc" id="tier-living-cost-desc">(Essential Stability & Healthcare)</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Control 2: Commercial Economy Ratio To Personal Economy -->
+                            <!-- Control 2: Commercial Economy to Personal Economy Size Ratio -->
                             <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-supply-chain">Commercial Economy Ratio To Personal Economy:</label>
+                                    <label for="slider-supply-chain">Commercial Economy to Personal Economy Size Ratio: <small class="ctrl-subtitle">(How big is the commercial economy compared to the individual economy)</small></label>
                                     <span class="ctrl-val-badge" id="val-supply-chain">70 : 1</span>
                                 </div>
-                                <input type="range" id="slider-supply-chain" min="10" max="100" value="70" step="5" class="balance-slider" oninput="window.calculateMacroEngineV3 && window.calculateMacroEngineV3()">
-                                <div class="macro-tier-badge" id="tier-supply-chain">
-                                    <span class="tier-tag">Category:</span> <strong id="tier-supply-chain-name">Deep Modern Supply Chain</strong> <span id="tier-supply-chain-desc">(Global Multi-Tier Distribution, 70:1)</span>
+                                <div class="macro-slider-wrapper">
+                                    <input type="range" id="slider-supply-chain" min="1" max="100" value="70" step="1" class="balance-slider" oninput="window.calculateMacroEngineV3 && window.calculateMacroEngineV3()">
+                                    <div class="macro-floating-tier" id="tier-supply-chain">
+                                        <span class="tier-main" id="tier-supply-chain-name">Deep Modern Supply Chain</span> <span class="tier-desc" id="tier-supply-chain-desc">(Global Multi-Tier Distribution, 70:1)</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -730,9 +734,11 @@
                                     <label for="slider-velocity">Circulation Speed (Velocity):</label>
                                     <span class="ctrl-val-badge cyan" id="val-velocity">1.350 turns/day (493 turns/yr)</span>
                                 </div>
-                                <input type="range" id="slider-velocity" min="0.005" max="5.0" value="1.35" step="0.005" class="balance-slider cyan-slider" oninput="window.calculateMacroEngineV3 && window.calculateMacroEngineV3()">
-                                <div class="macro-tier-badge" id="tier-velocity">
-                                    <span class="tier-tag">Category:</span> <strong id="tier-velocity-name">IOUBI Full Equilibrium</strong> <span id="tier-velocity-desc">(Healthy Daily JIT Clearing)</span>
+                                <div class="macro-slider-wrapper">
+                                    <input type="range" id="slider-velocity" min="0.005" max="5.0" value="1.35" step="0.005" class="balance-slider cyan-slider" oninput="window.calculateMacroEngineV3 && window.calculateMacroEngineV3()">
+                                    <div class="macro-floating-tier" id="tier-velocity">
+                                        <span class="tier-main" id="tier-velocity-name">IOUBI Full Equilibrium</span> <span class="tier-desc" id="tier-velocity-desc">(Healthy Daily JIT Clearing)</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -756,25 +762,33 @@
                                 <div class="macro-metric-row">
                                     <div class="metric-info">
                                         <span class="metric-label">Real Cost of Living:</span>
-                                        <small class="metric-subtext" id="legacy-col-subtext">Includes 16.0% compound interest overhead from $24,000 debt stock.</small>
+                                        <small class="metric-subtext" id="legacy-col-subtext">Includes 40.0% compound interest overhead across 70 supply chain steps.</small>
                                     </div>
-                                    <div class="metric-value legacy-val" id="legacy-daily-cost">$78.28/day</div>
+                                    <div class="metric-value legacy-val" id="legacy-daily-cost">$65.75/day</div>
                                 </div>
 
                                 <div class="macro-metric-row">
                                     <div class="metric-info">
-                                        <span class="metric-label">Daily Payout Generated:</span>
-                                        <small class="metric-subtext">Yield under 1.4% fee levy on slow legacy turnover.</small>
+                                        <span class="metric-label">Net Daily Payout:</span>
+                                        <small class="metric-subtext">Taxes extracted (~30% income & sales) minus fragmented welfare.</small>
                                     </div>
-                                    <div class="metric-value legacy-val red-text" id="legacy-daily-yield">$2.56/day</div>
+                                    <div class="metric-value legacy-val red-text" id="legacy-net-payout">-$19.57/day</div>
                                 </div>
 
                                 <div class="macro-metric-row">
                                     <div class="metric-info">
-                                        <span class="metric-label">Implied Debt Stock Required:</span>
-                                        <small class="metric-subtext">Total debt capital needed to support volume at current velocity.</small>
+                                        <span class="metric-label">Money Supply:</span>
+                                        <small class="metric-subtext">Total debt capital required to mediate trade at 1.2 turns/year.</small>
                                     </div>
-                                    <div class="metric-value legacy-val" id="legacy-money-supply">$3,458</div>
+                                    <div class="metric-value legacy-val" id="legacy-money-supply">$1,420,000</div>
+                                </div>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Systemic Interest Overhead:</span>
+                                        <small class="metric-subtext">Annual 6.0% interest tribute paid to banks to keep money in existence.</small>
+                                    </div>
+                                    <div class="metric-value legacy-val red-text" id="legacy-interest-cost">$233.42/day</div>
                                 </div>
                             </div>
 
@@ -782,10 +796,10 @@
                             <div class="macro-progress-container">
                                 <div class="progress-label-row">
                                     <span>Coverage of Living Needs:</span>
-                                    <strong class="red-text" id="legacy-coverage-text">3.3% Covered</strong>
+                                    <strong class="red-text" id="legacy-coverage-text">0.0% Net Dividend (Net Tax Drain)</strong>
                                 </div>
                                 <div class="progress-track">
-                                    <div class="progress-fill legacy-fill" id="legacy-progress-fill" style="width: 3.3%;"></div>
+                                    <div class="progress-fill legacy-fill" id="legacy-progress-fill" style="width: 0%;"></div>
                                 </div>
                             </div>
 
@@ -798,7 +812,7 @@
                                     <strong>Debt Drag:</strong> Money supply is bloated with debt, creating ongoing interest tribute to banks.
                                 </li>
                                 <li>
-                                    <strong>Stagnant Flow:</strong> Slow velocity (2 turns/year) fails to generate enough natural fee volume.
+                                    <strong>Stagnant Flow:</strong> Slow velocity (1.2 turns/year) fails to generate enough natural fee volume.
                                 </li>
                             </ul>
                         </div>
@@ -812,25 +826,33 @@
                                 <div class="macro-metric-row">
                                     <div class="metric-info">
                                         <span class="metric-label">Real Cost of Living:</span>
-                                        <small class="metric-subtext">Interest overhead completely eliminated; prices drop to pure productive cost.</small>
+                                        <small class="metric-subtext">40% interest overhead eliminated; prices drop to pure productive cost.</small>
                                     </div>
-                                    <div class="metric-value ioubi-val" id="ioubi-daily-cost"><span class="deltar-font">&#xE002;</span>65.75/day</div>
+                                    <div class="metric-value ioubi-val" id="ioubi-daily-cost"><span class="deltar-font">&#xE002;</span>39.45/day</div>
                                 </div>
 
                                 <div class="macro-metric-row">
                                     <div class="metric-info">
-                                        <span class="metric-label">Daily Dividend Payout:</span>
-                                        <small class="metric-subtext">Automated 1.4% circulation contribution from 70:1 supply chain velocity.</small>
+                                        <span class="metric-label">Net Daily Payout:</span>
+                                        <small class="metric-subtext">Automated UBI dividend received with 0% income tax.</small>
                                     </div>
-                                    <div class="metric-value ioubi-val emerald-text" id="ioubi-daily-ubi"><span class="deltar-font">&#xE002;</span>340.20/day</div>
+                                    <div class="metric-value ioubi-val emerald-text" id="ioubi-daily-ubi">+<span class="deltar-font">&#xE002;</span>39.70/day</div>
                                 </div>
 
                                 <div class="macro-metric-row">
                                     <div class="metric-info">
-                                        <span class="metric-label">Implied Active Credit Line:</span>
-                                        <small class="metric-subtext">Compact zero-interest credit buffer needed for instant JIT clearing.</small>
+                                        <span class="metric-label">Money Supply:</span>
+                                        <small class="metric-subtext">Compact zero-interest active credit buffer for instant JIT clearing.</small>
                                     </div>
-                                    <div class="metric-value ioubi-val cyan-text" id="ioubi-money-supply"><span class="deltar-font">&#xE002;</span>3,458</div>
+                                    <div class="metric-value ioubi-val cyan-text" id="ioubi-money-supply"><span class="deltar-font">&#xE002;</span>2,074</div>
+                                </div>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Systemic Interest Overhead:</span>
+                                        <small class="metric-subtext">Zero debt creation; money exists as friction-free accounting credit.</small>
+                                    </div>
+                                    <div class="metric-value ioubi-val emerald-text" id="ioubi-interest-cost"><span class="deltar-font">&#xE002;</span>0.00/yr (0.0%)</div>
                                 </div>
                             </div>
 

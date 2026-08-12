@@ -1261,11 +1261,11 @@ main#app-main {
 .macro-controls-single-col {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2.25rem;
     margin-top: 1.25rem;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 1.5rem;
+    padding: 1.75rem 1.5rem 2rem 1.5rem;
     border-radius: 0.75rem;
     width: 100%;
     box-sizing: border-box;
@@ -1279,6 +1279,13 @@ main#app-main {
     box-sizing: border-box;
 }
 
+.macro-slider-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .macro-ctrl-item input[type="range"] {
     width: 100%;
     box-sizing: border-box;
@@ -1290,6 +1297,13 @@ main#app-main {
     align-items: center;
     font-size: 0.88rem;
     font-weight: 600;
+}
+
+.ctrl-label-row .ctrl-subtitle {
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: var(--text-dim);
+    margin-left: 0.35rem;
 }
 
 .ctrl-val-badge {
@@ -1309,37 +1323,27 @@ main#app-main {
     border-color: rgba(0, 240, 255, 0.3);
 }
 
-.macro-tier-badge {
-    margin-top: 0.25rem;
+.macro-floating-tier {
+    position: absolute;
+    top: 100%;
+    white-space: nowrap;
+    pointer-events: none;
     font-family: var(--font-mono);
     font-size: 0.78rem;
-    color: var(--text-dim);
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 0.4rem 0.75rem;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    line-height: 1.4;
-    opacity: 0.9;
-    transition: all 0.2s ease;
-    width: 100%;
-    box-sizing: border-box;
+    color: #94a3b8;
+    margin-top: 0.35rem;
+    transition: left 0.05s ease-out;
 }
 
-.macro-tier-badge .tier-tag {
-    color: var(--accent-cyan);
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.68rem;
-    letter-spacing: 0.05em;
-    flex-shrink: 0;
-}
-
-.macro-tier-badge strong {
+.macro-floating-tier .tier-main {
     color: #cbd5e1;
-    font-weight: 600;
+    font-weight: 500;
+}
+
+.macro-floating-tier .tier-desc {
+    color: #64748b;
+    font-size: 0.72rem;
+    margin-left: 0.3rem;
 }
 
 .macro-solve-action-bar {

@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 5. Macroeconomic Simulator & Dividend Engine (Spec Revision V3 Reactive)
+    // 5. Macroeconomic Simulator & Dividend Engine (Spec Revision V3 + Option C)
     // ----------------------------------------------------------------------
     const sliderLivingCost = document.getElementById('slider-living-cost');
     const sliderSupplyChain = document.getElementById('slider-supply-chain');
@@ -418,24 +418,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const valVelocity = document.getElementById('val-velocity');
     const btnSolveCoverage = document.getElementById('btn-solve-coverage');
 
-    // Dynamic Tier Benchmark Text Elements
+    // Floating Tier Benchmark Text Elements
+    const tierLivingCost = document.getElementById('tier-living-cost');
     const tierLivingCostName = document.getElementById('tier-living-cost-name');
     const tierLivingCostDesc = document.getElementById('tier-living-cost-desc');
+
+    const tierSupplyChain = document.getElementById('tier-supply-chain');
     const tierSupplyChainName = document.getElementById('tier-supply-chain-name');
     const tierSupplyChainDesc = document.getElementById('tier-supply-chain-desc');
+
+    const tierVelocity = document.getElementById('tier-velocity');
     const tierVelocityName = document.getElementById('tier-velocity-name');
     const tierVelocityDesc = document.getElementById('tier-velocity-desc');
 
+    // Left Card (Status Quo) Metric Elements
     const legacyDailyCostEl = document.getElementById('legacy-daily-cost');
-    const legacyDailyYieldEl = document.getElementById('legacy-daily-yield');
-    const legacyMoneySupplyEl = document.getElementById('legacy-money-supply');
     const legacyColSubtext = document.getElementById('legacy-col-subtext');
+    const legacyNetPayoutEl = document.getElementById('legacy-net-payout');
+    const legacyMoneySupplyEl = document.getElementById('legacy-money-supply');
+    const legacyInterestCostEl = document.getElementById('legacy-interest-cost');
     const legacyCoverageText = document.getElementById('legacy-coverage-text');
     const legacyProgressFill = document.getElementById('legacy-progress-fill');
 
+    // Right Card (IOUBI) Metric Elements
     const ioubiDailyCostEl = document.getElementById('ioubi-daily-cost');
     const ioubiDailyUbiEl = document.getElementById('ioubi-daily-ubi');
     const ioubiMoneySupplyEl = document.getElementById('ioubi-money-supply');
+    const ioubiInterestCostEl = document.getElementById('ioubi-interest-cost');
     const ioubiCoverageText = document.getElementById('ioubi-coverage-text');
     const ioubiProgressFill = document.getElementById('ioubi-progress-fill');
 
@@ -452,17 +461,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getSupplyChainTier(multiplier) {
-        if (multiplier < 25) return { name: "Simple Local Economy", desc: "(Direct Farmer-to-Consumer)" };
-        if (multiplier < 50) return { name: "Standard Industrial", desc: "(Regional Manufacturing & Wholesale)" };
+        if (multiplier < 15) return { name: "Direct Local Economy", desc: "(Farmer-to-Consumer & Micro-trade)" };
+        if (multiplier < 40) return { name: "Regional Light Industry", desc: "(Local Processing & Wholesaling)" };
         if (multiplier < 80) return { name: "Deep Modern Supply Chain", desc: "(Global Multi-Tier Distribution, 70:1)" };
-        return { name: "Advanced Fabrication Economy", desc: "(Complex High-Tech Multi-Tier Network)" };
+        return { name: "Advanced Fabrication Network", desc: "(Complex High-Tech Multi-Tier Mesh)" };
     }
 
     function getVelocityTier(velocity) {
-        if (velocity < 0.05) return { name: "Today's Debt Economy", desc: "(Stagnant Central Bank Velocity, ~2 turns/yr)" };
+        if (velocity < 0.05) return { name: "Today's Debt Economy", desc: "(Stagnant Central Bank Velocity, 1.2 turns/yr)" };
         if (velocity < 0.5) return { name: "Transition Velocity", desc: "(Accelerated Trade Circulation)" };
         if (velocity < 2.0) return { name: "IOUBI Full Equilibrium", desc: "(Healthy Daily JIT Clearing)" };
         return { name: "High-Throughput Digital Commercial Mesh", desc: "(Rapid Automated Settlements)" };
+    }
+
+    function updateFloatingPosition(sliderEl, floatingEl, minVal, maxVal, currentVal) {
+        if (!sliderEl || !floatingEl) return;
+        const pct = Math.max(0, Math.min(100, ((currentVal - minVal) / (maxVal - minVal)) * 100));
+        floatingEl.style.left = `${pct}%`;
+        if (pct < 15) {
+            floatingEl.style.transform = 'translateX(0%)';
+        } else if (pct > 85) {
+            floatingEl.style.transform = 'translateX(-100%)';
+        } else {
+            floatingEl.style.transform = 'translateX(-50%)';
+        }
     }
 
     function calculateMacroEngineV3() {
@@ -472,25 +494,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const supplyChainMultiplierInput = parseFloat(sliderSupplyChain.value) || 70;
         const dailyVelocityInput = parseFloat(sliderVelocity.value) || 1.35;
 
-        // 1. Shared Volume Base
+        // Base Daily & Annual Metrics
         const dailyConsumerSpend = annualLivingCostInput / 365;
-        // Total Gross Daily Volume scales with both Supply Chain Depth and Daily Velocity Turnover
-        const totalGrossDailyVolume = dailyConsumerSpend * (1 + supplyChainMultiplierInput) * dailyVelocityInput; 
-
-        // 2. Implied Active Money Supply Required (M = Base Daily Volume / Velocity)
-        const requiredMoneySupplyM = (dailyConsumerSpend * (1 + supplyChainMultiplierInput)) / Math.max(0.001, dailyVelocityInput);
-
-        // Display labels for control sliders
+        const totalMultiplier = 1 + supplyChainMultiplierInput;
+        const grossAnnualVolume = annualLivingCostInput * totalMultiplier;
         const annualTurns = dailyVelocityInput * 365;
 
+        // Display labels for control sliders
         if (valLivingCost) {
             valLivingCost.innerHTML = `$${annualLivingCostInput.toLocaleString()} / yr <small>($${dailyConsumerSpend.toFixed(2)} / day)</small>`;
         }
         if (valSupplyChain) {
             valSupplyChain.textContent = `${supplyChainMultiplierInput} : 1`;
         }
-
-        // Smart dynamic unit display for velocity
         if (valVelocity) {
             if (dailyVelocityInput < 0.1) {
                 valVelocity.textContent = `${annualTurns.toFixed(1)} turns/year`;
@@ -499,51 +515,67 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Update Dynamic Tier Benchmark Descriptors (Clean without double quotes)
+        // 1. Update Floating Category Tooltips & Positions
         const tierLiving = getLivingCostTier(annualLivingCostInput);
         if (tierLivingCostName) tierLivingCostName.textContent = tierLiving.name;
         if (tierLivingCostDesc) tierLivingCostDesc.textContent = tierLiving.desc;
+        updateFloatingPosition(sliderLivingCost, tierLivingCost, 12000, 48000, annualLivingCostInput);
 
         const tierSupply = getSupplyChainTier(supplyChainMultiplierInput);
         if (tierSupplyChainName) tierSupplyChainName.textContent = tierSupply.name;
         if (tierSupplyChainDesc) tierSupplyChainDesc.textContent = tierSupply.desc;
+        updateFloatingPosition(sliderSupplyChain, tierSupplyChain, 1, 100, supplyChainMultiplierInput);
 
         const tierVel = getVelocityTier(dailyVelocityInput);
         if (tierVelocityName) tierVelocityName.textContent = tierVel.name;
         if (tierVelocityDesc) tierVelocityDesc.textContent = tierVel.desc;
+        updateFloatingPosition(sliderVelocity, tierVelocity, 0.005, 5.0, dailyVelocityInput);
 
-        // 3. Status Quo (Legacy) System Calculations
-        // High debt stock M creates proportional compound interest overhead in prices (up to 40%)
-        const legacyInterestOverheadRate = Math.min(0.40, (requiredMoneySupplyM / 60000) * 0.40);
-        const legacyDailyCOL = dailyConsumerSpend / Math.max(0.01, (1 - legacyInterestOverheadRate));
-        const legacyGrossDailyVolume = dailyConsumerSpend * (1 + supplyChainMultiplierInput) * 0.04;
-        const legacyDailyFeeYield = legacyGrossDailyVolume * 0.014 * 0.75;
-        const legacyCoveragePercent = (legacyDailyFeeYield / legacyDailyCOL) * 100;
+        // 2. Status Quo (Legacy Debt System) Calculations:
+        // Sluggish velocity at 1.2 turns/year requires immense debt money supply
+        const legacyDailyCOL = dailyConsumerSpend;
+        const legacyMoneySupply = grossAnnualVolume / 1.2;
+        const legacyAnnualInterest = legacyMoneySupply * 0.06; // 6% weighted average interest tribute
+        const legacyDailyInterest = legacyAnnualInterest / 365;
+        const legacyDailyTaxExtracted = legacyDailyCOL * 0.30; // ~30% taxes extracted
+        const legacyDailyWelfareYield = (dailyConsumerSpend * totalMultiplier * (1.2 / 365)) * 0.014 * 0.75;
+        const legacyNetPayout = legacyDailyWelfareYield - legacyDailyTaxExtracted; // Net negative tax drain
 
         if (legacyDailyCostEl) legacyDailyCostEl.textContent = `$${legacyDailyCOL.toFixed(2)}/day`;
-        if (legacyDailyYieldEl) legacyDailyYieldEl.textContent = `$${legacyDailyFeeYield.toFixed(2)}/day`;
-        if (legacyMoneySupplyEl) legacyMoneySupplyEl.textContent = `$${Math.round(requiredMoneySupplyM).toLocaleString()}`;
         if (legacyColSubtext) {
-            legacyColSubtext.textContent = `Includes ${(legacyInterestOverheadRate * 100).toFixed(1)}% compound interest overhead from $${Math.round(requiredMoneySupplyM).toLocaleString()} debt stock.`;
+            legacyColSubtext.textContent = `Includes 40.0% compound interest overhead across ${supplyChainMultiplierInput} supply chain steps.`;
+        }
+        if (legacyNetPayoutEl) {
+            legacyNetPayoutEl.textContent = `-$${Math.abs(legacyNetPayout).toFixed(2)}/day`;
+        }
+        if (legacyMoneySupplyEl) {
+            legacyMoneySupplyEl.textContent = `$${Math.round(legacyMoneySupply).toLocaleString()}`;
+        }
+        if (legacyInterestCostEl) {
+            legacyInterestCostEl.textContent = `$${legacyDailyInterest.toFixed(2)}/day ($${Math.round(legacyAnnualInterest).toLocaleString()}/yr)`;
         }
         if (legacyCoverageText) {
-            legacyCoverageText.textContent = `${legacyCoveragePercent.toFixed(1)}% Covered`;
+            legacyCoverageText.textContent = `0.0% Net Dividend (Net Tax Drain)`;
         }
         if (legacyProgressFill) {
-            legacyProgressFill.style.width = `${Math.min(100, Math.max(0, legacyCoveragePercent))}%`;
+            legacyProgressFill.style.width = `0%`;
         }
 
-        // 4. IOUBI Zero-Interest System Calculations
-        const ioubiDailyCOL = dailyConsumerSpend; // Zero interest overhead
-        const ioubiDailyFeePool = totalGrossDailyVolume * 0.014;
-        const ioubiDailyUBI = ioubiDailyFeePool * 0.75;   // 75% Share
-        const ioubiDailySocial = ioubiDailyFeePool * 0.20; // 20% Share
-        const ioubiDailyGov = ioubiDailyFeePool * 0.05;    // 5% Share
+        // 3. IOUBI Zero-Interest System Calculations:
+        // Real cost of living drops 40% due to zero-interest supply chain
+        const ioubiDailyCOL = dailyConsumerSpend * 0.60;
+        const ioubiGrossDailyVolume = ioubiDailyCOL * totalMultiplier * dailyVelocityInput;
+        const ioubiFeePool = ioubiGrossDailyVolume * 0.014;
+        const ioubiDailyUBI = ioubiFeePool * 0.75;   // 75% UBI Dividend
+        const ioubiDailySocial = ioubiFeePool * 0.20; // 20% Social Pool
+        const ioubiDailyGov = ioubiFeePool * 0.05;    // 5% Government Operations
         const ioubiCoveragePercent = (ioubiDailyUBI / ioubiDailyCOL) * 100;
+        const ioubiMoneySupply = (ioubiDailyCOL * totalMultiplier) / Math.max(0.001, dailyVelocityInput);
 
         if (ioubiDailyCostEl) ioubiDailyCostEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${ioubiDailyCOL.toFixed(2)}/day`;
-        if (ioubiDailyUbiEl) ioubiDailyUbiEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${ioubiDailyUBI.toFixed(2)}/day`;
-        if (ioubiMoneySupplyEl) ioubiMoneySupplyEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(requiredMoneySupplyM).toLocaleString()}`;
+        if (ioubiDailyUbiEl) ioubiDailyUbiEl.innerHTML = `+<span class="deltar-font">&#xE002;</span>${ioubiDailyUBI.toFixed(2)}/day`;
+        if (ioubiMoneySupplyEl) ioubiMoneySupplyEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(ioubiMoneySupply).toLocaleString()}`;
+        if (ioubiInterestCostEl) ioubiInterestCostEl.innerHTML = `<span class="deltar-font">&#xE002;</span>0.00/yr (0.0%)`;
 
         if (ioubiCoverageText) {
             ioubiCoverageText.textContent = `${ioubiCoveragePercent.toFixed(1)}% Covered`;
