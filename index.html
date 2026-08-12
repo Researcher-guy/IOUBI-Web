@@ -699,52 +699,40 @@
                         </div>
                         <p class="tool-desc">Compare how today's debt-backed system fares against a 1.4% zero-interest velocity fee.</p>
 
-                        <div class="macro-controls-grid">
-                            <!-- Control 1: Target Annual Cost of Living Slider ($L$) -->
+                        <div class="macro-controls-single-col">
+                            <!-- Control 1: Target Cost of Living -->
                             <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-living-cost">Target Annual Living Floor ($L$):</label>
+                                    <label for="slider-living-cost">Target Cost of Living:</label>
                                     <span class="ctrl-val-badge" id="val-living-cost">$24,000 / yr <small>($65.75 / day)</small></span>
                                 </div>
                                 <input type="range" id="slider-living-cost" min="12000" max="48000" value="24000" step="1000" class="balance-slider">
                                 <div class="macro-tier-badge" id="tier-living-cost">
-                                    <span class="tier-tag">Standard:</span> <strong id="tier-living-cost-name">Median Developed Living</strong> <span id="tier-living-cost-desc">(Essential Stability & Healthcare)</span>
+                                    <span class="tier-tag">Category:</span> <strong id="tier-living-cost-name">Median Developed Living</strong> <span id="tier-living-cost-desc">(Essential Stability & Healthcare)</span>
                                 </div>
                             </div>
 
-                            <!-- Control 2: Active Money Supply / Credit Limit per Capita ($M$) -->
+                            <!-- Control 2: Commercial Economy Ratio To Personal Economy -->
                             <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-money-supply">Active Money Supply / Credit Limit ($M$):</label>
-                                    <span class="ctrl-val-badge cyan" id="val-money-supply">$24,000 / person</span>
-                                </div>
-                                <input type="range" id="slider-money-supply" min="1000" max="60000" value="24000" step="1000" class="balance-slider cyan-slider">
-                                <div class="macro-tier-badge" id="tier-money-supply">
-                                    <span class="tier-tag">Standard:</span> <strong id="tier-money-supply-name">Standard IOUBI Baseline</strong> <span id="tier-money-supply-desc">(Universal Living Floor Coverage)</span>
-                                </div>
-                            </div>
-
-                            <!-- Control 3: Supply Chain Multiplier ($S$) -->
-                            <div class="macro-ctrl-item">
-                                <div class="ctrl-label-row">
-                                    <label for="slider-supply-chain">Supply Chain Multiplier ($S$):</label>
+                                    <label for="slider-supply-chain">Commercial Economy Ratio To Personal Economy:</label>
                                     <span class="ctrl-val-badge" id="val-supply-chain">70 : 1</span>
                                 </div>
                                 <input type="range" id="slider-supply-chain" min="10" max="100" value="70" step="5" class="balance-slider">
                                 <div class="macro-tier-badge" id="tier-supply-chain">
-                                    <span class="tier-tag">Standard:</span> <strong id="tier-supply-chain-name">Deep Modern Supply Chain</strong> <span id="tier-supply-chain-desc">(Global Multi-Tier Distribution, 70:1)</span>
+                                    <span class="tier-tag">Category:</span> <strong id="tier-supply-chain-name">Deep Modern Supply Chain</strong> <span id="tier-supply-chain-desc">(Global Multi-Tier Distribution, 70:1)</span>
                                 </div>
                             </div>
 
-                            <!-- Control 4: Daily Money Circulation Speed / Velocity ($V$) -->
+                            <!-- Control 3: Circulation Speed (Velocity) -->
                             <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-velocity">Circulation Speed / Velocity ($V$):</label>
+                                    <label for="slider-velocity">Circulation Speed (Velocity):</label>
                                     <span class="ctrl-val-badge cyan" id="val-velocity">1.350 turns/day (493 turns/yr)</span>
                                 </div>
                                 <input type="range" id="slider-velocity" min="0.005" max="5.0" value="1.35" step="0.005" class="balance-slider cyan-slider">
                                 <div class="macro-tier-badge" id="tier-velocity">
-                                    <span class="tier-tag">Standard:</span> <strong id="tier-velocity-name">IOUBI Full Equilibrium</strong> <span id="tier-velocity-desc">(Healthy Daily JIT Clearing)</span>
+                                    <span class="tier-tag">Category:</span> <strong id="tier-velocity-name">IOUBI Full Equilibrium</strong> <span id="tier-velocity-desc">(Healthy Daily JIT Clearing)</span>
                                 </div>
                             </div>
                         </div>
@@ -779,6 +767,14 @@
                                         <small class="metric-subtext">Yield under 1.4% fee levy on slow legacy turnover.</small>
                                     </div>
                                     <div class="metric-value legacy-val red-text" id="legacy-daily-yield">$2.56/day</div>
+                                </div>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Implied Debt Stock Required:</span>
+                                        <small class="metric-subtext">Total debt capital needed to support volume at current velocity.</small>
+                                    </div>
+                                    <div class="metric-value legacy-val" id="legacy-money-supply">$3,458</div>
                                 </div>
                             </div>
 
@@ -827,6 +823,14 @@
                                         <small class="metric-subtext">Automated 1.4% circulation contribution from 70:1 supply chain velocity.</small>
                                     </div>
                                     <div class="metric-value ioubi-val emerald-text" id="ioubi-daily-ubi"><span class="deltar-font">&#xE002;</span>340.20/day</div>
+                                </div>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Implied Active Credit Line:</span>
+                                        <small class="metric-subtext">Compact zero-interest credit buffer needed for instant JIT clearing.</small>
+                                    </div>
+                                    <div class="metric-value ioubi-val cyan-text" id="ioubi-money-supply"><span class="deltar-font">&#xE002;</span>3,458</div>
                                 </div>
                             </div>
 
