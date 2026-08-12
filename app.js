@@ -72,7 +72,100 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 2. Transaction Fee Calculator
+    // 2. Transaction Fee Calculator Helpers
+    // ----------------------------------------------------------------------
+
+    // Format numbers with comma separators for thousands, millions, etc.
+    function formatNumberWithCommas(num, decimals = 3) {
+        if (isNaN(num)) return '0.000';
+        const fixedStr = Number(num).toFixed(decimals);
+        const parts = fixedStr.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+    }
+
+    // Smart Multi-Unit Time Formatter (max 2 units, leading with >= 1)
+    function formatSmartDuration(hours) {
+        if (isNaN(hours) || hours <= 0) return '0 secs';
+        const totalSecs = hours * 3600;
+
+        const SEC_PER_MIN = 60;
+        const SEC_PER_HR = 3600;
+        const SEC_PER_DAY = 86400;
+        const SEC_PER_WEEK = 604800;
+        const SEC_PER_MONTH = 2592000; // 30 days
+        const SEC_PER_YEAR = 31536000; // 365 days
+
+        if (totalSecs >= SEC_PER_YEAR) {
+            const yrs = Math.floor(totalSecs / SEC_PER_YEAR);
+            const remSecs = totalSecs % SEC_PER_YEAR;
+            const mos = Math.round(remSecs / SEC_PER_MONTH);
+            if (mos > 0 && mos < 12) return `${yrs.toLocaleString()} yr${yrs > 1 ? 's' : ''} ${mos} mo${mos > 1 ? 's' : ''}`;
+            return `${yrs.toLocaleString()} yr${yrs > 1 ? 's' : ''}`;
+        }
+        if (totalSecs >= SEC_PER_MONTH) {
+            const mos = Math.floor(totalSecs / SEC_PER_MONTH);
+            const remSecs = totalSecs % SEC_PER_MONTH;
+            const days = Math.round(remSecs / SEC_PER_DAY);
+            if (days > 0 && days < 30) return `${mos} mo${mos > 1 ? 's' : ''} ${days} day${days > 1 ? 's' : ''}`;
+            return `${mos} mo${mos > 1 ? 's' : ''}`;
+        }
+        if (totalSecs >= SEC_PER_WEEK) {
+            const wks = Math.floor(totalSecs / SEC_PER_WEEK);
+            const remSecs = totalSecs % SEC_PER_WEEK;
+            const days = Math.round(remSecs / SEC_PER_DAY);
+            if (days > 0 && days < 7) return `${wks} wk${wks > 1 ? 's' : ''} ${days} day${days > 1 ? 's' : ''}`;
+            return `${wks} wk${wks > 1 ? 's' : ''}`;
+        }
+        if (totalSecs >= SEC_PER_DAY) {
+            const days = Math.floor(totalSecs / SEC_PER_DAY);
+            const remSecs = totalSecs % SEC_PER_DAY;
+            const hrs = Math.round(remSecs / SEC_PER_HR);
+            if (hrs > 0 && hrs < 24) return `${days} day${days > 1 ? 's' : ''} ${hrs} hr${hrs > 1 ? 's' : ''}`;
+            return `${days} day${days > 1 ? 's' : ''}`;
+        }
+        if (totalSecs >= SEC_PER_HR) {
+            const hrs = Math.floor(totalSecs / SEC_PER_HR);
+            const remSecs = totalSecs % SEC_PER_HR;
+            const mins = Math.round(remSecs / SEC_PER_MIN);
+            if (mins > 0 && mins < 60) return `${hrs} hr${hrs > 1 ? 's' : ''} ${mins} min${mins > 1 ? 's' : ''}`;
+            return `${hrs} hr${hrs > 1 ? 's' : ''}`;
+        }
+        if (totalSecs >= SEC_PER_MIN) {
+            const mins = Math.floor(totalSecs / SEC_PER_MIN);
+            const secs = Math.round(totalSecs % SEC_PER_MIN);
+            if (secs > 0 && secs < 60) return `${mins} min${mins > 1 ? 's' : ''} ${secs} sec${secs > 1 ? 's' : ''}`;
+            return `${mins} min${mins > 1 ? 's' : ''}`;
+        }
+        // Under 60 seconds
+        if (totalSecs >= 1) {
+            return `${totalSecs.toFixed(2)} secs`;
+        }
+        return `${totalSecs.toFixed(3)} secs`;
+    }
+
+    // Benchmark tier information based on 2,000 working hours / year
+    function getSalaryTier(ratePerHour) {
+        const annualWage = ratePerHour * 2000;
+        const formattedAnnual = formatNumberWithCommas(annualWage, 0);
+
+        if (ratePerHour < 0.5) {
+            return { name: "Poorest Regions (Subsistence Level)", annual: formattedAnnual };
+        } else if (ratePerHour < 5) {
+            return { name: "Developing Nations Average", annual: formattedAnnual };
+        } else if (ratePerHour < 25) {
+            return { name: "Global Average / Median Income", annual: formattedAnnual };
+        } else if (ratePerHour < 75) {
+            return { name: "Developed Nations Average", annual: formattedAnnual };
+        } else if (ratePerHour < 250) {
+            return { name: "Developed Nations High Earner", annual: formattedAnnual };
+        } else {
+            return { name: "Developed Nations Wealthy / Top Tier", annual: formattedAnnual };
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // 3. Transaction Fee Calculator UI & Binding
     // ----------------------------------------------------------------------
     const inputBalA = document.getElementById('input-bal-a');
     const sliderBalA = document.getElementById('slider-bal-a');
@@ -84,6 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const resRate = document.getElementById('res-rate');
 
     const inputConversionRate = document.getElementById('input-conversion-rate');
+    const sliderConversionRate = document.getElementById('slider-conversion-rate');
+    const tierName = document.getElementById('tier-name');
+    const salaryTierInfo = document.getElementById('salary-tier-info');
+
     const inputTxAmount = document.getElementById('input-tx-amount');
     const txTimeEquiv = document.getElementById('tx-time-equiv');
 
@@ -103,25 +200,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const tblGov = document.getElementById('tbl-gov');
     const tblGovTime = document.getElementById('tbl-gov-time');
 
-    function formatTimeDuration(hours) {
-        if (isNaN(hours) || hours <= 0) return '0.00 mins';
-        const totalMinutes = hours * 60;
-        if (totalMinutes < 60) {
-            return `${totalMinutes.toFixed(2)} mins`;
-        }
-        const h = Math.floor(hours);
-        const remainingMinutes = (hours - h) * 60;
-        if (remainingMinutes < 0.01) {
-            return `${h} hr${h > 1 ? 's' : ''}`;
-        }
-        return `${h} hr${h > 1 ? 's' : ''} ${remainingMinutes.toFixed(2)} mins`;
+    // Conversion rate slider logarithmic bounds:
+    // Min: 1 Deltar/day = 1/24 Deltars/hr ≈ 0.04167 Deltars/hr
+    // Max: 10,000 Deltars/hr
+    const MIN_LOG_RATE = Math.log10(0.041667); // -1.3802
+    const MAX_LOG_RATE = Math.log10(10000);    // 4.0
+    const LOG_SPAN = MAX_LOG_RATE - MIN_LOG_RATE;
+
+    function rateToSliderPos(rate) {
+        const clamped = Math.max(0.041667, Math.min(10000, rate));
+        const frac = (Math.log10(clamped) - MIN_LOG_RATE) / LOG_SPAN;
+        return Math.round(frac * 1000);
+    }
+
+    function sliderPosToRate(pos) {
+        const frac = Math.max(0, Math.min(1000, pos)) / 1000;
+        const logVal = MIN_LOG_RATE + frac * LOG_SPAN;
+        const rawRate = Math.pow(10, logVal);
+        if (rawRate >= 100) return Math.round(rawRate);
+        if (rawRate >= 10) return parseFloat(rawRate.toFixed(1));
+        if (rawRate >= 1) return parseFloat(rawRate.toFixed(2));
+        return parseFloat(rawRate.toFixed(3));
     }
 
     function calculatePerZero() {
         if (!inputBalA || !inputBalB) return;
 
-        const rawBalA = parseFloat(inputBalA.value) || 0;
-        const rawBalB = parseFloat(inputBalB.value) || 0;
+        const rawBalA = Math.max(0, parseFloat(inputBalA.value) || 0);
+        const rawBalB = Math.max(0, parseFloat(inputBalB.value) || 0);
 
         // Floor of 10 for log function resulting in log floor of 1.00
         const logA = Math.log10(Math.max(10, rawBalA));
@@ -130,16 +236,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contribA) contribA.textContent = `Fee contribution: ${logA.toFixed(2)}%`;
         if (contribB) contribB.textContent = `Fee contribution: ${logB.toFixed(2)}%`;
 
-        // Average of log results with floor of 1.00% and no upper ceiling
+        // Average fee percentage with floor of 1.00%
         const avgFeePct = (logA + logB) / 2;
         if (resRate) resRate.textContent = `${avgFeePct.toFixed(2)}%`;
 
-        // Time conversion and transaction fee calculations
-        const convRate = parseFloat(inputConversionRate ? inputConversionRate.value : 20) || 20;
-        const txAmount = parseFloat(inputTxAmount ? inputTxAmount.value : 50) || 0;
+        // Conversion rate - strictly positive
+        let convRate = parseFloat(inputConversionRate ? inputConversionRate.value : 20);
+        if (isNaN(convRate) || convRate < 0.01) {
+            convRate = 0.01;
+            if (inputConversionRate) inputConversionRate.value = convRate;
+        }
 
+        // Update salary tier info
+        const tier = getSalaryTier(convRate);
+        if (salaryTierInfo) {
+            salaryTierInfo.innerHTML = `<span class="tier-tag">Benchmark:</span> <strong id="tier-name">${tier.name}</strong> (~<span class="deltar-font">&#xE002;</span>${tier.annual}/yr)`;
+        }
+
+        // Transaction payment calculation
+        const txAmount = Math.max(0, parseFloat(inputTxAmount ? inputTxAmount.value : 50) || 0);
         const txHours = txAmount / convRate;
-        if (txTimeEquiv) txTimeEquiv.textContent = formatTimeDuration(txHours);
+        if (txTimeEquiv) txTimeEquiv.textContent = formatSmartDuration(txHours);
 
         const feeAmount = txAmount * (avgFeePct / 100);
         const receivedAmount = txAmount - feeAmount;
@@ -147,35 +264,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const feeHours = feeAmount / convRate;
         const receivedHours = receivedAmount / convRate;
 
-        // Unified table population (only pure numbers under Deltars, and clean time under Your Time)
-        if (tblPaid) tblPaid.textContent = txAmount.toFixed(3);
-        if (tblPaidTime) tblPaidTime.textContent = formatTimeDuration(txHours);
+        // Transaction settlement row displays with comma separators
+        if (tblPaid) tblPaid.textContent = formatNumberWithCommas(txAmount, 3);
+        if (tblPaidTime) tblPaidTime.textContent = formatSmartDuration(txHours);
 
-        if (tblFee) tblFee.textContent = feeAmount.toFixed(3);
-        if (tblFeeTime) tblFeeTime.textContent = formatTimeDuration(feeHours);
+        if (tblFee) tblFee.textContent = formatNumberWithCommas(feeAmount, 3);
+        if (tblFeeTime) tblFeeTime.textContent = formatSmartDuration(feeHours);
 
-        if (tblReceived) tblReceived.textContent = receivedAmount.toFixed(3);
-        if (tblReceivedTime) tblReceivedTime.textContent = formatTimeDuration(receivedHours);
+        if (tblReceived) tblReceived.textContent = formatNumberWithCommas(receivedAmount, 3);
+        if (tblReceivedTime) tblReceivedTime.textContent = formatSmartDuration(receivedHours);
 
         // Pool breakdown: 100% Pool, UBI (75%), Social (20%), Gov (5%)
         const ubiFee = feeAmount * 0.75;
         const socialFee = feeAmount * 0.20;
         const govFee = feeAmount * 0.05;
 
-        if (tblPool) tblPool.textContent = feeAmount.toFixed(3);
-        if (tblPoolTime) tblPoolTime.textContent = formatTimeDuration(feeHours);
+        if (tblPool) tblPool.textContent = formatNumberWithCommas(feeAmount, 3);
+        if (tblPoolTime) tblPoolTime.textContent = formatSmartDuration(feeHours);
 
-        if (tblUbi) tblUbi.textContent = ubiFee.toFixed(3);
-        if (tblUbiTime) tblUbiTime.textContent = formatTimeDuration(ubiFee / convRate);
+        if (tblUbi) tblUbi.textContent = formatNumberWithCommas(ubiFee, 3);
+        if (tblUbiTime) tblUbiTime.textContent = formatSmartDuration(ubiFee / convRate);
 
-        if (tblSocial) tblSocial.textContent = socialFee.toFixed(3);
-        if (tblSocialTime) tblSocialTime.textContent = formatTimeDuration(socialFee / convRate);
+        if (tblSocial) tblSocial.textContent = formatNumberWithCommas(socialFee, 3);
+        if (tblSocialTime) tblSocialTime.textContent = formatSmartDuration(socialFee / convRate);
 
-        if (tblGov) tblGov.textContent = govFee.toFixed(3);
-        if (tblGovTime) tblGovTime.textContent = formatTimeDuration(govFee / convRate);
+        if (tblGov) tblGov.textContent = formatNumberWithCommas(govFee, 3);
+        if (tblGovTime) tblGovTime.textContent = formatSmartDuration(govFee / convRate);
     }
 
-    // Bidirectional sync for Payor Balance input and slider
+    // Bidirectional sync for Payor Account's Balance
     if (inputBalA && sliderBalA) {
         inputBalA.addEventListener('input', () => {
             sliderBalA.value = inputBalA.value;
@@ -187,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Bidirectional sync for Payee Balance input and slider
+    // Bidirectional sync for Payee Account's Balance
     if (inputBalB && sliderBalB) {
         inputBalB.addEventListener('input', () => {
             sliderBalB.value = inputBalB.value;
@@ -199,17 +316,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (inputConversionRate) {
-        inputConversionRate.addEventListener('input', calculatePerZero);
+    // Bidirectional sync for Conversion Rate & Slider
+    if (inputConversionRate && sliderConversionRate) {
+        inputConversionRate.addEventListener('input', () => {
+            let val = parseFloat(inputConversionRate.value);
+            if (val < 0.01) {
+                val = 0.01;
+                inputConversionRate.value = val;
+            }
+            sliderConversionRate.value = rateToSliderPos(val);
+            calculatePerZero();
+        });
+        sliderConversionRate.addEventListener('input', () => {
+            const calculatedRate = sliderPosToRate(parseInt(sliderConversionRate.value, 10));
+            inputConversionRate.value = calculatedRate;
+            calculatePerZero();
+        });
     }
+
     if (inputTxAmount) {
-        inputTxAmount.addEventListener('input', calculatePerZero);
+        inputTxAmount.addEventListener('input', () => {
+            if (parseFloat(inputTxAmount.value) < 0) inputTxAmount.value = 0;
+            calculatePerZero();
+        });
     }
 
     calculatePerZero();
 
     // ----------------------------------------------------------------------
-    // 3. Test Equilibrium Simulator (Sandbox)
+    // 4. Test Equilibrium Simulator (Sandbox)
     // ----------------------------------------------------------------------
     const sliderRatio = document.getElementById('slider-ratio');
     const sliderFriction = document.getElementById('slider-friction');
@@ -254,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 4. SCL Business Crowdfund Simulator
+    // 5. SCL Business Crowdfund Simulator
     // ----------------------------------------------------------------------
     const inputPCL = document.getElementById('input-pcl');
     const sliderDonors = document.getElementById('slider-donors');

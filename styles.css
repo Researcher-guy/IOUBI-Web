@@ -1076,6 +1076,33 @@ main#app-main {
     margin-left: 0.35rem;
 }
 
+.salary-tier-badge {
+    margin-top: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    padding: 0.45rem 0.85rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.salary-tier-badge .tier-tag {
+    color: var(--accent-cyan);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.salary-tier-badge strong {
+    color: #fff;
+}
+
 .time-equiv-badge-box {
     background: rgba(245, 158, 11, 0.12);
     border: 1px solid rgba(245, 158, 11, 0.4);

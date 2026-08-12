@@ -522,14 +522,14 @@
                     <div class="sim-form">
                         <div class="two-col-inputs">
                             <div class="form-group">
-                                <label for="input-bal-a">Payor Balance:</label>
+                                <label for="input-bal-a">Payor Account's Balance:</label>
                                 <input type="number" id="input-bal-a" value="1250" min="0" max="100000" step="10">
                                 <input type="range" id="slider-bal-a" min="0" max="100000" value="1250" step="10" class="balance-slider">
                                 <div class="fee-contrib-badge" id="contrib-a">Fee contribution: 3.10%</div>
                             </div>
 
                             <div class="form-group">
-                                <label for="input-bal-b">Payee Balance:</label>
+                                <label for="input-bal-b">Payee Account's Balance:</label>
                                 <input type="number" id="input-bal-b" value="300" min="0" max="100000" step="10">
                                 <input type="range" id="slider-bal-b" min="0" max="100000" value="300" step="10" class="balance-slider">
                                 <div class="fee-contrib-badge" id="contrib-b">Fee contribution: 2.48%</div>
@@ -545,8 +545,12 @@
                         <div class="form-group">
                             <label for="input-conversion-rate">Set your time's value. <small class="hint-inline">For viewing prices in your personal time.</small></label>
                             <div class="input-suffix-group">
-                                <input type="number" id="input-conversion-rate" value="20" min="0.1" step="1">
+                                <input type="number" id="input-conversion-rate" value="20" min="0.01" max="10000" step="1">
                                 <span class="input-suffix"><span class="deltar-font">&#xE002;</span> / hr</span>
+                            </div>
+                            <input type="range" id="slider-conversion-rate" min="0" max="1000" value="498" step="1" class="balance-slider">
+                            <div class="salary-tier-badge" id="salary-tier-info">
+                                <span class="tier-tag">Benchmark:</span> <strong id="tier-name">Global Average / Median Income</strong> (~<span class="deltar-font">&#xE002;</span>40,000/yr)
                             </div>
                         </div>
 
@@ -592,7 +596,7 @@
                                             </tr>
                                             
                                             <tr class="separator-row">
-                                                <td colspan="3">Pool Allocation Breakdown (from fee above)</td>
+                                                <td colspan="3">POOL ALLOCATION BREAKDOWN (Where do the fees go?)</td>
                                             </tr>
                                             
                                             <tr>
