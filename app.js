@@ -178,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const inputConversionRate = document.getElementById('input-conversion-rate');
     const sliderConversionRate = document.getElementById('slider-conversion-rate');
-    const tierName = document.getElementById('tier-name');
     const salaryTierInfo = document.getElementById('salary-tier-info');
 
     const inputTxAmount = document.getElementById('input-tx-amount');
@@ -200,9 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const tblGov = document.getElementById('tbl-gov');
     const tblGovTime = document.getElementById('tbl-gov-time');
 
-    // Conversion rate slider logarithmic bounds:
-    // Min: 1 Deltar/day = 1/24 Deltars/hr ≈ 0.04167 Deltars/hr
-    // Max: 10,000 Deltars/hr
     const MIN_LOG_RATE = Math.log10(0.041667); // -1.3802
     const MAX_LOG_RATE = Math.log10(10000);    // 4.0
     const LOG_SPAN = MAX_LOG_RATE - MIN_LOG_RATE;
@@ -344,52 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     calculatePerZero();
 
     // ----------------------------------------------------------------------
-    // 4. Test Equilibrium Simulator (Sandbox)
-    // ----------------------------------------------------------------------
-    const sliderRatio = document.getElementById('slider-ratio');
-    const sliderFriction = document.getElementById('slider-friction');
-    const sliderNodes = document.getElementById('slider-nodes');
-
-    const valRatio = document.getElementById('val-ratio');
-    const valFriction = document.getElementById('val-friction');
-    const valNodes = document.getElementById('val-nodes');
-
-    const eqCommercialVol = document.getElementById('eq-commercial-vol');
-    const eqPoolTotal = document.getElementById('eq-pool-total');
-    const eqDividendPerNode = document.getElementById('eq-dividend-per-node');
-
-    function calculateEquilibrium() {
-        if (!sliderRatio || !sliderFriction || !sliderNodes) return;
-
-        const ratio = parseInt(sliderRatio.value, 10);
-        const frictionPct = parseFloat(sliderFriction.value);
-        const nodesCount = parseInt(sliderNodes.value, 10);
-
-        if (valRatio) valRatio.textContent = `${ratio} : 1`;
-        if (valFriction) valFriction.textContent = `${frictionPct.toFixed(2)}%`;
-        if (valNodes) valNodes.textContent = nodesCount.toLocaleString();
-
-        const individualVolumePerDay = nodesCount * 1;
-        const commercialVolumePerDay = individualVolumePerDay * ratio;
-
-        const totalSystemicVolume = individualVolumePerDay + commercialVolumePerDay;
-        const dailyPoolContribution = totalSystemicVolume * (frictionPct / 100);
-        const dividendPerNode = dailyPoolContribution / nodesCount;
-
-        if (eqCommercialVol) eqCommercialVol.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(commercialVolumePerDay).toLocaleString()}/day`;
-        if (eqPoolTotal) eqPoolTotal.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(dailyPoolContribution).toLocaleString()}/day`;
-        if (eqDividendPerNode) eqDividendPerNode.innerHTML = `<span class="deltar-font">&#xE002;</span>${dividendPerNode.toFixed(3)}/day`;
-    }
-
-    if (sliderRatio) {
-        [sliderRatio, sliderFriction, sliderNodes].forEach(el => {
-            el.addEventListener('input', calculateEquilibrium);
-        });
-        calculateEquilibrium();
-    }
-
-    // ----------------------------------------------------------------------
-    // 5. SCL Business Crowdfund Simulator
+    // 4. Social Credit Limit (SCL) Business Crowdfund Simulator
     // ----------------------------------------------------------------------
     const inputPCL = document.getElementById('input-pcl');
     const sliderDonors = document.getElementById('slider-donors');
@@ -441,4 +392,116 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         calculateSCL();
     }
+
+    // ----------------------------------------------------------------------
+    // 5. Macroeconomic Balance & Dividend Engine (Full Width Component)
+    // ----------------------------------------------------------------------
+    const sliderLivingCost = document.getElementById('slider-living-cost');
+    const sliderVelocity = document.getElementById('slider-velocity');
+    const valLivingCost = document.getElementById('val-living-cost');
+    const valVelocity = document.getElementById('val-velocity');
+    const btnSolveCoverage = document.getElementById('btn-solve-coverage');
+
+    const legacyDailyCostEl = document.getElementById('legacy-daily-cost');
+    const legacyDailyYieldEl = document.getElementById('legacy-daily-yield');
+
+    const ioubiDailyCostEl = document.getElementById('ioubi-daily-cost');
+    const ioubiDailyUbiEl = document.getElementById('ioubi-daily-ubi');
+    const ioubiCoverageText = document.getElementById('ioubi-coverage-text');
+    const ioubiProgressFill = document.getElementById('ioubi-progress-fill');
+
+    const ioubiPoolUbi = document.getElementById('ioubi-pool-ubi');
+    const ioubiPoolSocial = document.getElementById('ioubi-pool-social');
+    const ioubiPoolGov = document.getElementById('ioubi-pool-gov');
+    const ioubiOutcomeBanner = document.getElementById('ioubi-outcome-banner');
+
+    function calculateMacroEngine() {
+        if (!sliderLivingCost || !sliderVelocity) return;
+
+        const annualCost = parseFloat(sliderLivingCost.value) || 24000;
+        const velocity = parseFloat(sliderVelocity.value) || 1.35;
+
+        const legacyDailyCost = annualCost / 365;
+        const ioubiDailyCost = legacyDailyCost * 0.60;
+
+        // Update control labels
+        if (valLivingCost) {
+            valLivingCost.innerHTML = `$${annualCost.toLocaleString()} / yr <small>($${legacyDailyCost.toFixed(2)} / day)</small>`;
+        }
+        if (valVelocity) {
+            valVelocity.textContent = `${velocity.toFixed(2)} turns / day`;
+        }
+
+        // Legacy calculations (locked at ~3.9% coverage)
+        const legacyDailyYield = (legacyDailyCost * 71 * 0.04) * 0.014 * 0.75;
+        if (legacyDailyCostEl) legacyDailyCostEl.textContent = `$${legacyDailyCost.toFixed(2)}/day`;
+        if (legacyDailyYieldEl) legacyDailyYieldEl.textContent = `$${legacyDailyYield.toFixed(2)}/day`;
+
+        // IOUBI calculations
+        const ioubiGrossVol = ioubiDailyCost * 71 * velocity;
+        const ioubiFeePool = ioubiGrossVol * 0.014;
+        const ioubiDailyUbi = ioubiFeePool * 0.75;
+        const ioubiDailySocial = ioubiFeePool * 0.20;
+        const ioubiDailyGov = ioubiFeePool * 0.05;
+
+        const coveragePct = (ioubiDailyUbi / ioubiDailyCost) * 100;
+
+        if (ioubiDailyCostEl) ioubiDailyCostEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${ioubiDailyCost.toFixed(2)}/day`;
+        if (ioubiDailyUbiEl) ioubiDailyUbiEl.innerHTML = `<span class="deltar-font">&#xE002;</span>${ioubiDailyUbi.toFixed(2)}/day`;
+
+        if (ioubiCoverageText) {
+            ioubiCoverageText.textContent = `${coveragePct.toFixed(1)}% Covered`;
+            if (coveragePct >= 100) {
+                ioubiCoverageText.className = 'emerald-text';
+            } else {
+                ioubiCoverageText.className = 'cyan-text';
+            }
+        }
+        if (ioubiProgressFill) {
+            ioubiProgressFill.style.width = `${Math.min(100, Math.max(0, coveragePct))}%`;
+            if (coveragePct >= 100) {
+                ioubiProgressFill.style.background = '#00ff9d';
+                ioubiProgressFill.style.boxShadow = '0 0 14px rgba(0, 255, 157, 0.6)';
+            } else {
+                ioubiProgressFill.style.background = 'var(--accent-cyan)';
+                ioubiProgressFill.style.boxShadow = '0 0 14px rgba(0, 240, 255, 0.6)';
+            }
+        }
+
+        if (ioubiPoolUbi) ioubiPoolUbi.textContent = ioubiDailyUbi.toFixed(2);
+        if (ioubiPoolSocial) ioubiPoolSocial.textContent = ioubiDailySocial.toFixed(2);
+        if (ioubiPoolGov) ioubiPoolGov.textContent = ioubiDailyGov.toFixed(2);
+
+        if (ioubiOutcomeBanner) {
+            if (coveragePct >= 100) {
+                ioubiOutcomeBanner.innerHTML = `✓ ${coveragePct.toFixed(0)}% funded living floor with zero income taxes and zero systemic debt.`;
+                ioubiOutcomeBanner.style.borderColor = '#00ff9d';
+                ioubiOutcomeBanner.style.color = '#00ff9d';
+                ioubiOutcomeBanner.style.background = 'rgba(0, 255, 157, 0.12)';
+            } else {
+                ioubiOutcomeBanner.innerHTML = `⚡ ${coveragePct.toFixed(0)}% of basic living floor covered. Adjust velocity or click "⚡ Solve for 100% Coverage".`;
+                ioubiOutcomeBanner.style.borderColor = 'var(--accent-cyan)';
+                ioubiOutcomeBanner.style.color = 'var(--accent-cyan)';
+                ioubiOutcomeBanner.style.background = 'rgba(0, 240, 255, 0.12)';
+            }
+        }
+    }
+
+    if (sliderLivingCost) {
+        sliderLivingCost.addEventListener('input', calculateMacroEngine);
+    }
+    if (sliderVelocity) {
+        sliderVelocity.addEventListener('input', calculateMacroEngine);
+    }
+
+    if (btnSolveCoverage && sliderVelocity) {
+        btnSolveCoverage.addEventListener('click', () => {
+            // Solve velocity: 1 / (71 * 0.014 * 0.75) ≈ 1.3414
+            const targetVelocity = 1 / (71 * 0.014 * 0.75);
+            sliderVelocity.value = targetVelocity.toFixed(2);
+            calculateMacroEngine();
+        });
+    }
+
+    calculateMacroEngine();
 });
