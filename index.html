@@ -523,13 +523,15 @@
                         <div class="two-col-inputs">
                             <div class="form-group">
                                 <label for="input-bal-a">Payor Balance:</label>
-                                <input type="number" id="input-bal-a" value="1250" min="0" step="10">
+                                <input type="number" id="input-bal-a" value="1250" min="0" max="100000" step="10">
+                                <input type="range" id="slider-bal-a" min="0" max="100000" value="1250" step="10" class="balance-slider">
                                 <div class="fee-contrib-badge" id="contrib-a">Fee contribution: 3.10%</div>
                             </div>
 
                             <div class="form-group">
                                 <label for="input-bal-b">Payee Balance:</label>
-                                <input type="number" id="input-bal-b" value="300" min="0" step="10">
+                                <input type="number" id="input-bal-b" value="300" min="0" max="100000" step="10">
+                                <input type="range" id="slider-bal-b" min="0" max="100000" value="300" step="10" class="balance-slider">
                                 <div class="fee-contrib-badge" id="contrib-b">Fee contribution: 2.48%</div>
                             </div>
                         </div>
@@ -545,42 +547,63 @@
                             <input type="number" id="input-conversion-rate" value="20" min="0.1" step="1">
                         </div>
 
-                        <div class="form-group">
-                            <label for="input-tx-amount">Transaction Payment (<span class="deltar-font">&#xE002;</span>):</label>
-                            <div class="input-with-badge">
+                        <div class="two-col-inputs">
+                            <div class="form-group">
+                                <label for="input-tx-amount">Transaction Payment In Deltars (<span class="deltar-font">&#xE002;</span>):</label>
                                 <input type="number" id="input-tx-amount" value="50" min="0" step="5">
-                                <div class="time-equiv-badge" id="tx-time-equiv">2 hrs 30 mins</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Price Valued In Your Time:</label>
+                                <div class="time-equiv-badge-box" id="tx-time-equiv">2 hrs 30 mins</div>
                             </div>
                         </div>
 
                         <div class="calc-results-box" id="calc-result">
-                            <div class="single-line-fee-summary" id="single-line-summary">
-                                <span class="fee-label">Fee Charged:</span>
-                                <span id="summary-rate">2.79%</span>,
-                                <span id="summary-currency"><span class="deltar-font">&#xE002;</span>1.40</span>,
-                                <span id="summary-time">4.2 minutes</span>
+                            <div class="fee-charged-card">
+                                <div class="fee-charged-header">Fee Charged</div>
+                                <div class="fee-charged-grid">
+                                    <div class="fee-charged-col">
+                                        <span class="fee-col-label">% rate</span>
+                                        <strong class="fee-col-val" id="summary-rate">2.79%</strong>
+                                    </div>
+                                    <div class="fee-charged-col">
+                                        <span class="fee-col-label">Deltars</span>
+                                        <strong class="fee-col-val" id="summary-currency"><span class="deltar-font">&#xE002;</span>1.394</strong>
+                                    </div>
+                                    <div class="fee-charged-col">
+                                        <span class="fee-col-label">Your Time</span>
+                                        <strong class="fee-col-val" id="summary-time">4.18 mins</strong>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="pool-table-container">
                                 <table class="pool-table">
                                     <thead>
                                         <tr>
-                                            <th>Payment</th>
-                                            <th>Fee subtracted</th>
-                                            <th>Total Pool</th>
-                                            <th>UBI</th>
-                                            <th>Social</th>
-                                            <th>Gov</th>
+                                            <th colspan="3" class="pool-group-header">Transaction Settlement</th>
+                                            <th colspan="4" class="pool-group-header">Fee Allocation Breakdown</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Paid</th>
+                                            <th>Fee</th>
+                                            <th>Received</th>
+                                            <th class="pool-cell">Pool</th>
+                                            <th>UBI (75%)</th>
+                                            <th>Social (20%)</th>
+                                            <th>Gov (5%)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td id="tbl-payment"><span class="deltar-font">&#xE002;</span>50.00</td>
-                                            <td id="tbl-fee"><span class="deltar-font">&#xE002;</span>1.40</td>
-                                            <td id="tbl-pool"><span class="deltar-font">&#xE002;</span>1.40</td>
-                                            <td id="tbl-ubi" class="ubi-cell"><span class="deltar-font">&#xE002;</span>0.70</td>
-                                            <td id="tbl-social" class="social-cell"><span class="deltar-font">&#xE002;</span>0.35</td>
-                                            <td id="tbl-gov" class="gov-cell"><span class="deltar-font">&#xE002;</span>0.35</td>
+                                            <td id="tbl-paid"><span class="deltar-font">&#xE002;</span>50.000</td>
+                                            <td id="tbl-fee"><span class="deltar-font">&#xE002;</span>1.394</td>
+                                            <td id="tbl-received"><span class="deltar-font">&#xE002;</span>48.606</td>
+                                            <td id="tbl-pool" class="pool-cell"><span class="deltar-font">&#xE002;</span>1.394</td>
+                                            <td id="tbl-ubi" class="ubi-cell"><span class="deltar-font">&#xE002;</span>1.045</td>
+                                            <td id="tbl-social" class="social-cell"><span class="deltar-font">&#xE002;</span>0.279</td>
+                                            <td id="tbl-gov" class="gov-cell"><span class="deltar-font">&#xE002;</span>0.070</td>
                                         </tr>
                                     </tbody>
                                 </table>

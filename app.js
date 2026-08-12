@@ -75,7 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. 1% Per Zero Log10 Calculator
     // ----------------------------------------------------------------------
     const inputBalA = document.getElementById('input-bal-a');
+    const sliderBalA = document.getElementById('slider-bal-a');
     const inputBalB = document.getElementById('input-bal-b');
+    const sliderBalB = document.getElementById('slider-bal-b');
+
     const contribA = document.getElementById('contrib-a');
     const contribB = document.getElementById('contrib-b');
     const resRate = document.getElementById('res-rate');
@@ -88,8 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryCurrency = document.getElementById('summary-currency');
     const summaryTime = document.getElementById('summary-time');
 
-    const tblPayment = document.getElementById('tbl-payment');
+    const tblPaid = document.getElementById('tbl-paid');
     const tblFee = document.getElementById('tbl-fee');
+    const tblReceived = document.getElementById('tbl-received');
     const tblPool = document.getElementById('tbl-pool');
     const tblUbi = document.getElementById('tbl-ubi');
     const tblSocial = document.getElementById('tbl-social');
@@ -98,8 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatTimeDuration(hours) {
         if (isNaN(hours) || hours <= 0) return '0 mins';
         const totalMinutes = hours * 60;
+        if (totalMinutes < 1) {
+            return `${(totalMinutes * 60).toFixed(1)} secs`;
+        }
         if (totalMinutes < 60) {
-            return `${totalMinutes.toFixed(1)} mins`;
+            return `${totalMinutes.toFixed(2)} mins`;
         }
         const h = Math.floor(hours);
         const m = Math.round((hours - h) * 60);
@@ -132,27 +139,56 @@ document.addEventListener('DOMContentLoaded', () => {
         if (txTimeEquiv) txTimeEquiv.textContent = formatTimeDuration(txHours);
 
         const feeAmount = txAmount * (avgFeePct / 100);
+        const receivedAmount = txAmount - feeAmount;
         const feeHours = feeAmount / convRate;
         const feeMinutes = feeHours * 60;
 
         if (summaryRate) summaryRate.textContent = `${avgFeePct.toFixed(2)}%`;
-        if (summaryCurrency) summaryCurrency.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(2)}`;
-        if (summaryTime) summaryTime.textContent = `${feeMinutes.toFixed(1)} minutes`;
+        if (summaryCurrency) summaryCurrency.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(3)}`;
+        if (summaryTime) summaryTime.textContent = `${feeMinutes.toFixed(2)} mins`;
 
-        if (tblPayment) tblPayment.innerHTML = `<span class="deltar-font">&#xE002;</span>${txAmount.toFixed(2)}`;
-        if (tblFee) tblFee.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(2)}`;
-        if (tblPool) tblPool.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(2)}`;
-        if (tblUbi) tblUbi.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.50).toFixed(2)}`;
-        if (tblSocial) tblSocial.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.25).toFixed(2)}`;
-        if (tblGov) tblGov.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.25).toFixed(2)}`;
+        // Pool breakdown: UBI (75%), Social (20%), Gov (5%)
+        if (tblPaid) tblPaid.innerHTML = `<span class="deltar-font">&#xE002;</span>${txAmount.toFixed(3)}`;
+        if (tblFee) tblFee.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(3)}`;
+        if (tblReceived) tblReceived.innerHTML = `<span class="deltar-font">&#xE002;</span>${receivedAmount.toFixed(3)}`;
+        if (tblPool) tblPool.innerHTML = `<span class="deltar-font">&#xE002;</span>${feeAmount.toFixed(3)}`;
+        if (tblUbi) tblUbi.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.75).toFixed(3)}`;
+        if (tblSocial) tblSocial.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.20).toFixed(3)}`;
+        if (tblGov) tblGov.innerHTML = `<span class="deltar-font">&#xE002;</span>${(feeAmount * 0.05).toFixed(3)}`;
     }
 
-    if (inputBalA) {
-        [inputBalA, inputBalB, inputConversionRate, inputTxAmount].forEach(el => {
-            if (el) el.addEventListener('input', calculatePerZero);
+    // Sync input and range slider for Payor Balance
+    if (inputBalA && sliderBalA) {
+        inputBalA.addEventListener('input', () => {
+            sliderBalA.value = inputBalA.value;
+            calculatePerZero();
         });
-        calculatePerZero();
+        sliderBalA.addEventListener('input', () => {
+            inputBalA.value = sliderBalA.value;
+            calculatePerZero();
+        });
     }
+
+    // Sync input and range slider for Payee Balance
+    if (inputBalB && sliderBalB) {
+        inputBalB.addEventListener('input', () => {
+            sliderBalB.value = inputBalB.value;
+            calculatePerZero();
+        });
+        sliderBalB.addEventListener('input', () => {
+            inputBalB.value = sliderBalB.value;
+            calculatePerZero();
+        });
+    }
+
+    if (inputConversionRate) {
+        inputConversionRate.addEventListener('input', calculatePerZero);
+    }
+    if (inputTxAmount) {
+        inputTxAmount.addEventListener('input', calculatePerZero);
+    }
+
+    calculatePerZero();
 
     // ----------------------------------------------------------------------
     // 3. Test Equilibrium Simulator (Sandbox)
