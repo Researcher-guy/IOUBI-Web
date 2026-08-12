@@ -287,53 +287,62 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tblGov) tblGov.textContent = formatNumberWithCommas(govFee, 3);
         if (tblGovTime) tblGovTime.textContent = formatSmartDuration(govFee / convRate);
     }
+    window.calculatePerZero = calculatePerZero;
 
     // Bidirectional sync for Payor Account's Balance
     if (inputBalA && sliderBalA) {
-        inputBalA.addEventListener('input', () => {
-            sliderBalA.value = inputBalA.value;
-            calculatePerZero();
-        });
-        sliderBalA.addEventListener('input', () => {
-            inputBalA.value = sliderBalA.value;
-            calculatePerZero();
+        ['input', 'change'].forEach(evt => {
+            inputBalA.addEventListener(evt, () => {
+                sliderBalA.value = inputBalA.value;
+                calculatePerZero();
+            });
+            sliderBalA.addEventListener(evt, () => {
+                inputBalA.value = sliderBalA.value;
+                calculatePerZero();
+            });
         });
     }
 
     // Bidirectional sync for Payee Account's Balance
     if (inputBalB && sliderBalB) {
-        inputBalB.addEventListener('input', () => {
-            sliderBalB.value = inputBalB.value;
-            calculatePerZero();
-        });
-        sliderBalB.addEventListener('input', () => {
-            inputBalB.value = sliderBalB.value;
-            calculatePerZero();
+        ['input', 'change'].forEach(evt => {
+            inputBalB.addEventListener(evt, () => {
+                sliderBalB.value = inputBalB.value;
+                calculatePerZero();
+            });
+            sliderBalB.addEventListener(evt, () => {
+                inputBalB.value = sliderBalB.value;
+                calculatePerZero();
+            });
         });
     }
 
     // Bidirectional sync for Conversion Rate & Slider
     if (inputConversionRate && sliderConversionRate) {
-        inputConversionRate.addEventListener('input', () => {
-            let val = parseFloat(inputConversionRate.value);
-            if (val < 0.01) {
-                val = 0.01;
-                inputConversionRate.value = val;
-            }
-            sliderConversionRate.value = rateToSliderPos(val);
-            calculatePerZero();
-        });
-        sliderConversionRate.addEventListener('input', () => {
-            const calculatedRate = sliderPosToRate(parseInt(sliderConversionRate.value, 10));
-            inputConversionRate.value = calculatedRate;
-            calculatePerZero();
+        ['input', 'change'].forEach(evt => {
+            inputConversionRate.addEventListener(evt, () => {
+                let val = parseFloat(inputConversionRate.value);
+                if (val < 0.01) {
+                    val = 0.01;
+                    inputConversionRate.value = val;
+                }
+                sliderConversionRate.value = rateToSliderPos(val);
+                calculatePerZero();
+            });
+            sliderConversionRate.addEventListener(evt, () => {
+                const calculatedRate = sliderPosToRate(parseInt(sliderConversionRate.value, 10));
+                inputConversionRate.value = calculatedRate;
+                calculatePerZero();
+            });
         });
     }
 
     if (inputTxAmount) {
-        inputTxAmount.addEventListener('input', () => {
-            if (parseFloat(inputTxAmount.value) < 0) inputTxAmount.value = 0;
-            calculatePerZero();
+        ['input', 'change'].forEach(evt => {
+            inputTxAmount.addEventListener(evt, () => {
+                if (parseFloat(inputTxAmount.value) < 0) inputTxAmount.value = 0;
+                calculatePerZero();
+            });
         });
     }
 
@@ -385,16 +394,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (barQ3) barQ3.style.width = quarters >= 3 ? '0%' : '25%';
         if (barQ4) barQ4.style.width = '0%';
     }
+    window.calculateSCL = calculateSCL;
 
     if (inputPCL) {
         [inputPCL, sliderDonors, sliderQuarters].forEach(el => {
-            el.addEventListener('input', calculateSCL);
+            if (el) {
+                el.addEventListener('input', calculateSCL);
+                el.addEventListener('change', calculateSCL);
+            }
         });
         calculateSCL();
     }
 
     // ----------------------------------------------------------------------
-    // 5. Macroeconomic Simulator & Dividend Engine (Spec Revision V3)
+    // 5. Macroeconomic Simulator & Dividend Engine (Spec Revision V3 Reactive)
     // ----------------------------------------------------------------------
     const sliderLivingCost = document.getElementById('slider-living-cost');
     const sliderSupplyChain = document.getElementById('slider-supply-chain');
@@ -461,10 +474,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 1. Shared Volume Base
         const dailyConsumerSpend = annualLivingCostInput / 365;
-        const totalGrossDailyVolume = dailyConsumerSpend * (1 + supplyChainMultiplierInput); 
+        // Total Gross Daily Volume scales with both Supply Chain Depth and Daily Velocity Turnover
+        const totalGrossDailyVolume = dailyConsumerSpend * (1 + supplyChainMultiplierInput) * dailyVelocityInput; 
 
-        // 2. Implied Active Money Supply Required (M = Volume / Velocity)
-        const requiredMoneySupplyM = totalGrossDailyVolume / dailyVelocityInput;
+        // 2. Implied Active Money Supply Required (M = Base Daily Volume / Velocity)
+        const requiredMoneySupplyM = (dailyConsumerSpend * (1 + supplyChainMultiplierInput)) / Math.max(0.001, dailyVelocityInput);
 
         // Display labels for control sliders
         const annualTurns = dailyVelocityInput * 365;
@@ -502,7 +516,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // High debt stock M creates proportional compound interest overhead in prices (up to 40%)
         const legacyInterestOverheadRate = Math.min(0.40, (requiredMoneySupplyM / 60000) * 0.40);
         const legacyDailyCOL = dailyConsumerSpend / Math.max(0.01, (1 - legacyInterestOverheadRate));
-        const legacyDailyFeeYield = totalGrossDailyVolume * 0.014 * 0.75;
+        const legacyGrossDailyVolume = dailyConsumerSpend * (1 + supplyChainMultiplierInput) * 0.04;
+        const legacyDailyFeeYield = legacyGrossDailyVolume * 0.014 * 0.75;
         const legacyCoveragePercent = (legacyDailyFeeYield / legacyDailyCOL) * 100;
 
         if (legacyDailyCostEl) legacyDailyCostEl.textContent = `$${legacyDailyCOL.toFixed(2)}/day`;
@@ -573,21 +588,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+    window.calculateMacroEngineV3 = calculateMacroEngineV3;
 
     // Attach both 'input' and 'change' listeners to all 3 sliders
     [sliderLivingCost, sliderSupplyChain, sliderVelocity].forEach(el => {
         if (el) {
-            el.addEventListener('input', calculateMacroEngineV3);
-            el.addEventListener('change', calculateMacroEngineV3);
+            ['input', 'change'].forEach(evt => {
+                el.addEventListener(evt, calculateMacroEngineV3);
+            });
         }
     });
 
     if (btnSolveCoverage && sliderVelocity) {
         btnSolveCoverage.addEventListener('click', () => {
             const supplyChainMultiplierInput = parseFloat(sliderSupplyChain ? sliderSupplyChain.value : 70) || 70;
-            // Solve V: target velocity where requiredMoneySupplyM produces exact 100% coverage
-            // totalGrossDailyVolume * 0.0105 = dailyConsumerSpend
-            // (1 + S) * 0.0105
+            // Solve V: target velocity where coverage equals 100%
+            // coverage = (1 + S) * V * 0.0105 = 1 => V = 1 / ((1 + S) * 0.0105)
             const targetV = 1 / ((1 + supplyChainMultiplierInput) * 0.0105);
             sliderVelocity.value = Math.min(5.0, Math.max(0.005, targetV)).toFixed(3);
             calculateMacroEngineV3();
