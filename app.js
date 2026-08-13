@@ -359,24 +359,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const sliderBaseCL = document.getElementById('slider-basecl');
     const valBaseCL = document.getElementById('val-basecl');
     const descBaseCL = document.getElementById('desc-basecl');
+    const descBaseCLMain = document.getElementById('desc-basecl-main');
+    const descBaseCLDesc = document.getElementById('desc-basecl-desc');
 
     const sliderSpend = document.getElementById('slider-spend');
     const valSpend = document.getElementById('val-spend');
     const descSpend = document.getElementById('desc-spend');
+    const descSpendMain = document.getElementById('desc-spend-main');
+    const descSpendDesc = document.getElementById('desc-spend-desc');
 
     const sliderTrend = document.getElementById('slider-trend');
     const valTrend = document.getElementById('val-trend');
     const descTrend = document.getElementById('desc-trend');
+    const descTrendMain = document.getElementById('desc-trend-main');
+    const descTrendDesc = document.getElementById('desc-trend-desc');
 
     const sliderActivity = document.getElementById('slider-activity');
     const valActivity = document.getElementById('val-activity');
     const descActivity = document.getElementById('desc-activity');
+    const descActivityMain = document.getElementById('desc-activity-main');
+    const descActivityDesc = document.getElementById('desc-activity-desc');
 
     const sliderUnusedSCL = document.getElementById('slider-unused-scl');
     const valUnusedSCL = document.getElementById('val-unused-scl');
     const descUnusedSCL = document.getElementById('desc-unused-scl');
+    const descUnusedSCLMain = document.getElementById('desc-unused-scl-main');
+    const descUnusedSCLDesc = document.getElementById('desc-unused-scl-desc');
 
     const outPCL = document.getElementById('out-pcl');
+    const outPCLFormula = document.getElementById('out-pcl-formula');
     const outSCLRate = document.getElementById('out-scl-rate');
     const outAvailSCL = document.getElementById('out-avail-scl');
 
@@ -384,14 +395,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const sliderBackers = document.getElementById('slider-backers');
     const valBackers = document.getElementById('val-backers');
     const descBackers = document.getElementById('desc-backers');
+    const descBackersMain = document.getElementById('desc-backers-main');
+    const descBackersDesc = document.getElementById('desc-backers-desc');
 
     const sliderDmin = document.getElementById('slider-dmin');
     const valDmin = document.getElementById('val-dmin');
     const descDmin = document.getElementById('desc-dmin');
+    const descDminMain = document.getElementById('desc-dmin-main');
+    const descDminDesc = document.getElementById('desc-dmin-desc');
 
     const sliderDmax = document.getElementById('slider-dmax');
     const valDmax = document.getElementById('val-dmax');
     const descDmax = document.getElementById('desc-dmax');
+    const descDmaxMain = document.getElementById('desc-dmax-main');
+    const descDmaxDesc = document.getElementById('desc-dmax-desc');
 
     const outBizCredit = document.getElementById('out-biz-credit');
     const outConsensusStatus = document.getElementById('out-consensus-status');
@@ -423,19 +440,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const graphW = w - padLeft - padRight;
         const graphH = h - padTop - padBottom;
 
-        const maxCap = Math.max(1000, initialCredit * 1.15);
+        const maxCap = Math.max(1000, initialCredit * 1.45);
 
-        // 9 Quarterly checkpoints: 0m, 3m, 6m, 9m, 12m, 15m, 18m, 21m, 24m
+        // 9 Checkpoints: 0m, 3m, 6m (Renewal Event), 9m, 12m, 15m, 18m (Ramps to 0), 21m, 24m
         const quarters = [
             { m: 0, label: 'M0', decay: 1.0 },
             { m: 3, label: 'M3', decay: 0.75 },
-            { m: 6, label: 'M6', decay: 0.50 },
-            { m: 9, label: 'M9', decay: 0.25 },
-            { m: 12, label: 'M12', decay: 1.0 },  // Community Renewal / Refresh
-            { m: 15, label: 'M15', decay: 0.75 },
-            { m: 18, label: 'M18', decay: 0.50 },
-            { m: 21, label: 'M21', decay: 0.25 },
-            { m: 24, label: 'M24', decay: 0.0 }
+            { m: 6, label: 'M6', decay: 1.25 },   // 6-Month Renewal Boost (+100% batch added to remaining 50%)
+            { m: 9, label: 'M9', decay: 1.00 },   // 25% decay on both batches
+            { m: 12, label: 'M12', decay: 0.50 }, // Batch 1 expires, Batch 2 at 50%
+            { m: 15, label: 'M15', decay: 0.25 }, // Batch 2 at 25%
+            { m: 18, label: 'M18', decay: 0.00 }, // Batch 2 expires (Zero Mark)
+            { m: 21, label: 'M21', decay: 0.00 },
+            { m: 24, label: 'M24', decay: 0.00 }
         ];
 
         // Draw horizontal grid lines & Y-axis labels
@@ -473,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
             ctx.stroke();
 
-            ctx.fillStyle = (q.m === 0 || q.m === 12 || q.m === 24) ? '#00f3ff' : '#64748b';
+            ctx.fillStyle = (q.m === 0 || q.m === 6 || q.m === 18) ? '#00f3ff' : '#64748b';
             ctx.fillText(q.label, x, h - 12);
         });
 
@@ -485,8 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (i === 0) {
                 ctx.moveTo(x, y);
             } else {
-                const prevX = padLeft + ((i - 1) / (quarters.length - 1)) * graphW;
-                // Stepped horizontal then drop to current level
+                // Stepped horizontal then drop or jump to current level
                 ctx.lineTo(x, padTop + graphH - ((initialCredit * quarters[i - 1].decay) / maxCap) * graphH);
                 ctx.lineTo(x, y);
             }
@@ -507,30 +523,33 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = 'rgba(0, 240, 255, 0.06)';
         ctx.fill();
 
-        // 2. Draw Enterprise Overdraft Utilization Curve (Amber Oscillating Utilization)
+        // 2. Draw Enterprise Overdraft Utilization Curve (Amber Oscillating Spikes Ramping to 0 at M18)
         ctx.beginPath();
         const curvePoints = [];
-        const subSteps = 48; // Smooth interpolation across 24 months
+        const subSteps = 64; // Smooth interpolation across 24 months
         for (let s = 0; s <= subSteps; s++) {
             const monthFrac = (s / subSteps) * 24;
             const x = padLeft + (monthFrac / 24) * graphW;
 
             // Determine active ceiling at this month
-            let activeCeiling = initialCredit;
+            let activeCeiling = 0;
             if (monthFrac < 3) activeCeiling = initialCredit * 1.0;
             else if (monthFrac < 6) activeCeiling = initialCredit * 0.75;
-            else if (monthFrac < 9) activeCeiling = initialCredit * 0.50;
-            else if (monthFrac < 12) activeCeiling = initialCredit * 0.25;
-            else if (monthFrac < 15) activeCeiling = initialCredit * 1.0; // Renewed
-            else if (monthFrac < 18) activeCeiling = initialCredit * 0.75;
-            else if (monthFrac < 21) activeCeiling = initialCredit * 0.50;
-            else activeCeiling = initialCredit * 0.25;
+            else if (monthFrac < 9) activeCeiling = initialCredit * 1.25; // 6-Mo Renewal Boost
+            else if (monthFrac < 12) activeCeiling = initialCredit * 1.00;
+            else if (monthFrac < 15) activeCeiling = initialCredit * 0.50;
+            else if (monthFrac < 18) activeCeiling = initialCredit * 0.25;
+            else activeCeiling = 0; // Expired at M18
 
-            // Cyclic utilization wave (drawdown for production & revenue clearance)
-            const wave = 0.55 + 0.25 * Math.sin(monthFrac * 1.57);
-            const actualUtilization = activeCeiling * Math.max(0.15, Math.min(0.85, wave));
+            // Utilization spikes rising to slightly fill steps, ramping to zero at M18
+            let actualUtilization = 0;
+            if (monthFrac < 18) {
+                const rampFactor = Math.max(0, 1 - (monthFrac / 18));
+                const wave = 0.60 + 0.28 * Math.sin(monthFrac * 1.6);
+                actualUtilization = activeCeiling * Math.max(0.18, Math.min(0.88, wave)) * Math.sqrt(rampFactor);
+            }
+
             const y = padTop + graphH - (actualUtilization / maxCap) * graphH;
-
             curvePoints.push({ x, y });
         }
 
@@ -555,7 +574,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const nationalSpend = parseFloat(sliderSpend.value) || 5;
         const trend = parseFloat(sliderTrend.value) || 2.0;
         const activity = parseFloat(sliderActivity.value) || 2.0;
-        const unusedSCL = parseFloat(sliderUnusedSCL.value) || 25000;
 
         // 1. Regional Modifier R
         const R = Math.min(2.0, Math.max(0.2, nationalSpend / 5));
@@ -564,48 +582,105 @@ document.addEventListener('DOMContentLoaded', () => {
         const PCL = (baseCL * R) + (baseCL * trend * activity);
         const dailySCLRate = PCL / 365;
 
-        // Update Tier 1 Badges & Readouts
-        if (valBaseCL) valBaseCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${baseCL.toLocaleString()}`;
-        if (descBaseCL) {
-            if (baseCL === 2000) descBaseCL.innerHTML = `<span class="deltar-font">&#xE002;</span>2,000 — System Minimum Floor (Low Inequality)`;
-            else if (baseCL <= 10000) descBaseCL.textContent = 'Moderate Regional Inequality (Standard Base)';
-            else if (baseCL <= 30000) descBaseCL.textContent = 'High Wealth Concentration (Expanded Base)';
-            else descBaseCL.textContent = 'Severe Inequality (Maximum System Counterweight)';
+        // Dynamic max on Accumulated Unused SCL Balance (double the PCL currently shown)
+        const maxUnusedSCL = Math.max(1000, Math.round(2 * PCL));
+        sliderUnusedSCL.max = maxUnusedSCL;
+        if (parseFloat(sliderUnusedSCL.value) > maxUnusedSCL) {
+            sliderUnusedSCL.value = maxUnusedSCL;
         }
+        const unusedSCL = parseFloat(sliderUnusedSCL.value);
 
-        if (valSpend) valSpend.innerHTML = `$${nationalSpend} / day <small>(R = ${R.toFixed(2)}x)</small>`;
-        if (descSpend) {
-            if (nationalSpend <= 4) descSpend.textContent = `Low Cost-of-Living Region (R = ${R.toFixed(2)}x)`;
-            else if (nationalSpend === 5) descSpend.textContent = `$5/day — Global Baseline Average (R = 1.0x Baseline)`;
-            else if (nationalSpend < 50) descSpend.textContent = `Developing Market Standard (R = ${R.toFixed(2)}x)`;
-            else descSpend.textContent = `High Cost-of-Living Metro Area (R = 2.0x Max Cap)`;
+        // Update Tier 1 Badges & Floating Tiers
+        if (valBaseCL) valBaseCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${baseCL.toLocaleString()}`;
+        if (descBaseCLMain && descBaseCLDesc) {
+            if (baseCL === 2000) {
+                descBaseCLMain.innerHTML = `<span class="deltar-font">&#xE002;</span> 2,000`;
+                descBaseCLDesc.textContent = '(Low Inequality System Minimum Floor)';
+            } else if (baseCL <= 10000) {
+                descBaseCLMain.textContent = 'Moderate Regional Inequality';
+                descBaseCLDesc.textContent = '(Standard Base Floor)';
+            } else if (baseCL <= 30000) {
+                descBaseCLMain.textContent = 'High Wealth Concentration';
+                descBaseCLDesc.textContent = '(Expanded Base Floor)';
+            } else {
+                descBaseCLMain.textContent = 'Severe Inequality';
+                descBaseCLDesc.textContent = '(Maximum Counterweight)';
+            }
         }
+        updateFloatingPosition(sliderBaseCL, descBaseCL, 2000, 50000, baseCL);
+
+        // Regional spend: display formatted multiplier "1.00x", "1.60x" etc.
+        if (valSpend) valSpend.textContent = `${R.toFixed(2)}x`;
+        if (descSpendMain && descSpendDesc) {
+            descSpendMain.innerHTML = `<span class="deltar-font">&#xE002;</span> ${nationalSpend}`;
+            if (nationalSpend <= 4) {
+                descSpendDesc.textContent = `(Low Cost-of-Living Region, R = ${R.toFixed(2)}x)`;
+            } else if (nationalSpend === 5) {
+                descSpendDesc.textContent = `(Global Baseline Average, R = 1.00x)`;
+            } else if (nationalSpend < 50) {
+                descSpendDesc.textContent = `(Developing Market Standard, R = ${R.toFixed(2)}x)`;
+            } else {
+                descSpendDesc.textContent = `(High Cost-of-Living Metro Area, R = 2.00x Max Cap)`;
+            }
+        }
+        updateFloatingPosition(sliderSpend, descSpend, 2, 100, nationalSpend);
 
         if (valTrend) valTrend.textContent = `${trend.toFixed(1)}x`;
-        if (descTrend) {
-            if (trend === 1.0) descTrend.textContent = 'Flat / Neutral Balance History (1.0x Minimum)';
-            else if (trend <= 5.0) descTrend.textContent = 'Steady Positive Earning Trend (2.0x Default)';
-            else if (trend <= 20.0) descTrend.textContent = 'Strong Growing Account Activity';
-            else descTrend.textContent = 'Exceptional Sustained Capital Growth (100x Max)';
+        if (descTrendMain && descTrendDesc) {
+            if (trend === 1.0) {
+                descTrendMain.textContent = 'Flat / Neutral Balance History';
+                descTrendDesc.textContent = '(1.0x Minimum)';
+            } else if (trend <= 5.0) {
+                descTrendMain.textContent = 'Steady Positive Trend';
+                descTrendDesc.textContent = '(2.0x Default)';
+            } else if (trend <= 20.0) {
+                descTrendMain.textContent = 'Strong Growing Activity';
+                descTrendDesc.textContent = '(Expanded Earning Velocity)';
+            } else {
+                descTrendMain.textContent = 'Exceptional Sustained Growth';
+                descTrendDesc.textContent = '(100x Max Cap)';
+            }
         }
+        updateFloatingPosition(sliderTrend, descTrend, 1.0, 100.0, trend);
 
         if (valActivity) valActivity.textContent = `${activity.toFixed(1)}x`;
-        if (descActivity) {
-            if (activity === 1.0) descActivity.textContent = 'Low Activity (< 2 transactions/day)';
-            else if (activity <= 1.5) descActivity.textContent = 'Moderate Trade Velocity (3–5 transactions/day)';
-            else descActivity.textContent = 'High Daily Circulation (6+ transactions/day — 2.0x Max)';
+        if (descActivityMain && descActivityDesc) {
+            if (activity === 1.0) {
+                descActivityMain.textContent = 'Low Activity';
+                descActivityDesc.textContent = '(< 2 transactions/day)';
+            } else if (activity <= 1.5) {
+                descActivityMain.textContent = 'Moderate Trade Velocity';
+                descActivityDesc.textContent = '(3–5 transactions/day)';
+            } else {
+                descActivityMain.textContent = 'High Daily Circulation';
+                descActivityDesc.textContent = '(6+ transactions/day — 2.0x Max)';
+            }
         }
+        updateFloatingPosition(sliderActivity, descActivity, 1.0, 2.0, activity);
 
-        if (valUnusedSCL) valUnusedSCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${unusedSCL.toLocaleString()}`;
-        if (descUnusedSCL) {
-            if (unusedSCL <= 5000) descUnusedSCL.textContent = 'New Account / Minimal Unused SCL';
-            else if (unusedSCL <= 25000) descUnusedSCL.textContent = 'Standard Unspent Social Credit Balance';
-            else if (unusedSCL <= 75000) descUnusedSCL.textContent = 'High Accumulated Gifting Reserve';
-            else descUnusedSCL.textContent = 'Maximum Reserve (Subject to 2-Year Rolling Expiration)';
+        if (valUnusedSCL) valUnusedSCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(unusedSCL).toLocaleString()}`;
+        if (descUnusedSCLMain && descUnusedSCLDesc) {
+            if (unusedSCL <= 0.2 * maxUnusedSCL) {
+                descUnusedSCLMain.textContent = 'New Account / Minimal Unused';
+                descUnusedSCLDesc.textContent = '(Building Reserve)';
+            } else if (unusedSCL <= 0.5 * maxUnusedSCL) {
+                descUnusedSCLMain.textContent = 'Standard Unspent Balance';
+                descUnusedSCLDesc.textContent = '(Active Gifting Reserve)';
+            } else if (unusedSCL <= 0.8 * maxUnusedSCL) {
+                descUnusedSCLMain.textContent = 'High Accumulated Reserve';
+                descUnusedSCLDesc.textContent = '(Substantial Capacity)';
+            } else {
+                descUnusedSCLMain.textContent = 'Maximum Reserve (2x PCL)';
+                descUnusedSCLDesc.textContent = '(Subject to 2-Year Expiration)';
+            }
         }
+        updateFloatingPosition(sliderUnusedSCL, descUnusedSCL, 0, maxUnusedSCL, unusedSCL);
 
-        // Tier 1 Summary Cards
+        // Tier 1 Summary Cards & Active PCL Formula
         if (outPCL) outPCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(PCL).toLocaleString()}`;
+        if (outPCLFormula) {
+            outPCLFormula.textContent = `${Math.round(PCL).toLocaleString()} = (${Math.round(baseCL).toLocaleString()} × ${R.toFixed(1)}) + (${Math.round(baseCL).toLocaleString()} × ${trend.toFixed(1)} × ${activity.toFixed(1)})`;
+        }
         if (outSCLRate) outSCLRate.innerHTML = `<span class="deltar-font">&#xE002;</span>${dailySCLRate.toFixed(1)}/day`;
         if (outAvailSCL) outAvailSCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(unusedSCL).toLocaleString()}`;
 
@@ -623,26 +698,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const dMax = parseFloat(sliderDmax.value);
 
             if (valBackers) valBackers.textContent = `${backers} Backers`;
-            if (descBackers) {
-                if (backers === 25) descBackers.textContent = '25 Backers — Minimum Required Group Size';
-                else if (backers < 100) descBackers.textContent = 'Local Community Project Scale';
-                else if (backers < 300) descBackers.textContent = 'Regional Enterprise Scale';
-                else descBackers.textContent = 'Major Infrastructure Enterprise Scale';
+            if (descBackersMain && descBackersDesc) {
+                descBackersMain.textContent = `${backers} Backers`;
+                if (backers === 25) descBackersDesc.textContent = '(Minimum Required Group Size)';
+                else if (backers < 100) descBackersDesc.textContent = '(Local Community Project Scale)';
+                else if (backers < 300) descBackersDesc.textContent = '(Regional Enterprise Scale)';
+                else descBackersDesc.textContent = '(Major Infrastructure Enterprise Scale)';
             }
+            updateFloatingPosition(sliderBackers, descBackers, 25, 500, backers);
 
             if (valDmin) valDmin.innerHTML = `<span class="deltar-font">&#xE002;</span>${dMin.toLocaleString()}`;
-            if (descDmin) {
-                if (dMin <= 2000) descDmin.textContent = 'Micro Supporter Base';
-                else if (dMin <= 10000) descDmin.textContent = 'Standard Member Contribution';
-                else descDmin.textContent = 'High-Capacity Supporter Base';
+            if (descDminMain && descDminDesc) {
+                descDminMain.innerHTML = `<span class="deltar-font">&#xE002;</span> ${dMin.toLocaleString()}`;
+                if (dMin <= 2000) descDminDesc.textContent = '(Micro Supporter Base)';
+                else if (dMin <= 10000) descDminDesc.textContent = '(Standard Member Contribution)';
+                else descDminDesc.textContent = '(High-Capacity Supporter Base)';
             }
+            updateFloatingPosition(sliderDmin, descDmin, 500, 20000, dMin);
 
+            const spreadRatio = (dMax / dMin).toFixed(1);
             if (valDmax) valDmax.innerHTML = `<span class="deltar-font">&#xE002;</span>${dMax.toLocaleString()}`;
-            if (descDmax) {
-                if (dMax === dMin) descDmax.textContent = 'Equal Gifts across all donors';
-                else if (dMax === 4 * dMin) descDmax.textContent = '4x Max Allowed Spread (Anti-Whale Rule Limit)';
-                else descDmax.textContent = `Valid Tiered Gift Spread (${(dMax / dMin).toFixed(1)}x Spread)`;
+            if (descDmaxMain && descDmaxDesc) {
+                descDmaxMain.textContent = `${spreadRatio}x Spread`;
+                if (dMax === dMin) descDmaxDesc.textContent = '(Equal Gifts across all donors)';
+                else if (dMax === 4 * dMin) descDmaxDesc.textContent = '(Anti-Whale Rule Limit)';
+                else descDmaxDesc.textContent = '(Valid Tiered Gift Spread)';
             }
+            updateFloatingPosition(sliderDmax, descDmax, sliderDmax.min, sliderDmax.max, dMax);
 
             const dAvg = (dMin + dMax) / 2;
             const initialBusinessCredit = backers * dAvg;
@@ -672,36 +754,48 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sliderSpend) sliderSpend.value = 5;
             if (sliderTrend) sliderTrend.value = 2.0;
             if (sliderActivity) sliderActivity.value = 2.0;
-            if (sliderUnusedSCL) sliderUnusedSCL.value = 10000;
             if (sliderBackers) sliderBackers.value = 25;
             if (sliderDmin) sliderDmin.value = 2000;
             if (sliderDmax) {
                 sliderDmax.max = 8000;
                 sliderDmax.value = 8000;
             }
+            // PCL = 10,000 -> max unused SCL = 20,000
+            if (sliderUnusedSCL) {
+                sliderUnusedSCL.max = 20000;
+                sliderUnusedSCL.value = 10000;
+            }
         } else if (stage === 'mid') {
             if (sliderBaseCL) sliderBaseCL.value = 4000;
             if (sliderSpend) sliderSpend.value = 5;
             if (sliderTrend) sliderTrend.value = 2.0;
             if (sliderActivity) sliderActivity.value = 2.0;
-            if (sliderUnusedSCL) sliderUnusedSCL.value = 20000;
             if (sliderBackers) sliderBackers.value = 50;
             if (sliderDmin) sliderDmin.value = 4000;
             if (sliderDmax) {
                 sliderDmax.max = 16000;
                 sliderDmax.value = 16000;
             }
+            // PCL = 20,000 -> max unused SCL = 40,000
+            if (sliderUnusedSCL) {
+                sliderUnusedSCL.max = 40000;
+                sliderUnusedSCL.value = 20000;
+            }
         } else if (stage === 'mature') {
             if (sliderBaseCL) sliderBaseCL.value = 10000;
             if (sliderSpend) sliderSpend.value = 5;
             if (sliderTrend) sliderTrend.value = 2.0;
             if (sliderActivity) sliderActivity.value = 2.0;
-            if (sliderUnusedSCL) sliderUnusedSCL.value = 50000;
             if (sliderBackers) sliderBackers.value = 500;
             if (sliderDmin) sliderDmin.value = 20000;
             if (sliderDmax) {
                 sliderDmax.max = 80000;
                 sliderDmax.value = 80000;
+            }
+            // PCL = 50,000 -> max unused SCL = 100,000
+            if (sliderUnusedSCL) {
+                sliderUnusedSCL.max = 100000;
+                sliderUnusedSCL.value = 50000;
             }
         }
 
