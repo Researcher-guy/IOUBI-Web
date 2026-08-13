@@ -627,64 +627,180 @@
                     </div>
                 </div>
 
-                <!-- SCL Business Funding & Quarterly Decay Simulator -->
-                <div class="sandbox-card glass-panel">
+                <!-- Personal & Enterprise Credit Simulator -->
+                <div class="sandbox-card glass-panel credit-sim-card">
                     <div class="tool-header">
-                        <h2>Social Credit Limit (SCL) Crowdfund & Decay Simulator</h2>
+                        <h2>Personal & Enterprise Credit Simulator</h2>
                     </div>
-                    <p class="tool-desc">Simulate how personal accounts donate 1/365th of their Personal Credit Limit (PCL) as SCL to expand a business overdraft limit, and observe the 25% quarterly decay schedule.</p>
+                    <p class="tool-desc">See how personal activity generates zero-interest credit and how community consensus funds enterprise growth.</p>
 
-                    <div class="scl-sim-layout">
-                        <div class="sim-controls">
-                            <div class="form-group">
-                                <label for="input-pcl">Avg Personal Credit Limit (PCL):</label>
-                                <input type="number" id="input-pcl" value="36500" step="1000">
-                                <small class="hint">Daily SCL Generated: <span id="scl-daily-rate"><span class="deltar-font">&#xE002;</span>100.0/day</span></small>
+                    <!-- Stage Preset Switch -->
+                    <div class="stage-preset-bar">
+                        <button type="button" class="stage-btn active" id="btn-preset-early">Early Stage</button>
+                        <button type="button" class="stage-btn" id="btn-preset-mid">Mid Stage</button>
+                        <button type="button" class="stage-btn" id="btn-preset-mature">Mature Stage</button>
+                    </div>
+
+                    <div class="credit-sim-content">
+                        <!-- TIER 1: Personal Credit Limit (PCL) Inputs -->
+                        <div class="sim-subpanel tier-panel tier-1-panel">
+                            <div class="tier-panel-header">
+                                <span class="tier-badge emerald-badge">TIER 1</span>
+                                <h3>Personal Credit Limit (PCL) Mechanics</h3>
                             </div>
 
-                            <div class="slider-group">
-                                <div class="slider-label">
-                                    <span>Assembled Crowd Donors (Min 25):</span>
-                                    <strong id="val-donors">30 Donors</strong>
+                            <div class="sim-ctrl-group">
+                                <!-- 1. Inequality BaseCL Floor -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-basecl">Inequality BaseCL Floor:</label>
+                                        <span class="ctrl-val-badge emerald" id="val-basecl"><span class="deltar-font">&#xE002;</span>2,000</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-basecl" min="2000" max="50000" value="2000" step="500" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
+                                        <div class="sim-floating-desc" id="desc-basecl"><span class="deltar-font">&#xE002;</span>2,000 — System Minimum Floor (Low Inequality)</div>
+                                    </div>
                                 </div>
-                                <input type="range" id="slider-donors" min="25" max="250" value="30" step="5">
+
+                                <!-- 2. National Daily Spend -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-spend">National Daily Spend (Regional Modifier R):</label>
+                                        <span class="ctrl-val-badge" id="val-spend">$5 / day <small>(R = 1.0x)</small></span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-spend" min="2" max="100" value="5" step="1" class="balance-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
+                                        <div class="sim-floating-desc" id="desc-spend">$5/day — Global Baseline Average (R = 1.0x Baseline)</div>
+                                    </div>
+                                </div>
+
+                                <!-- 3. 90-Day Balance Trend -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-trend">90-Day Balance Trend (T):</label>
+                                        <span class="ctrl-val-badge" id="val-trend">2.0x</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-trend" min="1.0" max="100.0" value="2.0" step="0.5" class="balance-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
+                                        <div class="sim-floating-desc" id="desc-trend">Steady Positive Earning Trend (2.0x Default)</div>
+                                    </div>
+                                </div>
+
+                                <!-- 4. Daily Transaction Activity -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-activity">Daily Transaction Activity (A):</label>
+                                        <span class="ctrl-val-badge" id="val-activity">2.0x</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-activity" min="1.0" max="2.0" value="2.0" step="0.1" class="balance-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
+                                        <div class="sim-floating-desc" id="desc-activity">High Daily Circulation (6+ transactions/day — 2.0x Max)</div>
+                                    </div>
+                                </div>
+
+                                <!-- 5. Accumulated Unused SCL Balance -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-unused-scl">Accumulated Unused SCL Balance:</label>
+                                        <span class="ctrl-val-badge emerald" id="val-unused-scl"><span class="deltar-font">&#xE002;</span>25,000</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-unused-scl" min="0" max="100000" value="25000" step="1000" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
+                                        <div class="sim-floating-desc" id="desc-unused-scl">Standard Unspent Social Credit Balance</div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="slider-group">
-                                <div class="slider-label">
-                                    <span>Quarterly Quarters Elapsed:</span>
-                                    <strong id="val-quarters">Q0 (Initial Raised)</strong>
+                            <!-- Tier 1 Output Card (Emerald Accents) -->
+                            <div class="tier-output-card emerald-card">
+                                <div class="output-stat">
+                                    <span class="stat-label">Calculated Personal Credit Limit (PCL):</span>
+                                    <strong class="stat-value emerald-text" id="out-pcl"><span class="deltar-font">&#xE002;</span>10,000</strong>
                                 </div>
-                                <input type="range" id="slider-quarters" min="0" max="4" value="0" step="1">
+                                <div class="output-subgrid">
+                                    <div class="sub-stat">
+                                        <span>Daily SCL Accrual Rate:</span>
+                                        <strong id="out-scl-rate"><span class="deltar-font">&#xE002;</span>27.4/day</strong>
+                                    </div>
+                                    <div class="sub-stat">
+                                        <span>Available SCL to Gift:</span>
+                                        <strong id="out-avail-scl"><span class="deltar-font">&#xE002;</span>25,000</strong>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="scl-results-display">
-                            <div class="scl-stat-pill">
-                                <span>Total Raised SCL Depth:</span>
-                                <strong id="scl-total-raised" class="glow-text"><span class="deltar-font">&#xE002;</span>3,000</strong>
+                        <!-- TIER 2: Enterprise Crowdfunding Inputs (Anti-Whale Rules) -->
+                        <div class="sim-subpanel tier-panel tier-2-panel">
+                            <div class="tier-panel-header">
+                                <span class="tier-badge cyan-badge">TIER 2</span>
+                                <h3>Enterprise Crowdfunding (Anti-Whale Protocol)</h3>
                             </div>
-                            <div class="scl-stat-pill">
-                                <span>Active Overdraft Ceiling:</span>
-                                <strong id="scl-active-limit" class="cyan-text"><span class="deltar-font">&#xE002;</span>3,000</strong>
+
+                            <div class="sim-ctrl-group">
+                                <!-- 1. Community Backers -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-backers">Community Backers (Min 25):</label>
+                                        <span class="ctrl-val-badge cyan" id="val-backers">25 Backers</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-backers" min="25" max="500" value="25" step="1" class="balance-slider cyan-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
+                                        <div class="sim-floating-desc" id="desc-backers">25 Backers — Minimum Required Group Size</div>
+                                    </div>
+                                </div>
+
+                                <!-- 2. Smallest Donor SCL Gift -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-dmin">Smallest Donor SCL Gift (D_min):</label>
+                                        <span class="ctrl-val-badge" id="val-dmin"><span class="deltar-font">&#xE002;</span>2,000</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-dmin" min="500" max="20000" value="2000" step="500" class="balance-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
+                                        <div class="sim-floating-desc" id="desc-dmin">Micro Supporter Base</div>
+                                    </div>
+                                </div>
+
+                                <!-- 3. Largest Donor SCL Gift -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-dmax">Largest Donor SCL Gift (D_max ≤ 4 × D_min):</label>
+                                        <span class="ctrl-val-badge cyan" id="val-dmax"><span class="deltar-font">&#xE002;</span>8,000</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-dmax" min="2000" max="8000" value="8000" step="500" class="balance-slider cyan-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
+                                        <div class="sim-floating-desc" id="desc-dmax">4x Max Allowed Spread (Anti-Whale Rule Limit)</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="scl-decay-bars">
-                                <div class="q-bar-group">
-                                    <span>Q1 (3 Mo): -25%</span>
-                                    <div class="q-bar-bg"><div id="bar-q1" class="q-bar-fill" style="width: 75%;"></div></div>
+
+                            <!-- Tier 2 Output Card (Cyan Accents) -->
+                            <div class="tier-output-card cyan-card">
+                                <div class="output-stat">
+                                    <span class="stat-label">Unlocked Enterprise Credit Line:</span>
+                                    <strong class="stat-value cyan-text glow-text" id="out-biz-credit"><span class="deltar-font">&#xE002;</span>125,000</strong>
                                 </div>
-                                <div class="q-bar-group">
-                                    <span>Q2 (6 Mo): -50%</span>
-                                    <div class="q-bar-bg"><div id="bar-q2" class="q-bar-fill" style="width: 50%;"></div></div>
+                                <div class="consensus-status-badge" id="out-consensus-status">
+                                    ✓ Compliant (Min 25 Backers | Max Gift ≤ 4x Min Gift)
                                 </div>
-                                <div class="q-bar-group">
-                                    <span>Q3 (9 Mo): -75%</span>
-                                    <div class="q-bar-bg"><div id="bar-q3" class="q-bar-fill" style="width: 25%;"></div></div>
+                            </div>
+                        </div>
+
+                        <!-- 24-Month Credit & Overdraft Runway Chart -->
+                        <div class="sim-subpanel chart-panel">
+                            <div class="chart-panel-header">
+                                <h3>24-Month Credit & Overdraft Runway</h3>
+                                <div class="chart-legend">
+                                    <span class="legend-item"><span class="legend-dot cyan-dot"></span> SCL Credit Ceiling (Stepped Decay & Refresh)</span>
+                                    <span class="legend-item"><span class="legend-dot amber-dot"></span> Enterprise Overdraft Utilization</span>
                                 </div>
-                                <div class="q-bar-group">
-                                    <span>Q4 (12 Mo): Expired</span>
-                                    <div class="q-bar-bg"><div id="bar-q4" class="q-bar-fill" style="width: 0%;"></div></div>
-                                </div>
+                            </div>
+                            <div class="runway-canvas-container">
+                                <canvas id="credit-runway-canvas" width="600" height="240"></canvas>
+                            </div>
+                            <div class="runway-summary-text">
+                                Demonstrates the 25% quarterly decay of donated SCL limits alongside recurring 12-month community backing renewals.
                             </div>
                         </div>
                     </div>
