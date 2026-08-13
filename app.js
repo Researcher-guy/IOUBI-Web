@@ -567,6 +567,16 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.shadowBlur = 0;
     }
 
+    function updateFloatingPosition(sliderEl, floatingEl, minVal, maxVal, currentVal) {
+        if (!sliderEl || !floatingEl) return;
+        const clampedVal = Math.max(minVal, Math.min(maxVal, currentVal));
+        const span = maxVal - minVal;
+        const pct = span <= 0 ? 0 : Math.max(0, Math.min(100, ((clampedVal - minVal) / span) * 100));
+        // Mathematically guarantee that floating text stays 100% within the container bounds
+        floatingEl.style.left = `${pct}%`;
+        floatingEl.style.transform = `translateX(-${pct}%)`;
+    }
+
     function calculateCreditEngine() {
         if (!sliderBaseCL || !sliderSpend || !sliderTrend || !sliderActivity || !sliderUnusedSCL) return;
 
@@ -575,8 +585,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const trend = parseFloat(sliderTrend.value) || 2.0;
         const activity = parseFloat(sliderActivity.value) || 2.0;
 
-        // 1. Regional Modifier R
-        const R = Math.min(2.0, Math.max(0.2, nationalSpend / 5));
+        // 1. Regional Modifier R ($2 = 0.2x, $5 = 1.0x, $10 = 2.0x)
+        let R = 1.0;
+        if (nationalSpend <= 2) {
+            R = 0.2;
+        } else if (nationalSpend <= 5) {
+            R = 0.2 + (nationalSpend - 2) * (0.8 / 3);
+        } else {
+            R = 1.0 + (nationalSpend - 5) * (1.0 / 5);
+        }
+        R = Math.min(2.0, Math.max(0.2, R));
 
         // 2. Personal Credit Limit (PCL) Calculation
         const PCL = (baseCL * R) + (baseCL * trend * activity);
@@ -613,32 +631,34 @@ document.addEventListener('DOMContentLoaded', () => {
         if (valSpend) valSpend.textContent = `${R.toFixed(2)}x`;
         if (descSpendMain && descSpendDesc) {
             descSpendMain.innerHTML = `<span class="deltar-font">&#xE002;</span> ${nationalSpend}`;
-            if (nationalSpend <= 4) {
-                descSpendDesc.textContent = `(Low Cost-of-Living Region, R = ${R.toFixed(2)}x)`;
+            if (nationalSpend <= 2) {
+                descSpendDesc.textContent = '(Subsistence / Lowest Cost Region)';
+            } else if (nationalSpend < 5) {
+                descSpendDesc.textContent = '(Low Cost-of-Living Region)';
             } else if (nationalSpend === 5) {
-                descSpendDesc.textContent = `(Global Baseline Average, R = 1.00x)`;
-            } else if (nationalSpend < 50) {
-                descSpendDesc.textContent = `(Developing Market Standard, R = ${R.toFixed(2)}x)`;
+                descSpendDesc.textContent = '(Global Baseline Average)';
+            } else if (nationalSpend < 10) {
+                descSpendDesc.textContent = '(Developing to High-Cost Standard)';
             } else {
-                descSpendDesc.textContent = `(High Cost-of-Living Metro Area, R = 2.00x Max Cap)`;
+                descSpendDesc.textContent = '(High Cost-of-Living Metro Area — Max Cap)';
             }
         }
-        updateFloatingPosition(sliderSpend, descSpend, 2, 100, nationalSpend);
+        updateFloatingPosition(sliderSpend, descSpend, 2, 10, nationalSpend);
 
         if (valTrend) valTrend.textContent = `${trend.toFixed(1)}x`;
         if (descTrendMain && descTrendDesc) {
             if (trend === 1.0) {
-                descTrendMain.textContent = 'Flat / Neutral Balance History';
-                descTrendDesc.textContent = '(1.0x Minimum)';
+                descTrendMain.textContent = 'Flat / Neutral History';
+                descTrendDesc.textContent = '(1.0x Baseline Floor)';
             } else if (trend <= 5.0) {
                 descTrendMain.textContent = 'Steady Positive Trend';
-                descTrendDesc.textContent = '(2.0x Default)';
+                descTrendDesc.textContent = '(Consistent Earning & Savings)';
             } else if (trend <= 20.0) {
-                descTrendMain.textContent = 'Strong Growing Activity';
-                descTrendDesc.textContent = '(Expanded Earning Velocity)';
+                descTrendMain.textContent = 'Strong Motivated Savings';
+                descTrendDesc.textContent = '(Active Credit Building)';
             } else {
-                descTrendMain.textContent = 'Exceptional Sustained Growth';
-                descTrendDesc.textContent = '(100x Max Cap)';
+                descTrendMain.textContent = 'Exceptional Capital Growth';
+                descTrendDesc.textContent = '(Motivated Savings & Elite Credit Building)';
             }
         }
         updateFloatingPosition(sliderTrend, descTrend, 1.0, 100.0, trend);
@@ -676,10 +696,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         updateFloatingPosition(sliderUnusedSCL, descUnusedSCL, 0, maxUnusedSCL, unusedSCL);
 
-        // Tier 1 Summary Cards & Active PCL Formula
+        // Tier 1 Summary Cards & Active PCL Formula (Concise, no leading prefix)
         if (outPCL) outPCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(PCL).toLocaleString()}`;
         if (outPCLFormula) {
-            outPCLFormula.textContent = `${Math.round(PCL).toLocaleString()} = (${Math.round(baseCL).toLocaleString()} × ${R.toFixed(1)}) + (${Math.round(baseCL).toLocaleString()} × ${trend.toFixed(1)} × ${activity.toFixed(1)})`;
+            outPCLFormula.textContent = `(${Math.round(baseCL).toLocaleString()} × ${R.toFixed(1)}) + (${Math.round(baseCL).toLocaleString()} × ${trend.toFixed(1)} × ${activity.toFixed(1)})`;
         }
         if (outSCLRate) outSCLRate.innerHTML = `<span class="deltar-font">&#xE002;</span>${dailySCLRate.toFixed(1)}/day`;
         if (outAvailSCL) outAvailSCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(unusedSCL).toLocaleString()}`;
@@ -891,17 +911,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return { name: "High-Throughput Digital Commercial Mesh", desc: "(Rapid Automated Settlements)" };
     }
 
-    function updateFloatingPosition(sliderEl, floatingEl, minVal, maxVal, currentVal) {
+    function updateFloatingPositionMacro(sliderEl, floatingEl, minVal, maxVal, currentVal) {
         if (!sliderEl || !floatingEl) return;
-        const pct = Math.max(0, Math.min(100, ((currentVal - minVal) / (maxVal - minVal)) * 100));
+        const clampedVal = Math.max(minVal, Math.min(maxVal, currentVal));
+        const span = maxVal - minVal;
+        const pct = span <= 0 ? 0 : Math.max(0, Math.min(100, ((clampedVal - minVal) / span) * 100));
         floatingEl.style.left = `${pct}%`;
-        if (pct < 15) {
-            floatingEl.style.transform = 'translateX(0%)';
-        } else if (pct > 85) {
-            floatingEl.style.transform = 'translateX(-100%)';
-        } else {
-            floatingEl.style.transform = 'translateX(-50%)';
-        }
+        floatingEl.style.transform = `translateX(-${pct}%)`;
     }
 
     function calculateMacroEngineV3() {
@@ -936,17 +952,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const tierLiving = getLivingCostTier(annualLivingCostInput);
         if (tierLivingCostName) tierLivingCostName.textContent = tierLiving.name;
         if (tierLivingCostDesc) tierLivingCostDesc.textContent = tierLiving.desc;
-        updateFloatingPosition(sliderLivingCost, tierLivingCost, 12000, 48000, annualLivingCostInput);
+        updateFloatingPositionMacro(sliderLivingCost, tierLivingCost, 12000, 48000, annualLivingCostInput);
 
         const tierSupply = getSupplyChainTier(supplyChainMultiplierInput);
         if (tierSupplyChainName) tierSupplyChainName.textContent = tierSupply.name;
         if (tierSupplyChainDesc) tierSupplyChainDesc.textContent = tierSupply.desc;
-        updateFloatingPosition(sliderSupplyChain, tierSupplyChain, 1, 100, supplyChainMultiplierInput);
+        updateFloatingPositionMacro(sliderSupplyChain, tierSupplyChain, 1, 100, supplyChainMultiplierInput);
 
         const tierVel = getVelocityTier(dailyVelocityInput);
         if (tierVelocityName) tierVelocityName.textContent = tierVel.name;
         if (tierVelocityDesc) tierVelocityDesc.textContent = tierVel.desc;
-        updateFloatingPosition(sliderVelocity, tierVelocity, 0.005, 5.0, dailyVelocityInput);
+        updateFloatingPositionMacro(sliderVelocity, tierVelocity, 0.005, 5.0, dailyVelocityInput);
 
         // 2. Status Quo (Legacy Debt System) Calculations:
         // Sluggish velocity at 1.2 turns/year requires immense debt money supply
