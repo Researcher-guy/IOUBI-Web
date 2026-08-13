@@ -1193,100 +1193,82 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 7. Master Site Client-Side Router
+    // 7. Navigation & Simulators Dropdown Controller
     // ----------------------------------------------------------------------
-    const routes = {
-        '/': 'view-home',
-        '/simulators/macro-economy': 'view-macro',
-        '/simulators/credit-simulator': 'view-credit',
-        '/simulators/fee-calculator': 'view-fee',
-        '/faq': 'view-faq',
-        '/docs': 'view-docs',
-        '/roadmap': 'view-roadmap',
-        // Common Aliases & Anchor fallbacks
-        '/macro-economy': 'view-macro',
-        '/credit-simulator': 'view-credit',
-        '/fee-calculator': 'view-fee',
-        '/simulators': 'view-macro',
-        '/specs': 'view-home',
-        '/mechanics': 'view-home'
-    };
+    const simDropdownBtn = document.getElementById('sim-dropdown-btn');
+    const simDropdown = document.getElementById('simulators-dropdown');
+    const simDropdownMenu = document.getElementById('sim-dropdown-menu');
 
-    function handleRoute() {
-        let rawHash = window.location.hash || '#/';
-        let cleanHash = rawHash.replace(/^#/, '').trim();
-        if (!cleanHash || cleanHash === '') cleanHash = '/';
-        if (!cleanHash.startsWith('/')) cleanHash = '/' + cleanHash;
-        if (cleanHash.length > 1 && cleanHash.endsWith('/')) cleanHash = cleanHash.slice(0, -1);
-
-        const targetViewId = routes[cleanHash] || 'view-home';
-
-        // 1. Switch Active View
-        document.querySelectorAll('.page-view').forEach(view => {
-            if (view.id === targetViewId) {
-                view.classList.add('active');
+    if (simDropdownBtn && simDropdown) {
+        simDropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = simDropdown.classList.contains('open');
+            if (isOpen) {
+                simDropdown.classList.remove('open');
+                simDropdownBtn.setAttribute('aria-expanded', 'false');
             } else {
-                view.classList.remove('active');
+                simDropdown.classList.add('open');
+                simDropdownBtn.setAttribute('aria-expanded', 'true');
             }
         });
 
-        // 2. Control Lite Roadmap Widget Visibility
-        const liteRoadmapWidget = document.getElementById('lite-roadmap-widget');
-        if (liteRoadmapWidget) {
-            liteRoadmapWidget.style.display = (targetViewId === 'view-roadmap') ? 'none' : 'block';
-        }
-
-        // 3. Highlight Navigation Links
-        document.querySelectorAll('.nav-link, .dropdown-item, .footer-nav-grid a').forEach(link => {
-            const linkRoute = link.getAttribute('data-route');
-            if (linkRoute && (linkRoute === cleanHash || (cleanHash === '/' && linkRoute === '/'))) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!simDropdown.contains(e.target)) {
+                simDropdown.classList.remove('open');
+                simDropdownBtn.setAttribute('aria-expanded', 'false');
             }
         });
 
-        // 4. Highlight Simulators Dropdown if inside simulator views
-        const simDropdownToggle = document.querySelector('.nav-dropdown-toggle');
-        if (simDropdownToggle) {
-            if (cleanHash.startsWith('/simulators') || cleanHash === '/macro-economy' || cleanHash === '/credit-simulator' || cleanHash === '/fee-calculator') {
-                simDropdownToggle.classList.add('active');
-            } else {
-                simDropdownToggle.classList.remove('active');
-            }
-        }
-
-        // 5. Trigger Canvas Redraws for activated simulators
-        if (targetViewId === 'view-macro' && typeof window.calculateMacroEngineV3 === 'function') {
-            setTimeout(window.calculateMacroEngineV3, 50);
-        }
-        if (targetViewId === 'view-credit' && typeof window.calculateCreditEngine === 'function') {
-            setTimeout(window.calculateCreditEngine, 50);
-        }
-        if (targetViewId === 'view-fee' && typeof window.calculateFeeFormula === 'function') {
-            setTimeout(window.calculateFeeFormula, 50);
-        }
-
-        // 6. Scroll Position Handling
-        if (rawHash === '#specs' || rawHash === '#/specs') {
-            const el = document.getElementById('specs');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-        } else if (rawHash === '#mechanics' || rawHash === '#/mechanics') {
-            const el = document.getElementById('mechanics');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Close dropdown when selecting an item
+        if (simDropdownMenu) {
+            simDropdownMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    simDropdown.classList.remove('open');
+                    simDropdownBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
         }
     }
 
-    // Attach router listeners
-    window.addEventListener('hashchange', handleRoute);
-    handleRoute();
-
-    // Mobile touch interaction for roadmap phase cards
-    document.querySelectorAll('.roadmap-phase-card').forEach(card => {
-        card.addEventListener('click', () => {
-            card.focus();
+    // ----------------------------------------------------------------------
+    // 8. Roadmap Phase Milestone Nodes Tap / Click Handler (Mobile/Touch)
+    // ----------------------------------------------------------------------
+    const phaseNodes = document.querySelectorAll('.roadmap-phase-node');
+    phaseNodes.forEach(node => {
+        node.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isAlreadyOpen = node.classList.contains('open');
+            phaseNodes.forEach(n => n.classList.remove('open'));
+            if (!isAlreadyOpen) {
+                node.classList.add('open');
+            }
         });
+    });
+
+    document.addEventListener('click', () => {
+        phaseNodes.forEach(n => n.classList.remove('open'));
+    });
+
+    // ----------------------------------------------------------------------
+    // 9. Initial Simulator Runs & Resize Redraws
+    // ----------------------------------------------------------------------
+    if (typeof window.calculateFeeFormula === 'function') {
+        window.calculateFeeFormula();
+    }
+    if (typeof window.calculateCreditEngine === 'function') {
+        window.calculateCreditEngine();
+    }
+    if (typeof window.calculateMacroEngineV3 === 'function') {
+        window.calculateMacroEngineV3();
+    }
+
+    window.addEventListener('resize', () => {
+        if (typeof window.calculateCreditEngine === 'function') {
+            window.calculateCreditEngine();
+        }
+        if (typeof window.calculateMacroEngineV3 === 'function') {
+            window.calculateMacroEngineV3();
+        }
     });
 });
