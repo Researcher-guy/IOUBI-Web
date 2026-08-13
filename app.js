@@ -1081,4 +1081,114 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     calculateMacroEngineV3();
+
+    // ----------------------------------------------------------------------
+    // 6. FAQ & Knowledge Base Search and Accordion Controller
+    // ----------------------------------------------------------------------
+    const faqSearchInput = document.getElementById('faq-search-input');
+    const faqSearchClear = document.getElementById('faq-search-clear');
+    const faqFilterButtons = document.querySelectorAll('.faq-filter-pill');
+    const faqAccordionItems = document.querySelectorAll('.faq-accordion-item');
+    const faqCategoryGroups = document.querySelectorAll('.faq-category-group');
+    const faqNoResults = document.getElementById('faq-no-results');
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    // Accordion Toggle (Allows multiple items open simultaneously)
+    faqAccordionItems.forEach(item => {
+        const btn = item.querySelector('.faq-question-btn');
+        const pane = item.querySelector('.faq-answer-pane');
+
+        if (btn && pane) {
+            btn.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                if (isActive) {
+                    item.classList.remove('active');
+                    btn.setAttribute('aria-expanded', 'false');
+                    pane.style.maxHeight = null;
+                } else {
+                    item.classList.add('active');
+                    btn.setAttribute('aria-expanded', 'true');
+                    pane.style.maxHeight = pane.scrollHeight + 'px';
+                }
+            });
+        }
+    });
+
+    // Update active pane heights on window resize
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.faq-accordion-item.active .faq-answer-pane').forEach(pane => {
+            pane.style.maxHeight = pane.scrollHeight + 'px';
+        });
+    });
+
+    // Filter & Search Engine
+    function filterFaqItems() {
+        const query = searchQuery.trim().toLowerCase();
+        let totalVisible = 0;
+
+        faqCategoryGroups.forEach(group => {
+            const groupCategory = group.getAttribute('data-category');
+            const isCategoryMatch = (currentCategory === 'all' || currentCategory === groupCategory);
+            const itemsInGroup = group.querySelectorAll('.faq-accordion-item');
+            let groupVisibleCount = 0;
+
+            itemsInGroup.forEach(item => {
+                const qText = item.querySelector('.faq-question-btn span')?.textContent.toLowerCase() || '';
+                const aText = item.querySelector('.faq-answer-body')?.textContent.toLowerCase() || '';
+                const matchesSearch = !query || qText.includes(query) || aText.includes(query);
+
+                if (isCategoryMatch && matchesSearch) {
+                    item.style.display = 'block';
+                    groupVisibleCount++;
+                    totalVisible++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            if (groupVisibleCount > 0) {
+                group.style.display = 'flex';
+            } else {
+                group.style.display = 'none';
+            }
+        });
+
+        if (faqNoResults) {
+            faqNoResults.style.display = totalVisible === 0 ? 'block' : 'none';
+        }
+    }
+
+    // Category Filter Pill Clicks
+    faqFilterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            faqFilterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = btn.getAttribute('data-category') || 'all';
+            filterFaqItems();
+        });
+    });
+
+    // Real-time Search Input Listener
+    if (faqSearchInput) {
+        faqSearchInput.addEventListener('input', () => {
+            searchQuery = faqSearchInput.value;
+            if (faqSearchClear) {
+                faqSearchClear.style.display = searchQuery ? 'block' : 'none';
+            }
+            filterFaqItems();
+        });
+    }
+
+    // Clear Search Button
+    if (faqSearchClear && faqSearchInput) {
+        faqSearchClear.addEventListener('click', () => {
+            faqSearchInput.value = '';
+            searchQuery = '';
+            faqSearchClear.style.display = 'none';
+            faqSearchInput.focus();
+            filterFaqItems();
+        });
+    }
 });

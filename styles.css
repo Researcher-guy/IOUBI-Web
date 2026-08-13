@@ -2175,6 +2175,280 @@ main#app-main {
 .need-item strong { font-size: 0.95rem; color: #fff; }
 .need-item small { font-size: 0.8rem; color: var(--text-muted); }
 
+/* ==========================================================================
+   7. FAQ / KNOWLEDGE BASE COMPONENT STYLES
+   ========================================================================== */
+
+.faq-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.faq-search-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1.75rem;
+}
+
+.faq-search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.faq-search-icon {
+    position: absolute;
+    left: 1.25rem;
+    color: var(--accent-cyan);
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+
+.faq-search-input {
+    width: 100%;
+    background: #0d1117;
+    border: 1.5px solid rgba(0, 240, 255, 0.3);
+    border-radius: 0.75rem;
+    padding: 1rem 1rem 1rem 3rem;
+    color: #fff;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
+}
+
+.faq-search-input:focus {
+    border-color: #00f3ff;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.25);
+    background: #111722;
+}
+
+.faq-search-input::placeholder {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.faq-search-clear {
+    position: absolute;
+    right: 1.25rem;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: none;
+    padding: 0.25rem;
+    transition: color 0.2s ease;
+}
+
+.faq-search-clear:hover {
+    color: #fff;
+}
+
+/* Category Filter Bar */
+.faq-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 2.5rem;
+}
+
+.faq-filter-pill {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.55rem 1rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.faq-filter-pill:hover {
+    color: #fff;
+    border-color: rgba(0, 240, 255, 0.4);
+    background: rgba(0, 240, 255, 0.05);
+}
+
+.faq-filter-pill.active {
+    color: #000;
+    background: linear-gradient(135deg, #00ff9d, #00f0ff);
+    border-color: transparent;
+    font-weight: 700;
+    box-shadow: 0 0 15px rgba(0, 255, 157, 0.35);
+}
+
+/* Accordion Category Group */
+.faq-category-group {
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.faq-category-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.faq-category-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f0f6fc;
+    margin: 0;
+}
+
+.faq-category-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+}
+
+/* Accordion Item Card */
+.faq-accordion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.faq-accordion-item {
+    background: #0d1117;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.25s ease;
+}
+
+.faq-accordion-item:hover {
+    border-color: rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.06);
+}
+
+.faq-accordion-item.active {
+    border-color: rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.12);
+    background: #111722;
+}
+
+.faq-question-btn {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    cursor: pointer;
+    gap: 1rem;
+    color: #f0f6fc;
+    font-family: var(--font-main);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+}
+
+.faq-accordion-item.active .faq-question-btn {
+    color: #00f3ff;
+}
+
+.faq-toggle-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-cyan);
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    font-weight: 700;
+    transition: all 0.25s ease;
+}
+
+.faq-accordion-item.active .faq-toggle-icon {
+    background: rgba(0, 240, 255, 0.15);
+    border-color: var(--accent-cyan);
+    transform: rotate(45deg);
+    color: #fff;
+}
+
+.faq-answer-pane {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-answer-body {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    color: #c9d1d9;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    padding-top: 1rem;
+}
+
+.faq-answer-body p {
+    margin-bottom: 0.85rem;
+}
+
+.faq-answer-body p:last-child {
+    margin-bottom: 0;
+}
+
+.faq-answer-body ol, .faq-answer-body ul {
+    margin: 0.75rem 0 0.85rem 1.35rem;
+}
+
+.faq-answer-body li {
+    margin-bottom: 0.4rem;
+}
+
+.faq-answer-body strong {
+    color: #fff;
+}
+
+.faq-no-results {
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    background: #0d1117;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    display: none;
+}
+
+.faq-no-results p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.faq-no-results small {
+    font-family: var(--font-mono);
+    color: var(--text-dim);
+}
+
 /* Footer */
 .footer {
     border-top: 1px solid var(--bg-card-border);
@@ -2227,4 +2501,6 @@ main#app-main {
     .sandbox-grid, .scl-sim-layout { grid-template-columns: 1fr; }
     .roadmap-timeline-box { padding: 1.5rem; }
     .footer-container { flex-direction: column; text-align: center; }
+    .faq-question-btn { font-size: 0.95rem; padding: 1rem 1.25rem; }
+    .faq-answer-body { padding: 0 1.25rem 1.25rem 1.25rem; }
 }

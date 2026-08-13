@@ -33,6 +33,7 @@
                 <a href="#mechanics" class="nav-link">Core Mechanics</a>
                 <a href="#docs" class="nav-link">Documentation Hub</a>
                 <a href="#simulators" class="nav-link">Simulators</a>
+                <a href="#faq" class="nav-link">FAQ</a>
                 <a href="#roadmap" class="nav-link">Roadmap</a>
             </nav>
 
@@ -1081,7 +1082,270 @@
         </section>
 
         <!-- =================================================================== -->
-        <!-- 6. PROJECT ROADMAP & DEVELOPMENT PROGRESS                          -->
+        <!-- 6. FREQUENTLY ASKED QUESTIONS (FAQ & KNOWLEDGE BASE)               -->
+        <!-- =================================================================== -->
+        <section id="faq" class="section-container faq-section">
+            <div class="section-header">
+                <span class="section-tag">KNOWLEDGE BASE</span>
+                <h2>Frequently Asked Questions</h2>
+                <p class="section-desc">Find answers to common questions about Deltar currency valuation, personal credit limits, business crowdfunding, the 1.4% fee pool, and real-world economics.</p>
+            </div>
+
+            <!-- Top Search Bar -->
+            <div class="faq-search-container">
+                <div class="faq-search-input-wrapper">
+                    <span class="faq-search-icon">🔍</span>
+                    <input type="text" id="faq-search-input" class="faq-search-input" placeholder="Search questions or keywords (e.g. Deltar, PCL, anti-whale, housing, fee pool)..." autocomplete="off">
+                    <button type="button" id="faq-search-clear" class="faq-search-clear" title="Clear search">✕</button>
+                </div>
+            </div>
+
+            <!-- Category Filter Pills -->
+            <div class="faq-filter-bar" id="faq-filter-bar">
+                <button type="button" class="faq-filter-pill active" data-category="all">All Categories (12)</button>
+                <button type="button" class="faq-filter-pill" data-category="cat-1">1. Fundamentals & Deltar</button>
+                <button type="button" class="faq-filter-pill" data-category="cat-2">2. Personal Credit & Limits</button>
+                <button type="button" class="faq-filter-pill" data-category="cat-3">3. Business & Social Credit</button>
+                <button type="button" class="faq-filter-pill" data-category="cat-4">4. Safety Nets & Fee Pool</button>
+                <button type="button" class="faq-filter-pill" data-category="cat-5">5. Real-World & Housing</button>
+            </div>
+
+            <!-- Accordion Categories Container -->
+            <div class="faq-accordion-container" id="faq-accordion-container">
+                
+                <!-- Category 1: Fundamentals & The Deltar Currency -->
+                <div class="faq-category-group" data-category="cat-1">
+                    <div class="faq-category-header">
+                        <span class="faq-category-badge">SECTION 01</span>
+                        <h3>1. Fundamentals & The Deltar Currency</h3>
+                    </div>
+                    <div class="faq-accordion-list">
+                        <!-- Q1 -->
+                        <div class="faq-accordion-item" data-category="cat-1">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>What is a Deltar, and how is its value set?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>The Deltar (<span class="deltar-font">&#xE002;</span>) is a zero-interest unit of economic account representing a proxy for human time. Rather than being pegged to an arbitrary gold standard or fiat decree, the global purchasing value of the Deltar is anchored by averaging everyone's collective psychological conversion rate of what they value their personal labor time at.</p>
+                                    <p>While prices of goods remain standardized globally (e.g., a loaf of bread costs <span class="deltar-font">&#xE002;</span>2), individuals decide how much of their own time it takes to earn those two Deltars.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="faq-accordion-item" data-category="cat-1">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>Why don't prices constantly inflate like in today's economy?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>In today's system, money is created as bank debt carrying compound interest, creating a 40% hidden overhead built into all retail prices. IOUBI eliminates compound interest completely.</p>
+                                    <p>Furthermore, currency is only created when an individual or business overdrafts to clear trade, and it is permanently destroyed when debt is repaid back to the system. Without interest drag or unbacked currency floods, prices naturally trend down toward their true productive cost.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 2: Personal Credit & The Credit Overuse Valve -->
+                <div class="faq-category-group" data-category="cat-2">
+                    <div class="faq-category-header">
+                        <span class="faq-category-badge">SECTION 02</span>
+                        <h3>2. Personal Credit & The Credit Overuse Valve</h3>
+                    </div>
+                    <div class="faq-accordion-list">
+                        <!-- Q3 -->
+                        <div class="faq-accordion-item" data-category="cat-2">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>How is my Personal Credit Limit (PCL) calculated?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Your PCL is calculated dynamically every day based on four core factors:</p>
+                                    <ol>
+                                        <li><strong>Inequality Base Floor:</strong> Automatically expands for everyone if global wealth concentrates at the top.</li>
+                                        <li><strong>Regional Living Index:</strong> Adjusts for local cost-of-living differences.</li>
+                                        <li><strong>90-Day Balance Trend:</strong> Rewards consistent, healthy account management.</li>
+                                        <li><strong>Daily Transaction Velocity:</strong> Reflects your active participation in the real economy.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="faq-accordion-item" data-category="cat-2">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>What prevents someone from maxing out their credit and abusing the system?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Your 90-day balance trend is the most sensitive lever in your PCL calculation. If you max out your credit line to buy luxury assets (like three homes) and your balance trend drops, your PCL will automatically shrink.</p>
+                                    <p>If your negative balance drops below your new, lower PCL limit, <strong>your account spending is instantly frozen</strong>. You keep full ownership of your assets (no foreclosures or repo men), but you cannot spend a single Deltar until your daily UBI dividend and income restore your balance above your credit floor. Short-term credit abuse paralyzes your daily liquidity.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 3: Business Funding & Social Credit (SCL) -->
+                <div class="faq-category-group" data-category="cat-3">
+                    <div class="faq-category-header">
+                        <span class="faq-category-badge">SECTION 03</span>
+                        <h3>3. Business Funding & Social Credit (SCL)</h3>
+                    </div>
+                    <div class="faq-accordion-list">
+                        <!-- Q5 -->
+                        <div class="faq-accordion-item" data-category="cat-3">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>How do businesses get funding without investors or bank loans?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Businesses do not receive a daily UBI dividend or an automated credit limit. Instead, they raise Social Credit Limit (SCL) pledges from everyday citizens. Citizens accumulate unspent SCL daily based on their personal credit status and can give it to local enterprises, raising the business's zero-interest overdraft ceiling.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q6 -->
+                        <div class="faq-accordion-item" data-category="cat-3">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>What stops a wealthy donor from controlling a business through massive credit gifts?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>All SCL crowdfunding campaigns enforce two strict rules:</p>
+                                    <ul>
+                                        <li><strong>25-Donor Minimum:</strong> A campaign requires at least 25 distinct human supporters to be valid.</li>
+                                        <li><strong>4x Anti-Whale Rule:</strong> The largest single SCL donation in a campaign cannot exceed 4 times the smallest donation.</li>
+                                    </ul>
+                                    <p>Even a billionaire cannot dominate a business's credit line—enterprise funding requires genuine community consensus.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q7 -->
+                        <div class="faq-accordion-item" data-category="cat-3">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>Why do businesses need to run quarterly crowdfunding campaigns?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>All donated SCL decays by 25% every 3 months (100% annual expiration). This forces businesses to continuously deliver real value, quality goods, and good jobs to earn renewed community trust and maintain their credit ceilings.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 4: Safety Nets, Governance & The Fee Pool -->
+                <div class="faq-category-group" data-category="cat-4">
+                    <div class="faq-category-header">
+                        <span class="faq-category-badge">SECTION 04</span>
+                        <h3>4. Safety Nets, Governance & The Fee Pool</h3>
+                    </div>
+                    <div class="faq-accordion-list">
+                        <!-- Q8 -->
+                        <div class="faq-accordion-item" data-category="cat-4">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>How are UBI, healthcare, and public services funded without income taxes?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>A single, microscopic 1.4% average fee is collected across all daily transaction velocity. This single fee replaces income tax, sales tax, corporate tax, credit card swipe fees, and government debt.</p>
+                                    <p>Every midnight, 100% of collected fees are split into three pools:</p>
+                                    <ul>
+                                        <li><strong>75% UBI Dividend Pool:</strong> Distributed equally to all human accounts as a daily cash living floor.</li>
+                                        <li><strong>20% Social Pool:</strong> Funds community grants and universal insurance for all needs.</li>
+                                        <li><strong>5% Government Pool:</strong> Direct-allocated by citizens to fund public administration, regulation, and enforcement.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q9 -->
+                        <div class="faq-accordion-item" data-category="cat-4">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>Who approves healthcare claims and community grants?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Claims are reviewed on a private platform by a randomly selected, volunteer jury of everyday peers serving a single shift. Once a claim is approved by consensus, automated payments begin immediately to keep velocity moving.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q10 -->
+                        <div class="faq-accordion-item" data-category="cat-4">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>How do the 75 / 20 / 5 pool percentages change?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Members can vote daily to adjust the pool split. To prevent economic shocks, votes can only shift pool allocations by a maximum rate of 0.001% per day. A complete 1% shift requires 1,000 days of unanimous global consensus.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 5: Real-World Applications & Housing -->
+                <div class="faq-category-group" data-category="cat-5">
+                    <div class="faq-category-header">
+                        <span class="faq-category-badge">SECTION 05</span>
+                        <h3>5. Real-World Applications & Housing</h3>
+                    </div>
+                    <div class="faq-accordion-list">
+                        <!-- Q11 -->
+                        <div class="faq-accordion-item" data-category="cat-5">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>How does housing work under IOUBI?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>IOUBI provides zero-interest, zero-down overdraft capacity to purchase up to 1–3 primary residences per family. Because corporate landlords and institutional investors must extract high profit margins and pay interest, they cannot compete with zero-interest homeownership.</p>
+                                    <p>Housing shifts from a speculative financial asset back to something used by its owner.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q12 -->
+                        <div class="faq-accordion-item" data-category="cat-5">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span>What happens when AI and automation eliminate traditional jobs?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Under IOUBI, automation is a blessing, not a threat. As AI drives production costs toward zero, goods become cheaper while the 1.4% transaction velocity fee continues to fully fund the daily living dividend.</p>
+                                    <p>Money ceases to be a scarce survival token and becomes like rainwater in a garden—an abundant tool used simply to connect human demand with automated abundance.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Results State -->
+                <div class="faq-no-results" id="faq-no-results">
+                    <p>No questions matched your search.</p>
+                    <small>Try searching for terms like "Deltar", "credit limit", "anti-whale", "insurance", or "housing".</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- 7. PROJECT ROADMAP & DEVELOPMENT PROGRESS                          -->
         <!-- =================================================================== -->
         <section id="roadmap" class="section-container">
             <div class="section-header">
@@ -1148,6 +1412,7 @@
             </div>
 
             <div class="footer-links">
+                <a href="#faq">Knowledge Base FAQ</a>
                 <a href="https://github.com/Researcher-guy/IOUBI-Web" target="_blank" rel="noopener">GitHub Repository</a>
                 <a href="javascript:void(0)">Discord Community</a>
                 <a href="javascript:void(0)">MIT / Open Source License</a>
