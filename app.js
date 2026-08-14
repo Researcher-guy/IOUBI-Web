@@ -826,7 +826,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stage === 'mid' && btnPresetMid) btnPresetMid.classList.add('active');
         if (stage === 'mature' && btnPresetMature) btnPresetMature.classList.add('active');
 
-        calculateCreditEngine();
+        // Programmatically dispatch 'input' events to update all readouts, labels, and charts
+        [sliderBaseCL, sliderSpend, sliderTrend, sliderActivity, sliderBackers, sliderDmin, sliderDmax, sliderUnusedSCL].forEach(slider => {
+            if (slider) slider.dispatchEvent(new Event('input'));
+        });
     }
 
     if (btnPresetEarly) btnPresetEarly.addEventListener('click', () => applyPreset('early'));
@@ -1076,7 +1079,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // coverage = (1 + S) * V * 0.0105 = 1 => V = 1 / ((1 + S) * 0.0105)
             const targetV = 1 / ((1 + supplyChainMultiplierInput) * 0.0105);
             sliderVelocity.value = Math.min(5.0, Math.max(0.005, targetV)).toFixed(3);
-            calculateMacroEngineV3();
+            sliderVelocity.dispatchEvent(new Event('input'));
         });
     }
 
@@ -1210,6 +1213,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 simDropdown.classList.add('open');
                 simDropdownBtn.setAttribute('aria-expanded', 'true');
             }
+            switchView('view-simulators', null);
         });
 
         // Close dropdown when clicking outside
@@ -1232,7 +1236,134 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 8. Roadmap Phase Milestone Nodes Tap / Click Handler (Mobile/Touch)
+    // 8. Master View-Switching Navigation (Single-DOM Tab Architecture)
+    // ----------------------------------------------------------------------
+    const viewRoutes = {
+        '#overview': { view: 'view-overview', anchor: null },
+        '#specs': { view: 'view-overview', anchor: 'specs' },
+        '#mechanics': { view: 'view-overview', anchor: 'mechanics' },
+        '#hero': { view: 'view-overview', anchor: 'hero' },
+        '#simulators': { view: 'view-simulators', anchor: null },
+        '#macro-balance-engine': { view: 'view-simulators', anchor: 'macro-balance-engine' },
+        '#credit-sim-card': { view: 'view-simulators', anchor: 'credit-sim-card' },
+        '#fee-calc-card': { view: 'view-simulators', anchor: 'fee-calc-card' },
+        '#docs': { view: 'view-docs', anchor: null },
+        '#faq': { view: 'view-faq', anchor: null },
+        '#roadmap': { view: 'view-roadmap', anchor: null }
+    };
+
+    function switchView(targetViewId, targetAnchorId) {
+        if (!targetViewId) targetViewId = 'view-overview';
+
+        // 1. Toggle view tab display classes
+        const viewTabs = document.querySelectorAll('.view-tab');
+        viewTabs.forEach(tab => {
+            if (tab.id === targetViewId) {
+                tab.classList.remove('hidden-view');
+                tab.classList.add('active-view');
+            } else {
+                tab.classList.remove('active-view');
+                tab.classList.add('hidden-view');
+            }
+        });
+
+        // 2. Update navigation active state
+        document.querySelectorAll('.nav-link, .dropdown-item, .footer-nav-grid a').forEach(link => {
+            const linkView = link.getAttribute('data-target-view');
+            if (linkView === targetViewId) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+
+        // 3. Highlight Simulators dropdown toggle if inside simulators
+        if (simDropdownBtn) {
+            if (targetViewId === 'view-simulators') {
+                simDropdownBtn.classList.add('active');
+            } else {
+                simDropdownBtn.classList.remove('active');
+            }
+        }
+
+        // 4. Update simulator jump pills active state if inside simulators view
+        if (targetViewId === 'view-simulators' && targetAnchorId) {
+            document.querySelectorAll('.sim-nav-pill').forEach(pill => {
+                const href = pill.getAttribute('href');
+                if (href === '#' + targetAnchorId) {
+                    pill.classList.add('active');
+                } else {
+                    pill.classList.remove('active');
+                }
+            });
+        }
+
+        // 5. Re-render charts and calculations when entering visible container
+        if (targetViewId === 'view-simulators') {
+            setTimeout(() => {
+                if (typeof window.calculateCreditEngine === 'function') window.calculateCreditEngine();
+                if (typeof window.calculateMacroEngineV3 === 'function') window.calculateMacroEngineV3();
+                if (typeof window.calculateFeeFormula === 'function') window.calculateFeeFormula();
+            }, 60);
+        }
+
+        // 6. Smooth scrolling
+        if (targetAnchorId) {
+            setTimeout(() => {
+                const anchorEl = document.getElementById(targetAnchorId);
+                if (anchorEl) {
+                    anchorEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }, 70);
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function handleHashNavigation() {
+        const hash = window.location.hash || '#overview';
+        const route = viewRoutes[hash] || { view: 'view-overview', anchor: null };
+        switchView(route.view, route.anchor);
+    }
+
+    // Attach click listeners to all tab links
+    document.querySelectorAll('.nav-tab-link, .sim-nav-pill').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const targetView = link.getAttribute('data-target-view');
+            const targetAnchor = link.getAttribute('data-target-anchor');
+            const href = link.getAttribute('href');
+
+            if (targetView) {
+                e.preventDefault();
+                switchView(targetView, targetAnchor);
+                if (targetAnchor) {
+                    window.history.pushState(null, '', '#' + targetAnchor);
+                } else if (href && href.startsWith('#')) {
+                    window.history.pushState(null, '', href);
+                }
+            } else if (href && href.startsWith('#')) {
+                const anchorName = href.replace('#', '');
+                for (const [rHash, rConfig] of Object.entries(viewRoutes)) {
+                    if (rHash === href || rConfig.anchor === anchorName) {
+                        e.preventDefault();
+                        switchView(rConfig.view, rConfig.anchor || anchorName);
+                        window.history.pushState(null, '', href);
+                        break;
+                    }
+                }
+            }
+        });
+    });
+
+    window.addEventListener('hashchange', handleHashNavigation);
+
+    // Initial View on load
+    handleHashNavigation();
+
+    // ----------------------------------------------------------------------
+    // 9. Roadmap Phase Milestone Nodes Tap / Click Handler (Mobile/Touch)
     // ----------------------------------------------------------------------
     const phaseNodes = document.querySelectorAll('.roadmap-phase-node');
     phaseNodes.forEach(node => {
@@ -1251,7 +1382,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ----------------------------------------------------------------------
-    // 9. Initial Simulator Runs & Resize Redraws
+    // 10. Initial Simulator Runs & Resize Redraws
     // ----------------------------------------------------------------------
     if (typeof window.calculateFeeFormula === 'function') {
         window.calculateFeeFormula();

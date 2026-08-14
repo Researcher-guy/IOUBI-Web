@@ -14,13 +14,18 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Background Animated Particle / Star Canvas Layer -->
+    <div id="canvas-bg-container">
+        <canvas id="bg-canvas"></canvas>
+    </div>
+
     <div class="site-wrapper">
         <!-- =================================================================== -->
         <!-- STICKY NAVIGATION HEADER                                            -->
         <!-- =================================================================== -->
         <header class="navbar" id="top-nav">
             <div class="nav-container">
-                <a href="#hero" class="brand-logo">
+                <a href="#overview" class="brand-logo nav-tab-link" data-target-view="view-overview">
                     <span class="deltar-font logo-deltar-char">&#xE002;</span>
                     <div class="brand-text">
                         <span class="brand-title">IOUBI</span>
@@ -29,28 +34,30 @@
                 </a>
 
                 <nav class="nav-links">
+                    <a href="#overview" class="nav-link nav-tab-link active" data-target-view="view-overview">Overview</a>
+
                     <!-- Simulators Dropdown -->
                     <div class="nav-dropdown" id="simulators-dropdown">
-                        <button type="button" class="nav-dropdown-toggle" id="sim-dropdown-btn" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="nav-dropdown-toggle nav-tab-link" id="sim-dropdown-btn" data-target-view="view-simulators" aria-haspopup="true" aria-expanded="false">
                             <span>Simulators</span>
                             <span class="dropdown-caret">▾</span>
                         </button>
                         <div class="nav-dropdown-menu" id="sim-dropdown-menu">
-                            <a href="#macro-balance-engine" class="dropdown-item">
+                            <a href="#macro-balance-engine" class="dropdown-item nav-tab-link" data-target-view="view-simulators" data-target-anchor="macro-balance-engine">
                                 <span class="dropdown-icon">⚡</span>
                                 <div class="dropdown-text">
                                     <strong>Macro-Economy & Dividend Engine</strong>
                                     <small>Compare status quo debt drag vs. IOUBI velocity equilibrium</small>
                                 </div>
                             </a>
-                            <a href="#credit-sim-card" class="dropdown-item">
+                            <a href="#credit-sim-card" class="dropdown-item nav-tab-link" data-target-view="view-simulators" data-target-anchor="credit-sim-card">
                                 <span class="dropdown-icon">📈</span>
                                 <div class="dropdown-text">
                                     <strong>Personal & Enterprise Credit Simulator</strong>
                                     <small>Explore PCL formulas, anti-whale rules & 24-mo runway</small>
                                 </div>
                             </a>
-                            <a href="#fee-calc-card" class="dropdown-item">
+                            <a href="#fee-calc-card" class="dropdown-item nav-tab-link" data-target-view="view-simulators" data-target-anchor="fee-calc-card">
                                 <span class="dropdown-icon">⚖️</span>
                                 <div class="dropdown-text">
                                     <strong>Progressive Transaction Fee Calculator</strong>
@@ -60,1189 +67,1206 @@
                         </div>
                     </div>
 
-                    <a href="#specs" class="nav-link">Specifications</a>
-                    <a href="#docs" class="nav-link">Docs</a>
-                    <a href="#faq" class="nav-link">FAQ</a>
-                    <a href="#roadmap" class="nav-link">Roadmap</a>
+                    <a href="#docs" class="nav-link nav-tab-link" data-target-view="view-docs">Docs</a>
+                    <a href="#faq" class="nav-link nav-tab-link" data-target-view="view-faq">FAQ</a>
+                    <a href="#roadmap" class="nav-link nav-tab-link" data-target-view="view-roadmap">Roadmap</a>
                 </nav>
 
                 <div class="nav-actions">
-                    <span class="status-badge"><span class="pulse-dot"></span> 2026 Core: 51.4% | Phase 5</span>
+                    <a href="#roadmap" class="status-badge nav-tab-link" data-target-view="view-roadmap" style="text-decoration: none; cursor: pointer;">
+                        <span class="pulse-dot"></span> 2026 Core: 51.4% | Phase 5
+                    </a>
                 </div>
             </div>
         </header>
 
         <!-- =================================================================== -->
-        <!-- 1. HERO SECTION                                                     -->
+        <!-- VIEW 1: OVERVIEW / HOME TAB                                         -->
         <!-- =================================================================== -->
-        <section id="hero" class="hero-section">
-            <div class="hero-glow-bg"></div>
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <span class="pulse-dot"></span> MATHEMATICALLY SOUND MONEY ARCHITECTURE
-                </div>
-                <h1 class="hero-title">
-                    Universal Basic Income via <span class="gradient-text">Zero-Interest Mutual Credit</span>
-                </h1>
-                <p class="hero-subtitle">
-                    IOUBI eliminates systemic interest, private bank money creation, and taxation drag by replacing debt-backed fiat with an algorithmic, velocity-driven mutual credit ledger.
-                </p>
-                <div class="hero-cta-group">
-                    <a href="#macro-balance-engine" class="btn btn-primary">
-                        <span>⚡ Launch Macroeconomic Simulator</span>
-                    </a>
-                    <a href="#docs" class="btn btn-secondary">
-                        <span>Read Technical Whitepaper</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================================================================== -->
-        <!-- 2. CORE SPECIFICATIONS (THE FIVE FUNDAMENTAL ACCOUNTING MECHANICS)  -->
-        <!-- =================================================================== -->
-        <section id="specs" class="section-container">
-            <div class="section-header">
-                <span class="section-tag">CORE SPECIFICATIONS</span>
-                <h2>The Five Fundamental Accounting Mechanics</h2>
-                <p class="section-desc">The immutable mathematical bedrock governing liquidity, solvency, velocity, and non-speculative capital formation.</p>
-            </div>
-
-            <div class="specs-grid">
-                <!-- Mechanic 1 -->
-                <div class="spec-card glass-panel">
-                    <div class="spec-num">01</div>
-                    <h3>Deltar (<span class="deltar-font">&#xE002;</span>) — Closed System Numeraire</h3>
-                    <p>A pure unit of account pegged to the median hourly wage of regional labor. Deltar is never mined, lent at interest, or extracted by centralized seigniorage.</p>
-                    <div class="spec-metric">
-                        <span class="metric-label">Peg Mechanism:</span>
-                        <span class="metric-val">1.00 <span class="deltar-font">&#xE002;</span> ≈ Global Normalized Living Floor</span>
+        <main class="view-tab active-view" id="view-overview">
+            <!-- 1. HERO SECTION -->
+            <section id="hero" class="hero-section">
+                <div class="hero-glow-bg"></div>
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="pulse-dot"></span> MATHEMATICALLY SOUND MONEY ARCHITECTURE
                     </div>
-                </div>
-
-                <!-- Mechanic 2 -->
-                <div class="spec-card glass-panel">
-                    <div class="spec-num">02</div>
-                    <h3>Personal Credit Limits (PCL)</h3>
-                    <p>Automated zero-interest overdraft lines granted to every verified human. Scaled continuously by regional cost of living, savings trend, and daily economic circulation.</p>
-                    <div class="spec-metric">
-                        <span class="metric-label">Base Overdraft Formula:</span>
-                        <span class="metric-val">PCL = (BaseCL × R) + (BaseCL × Trend × Activity)</span>
-                    </div>
-                </div>
-
-                <!-- Mechanic 3 -->
-                <div class="spec-card glass-panel">
-                    <div class="spec-num">03</div>
-                    <h3>Social Credit Limits (SCL) Crowdfunding</h3>
-                    <p>Enterprises cannot mint or borrow money from banks. Instead, individuals gift portions of their daily PCL allowance to trustworthy businesses, subject to strict anti-whale limits.</p>
-                    <div class="spec-metric">
-                        <span class="metric-label">Anti-Whale Rule:</span>
-                        <span class="metric-val">Min 25 Backers | D_max ≤ 4 × D_min</span>
-                    </div>
-                </div>
-
-                <!-- Mechanic 4 -->
-                <div class="spec-card glass-panel">
-                    <div class="spec-num">04</div>
-                    <h3>Logarithmic Progressive Velocity Fee</h3>
-                    <p>A micro-transaction fee (0.01% to 5.0%) calculated using the logarithmic balance scale of both parties. Larger balances pay proportionately higher fees, preventing hoarding.</p>
-                    <div class="spec-metric">
-                        <span class="metric-label">Mean Rate:</span>
-                        <span class="metric-val">1.40% Benchmark Equilibrium</span>
-                    </div>
-                </div>
-
-                <!-- Mechanic 5 -->
-                <div class="spec-card glass-panel">
-                    <div class="spec-num">05</div>
-                    <h3>Democratic Safety Net & Dividend Pools</h3>
-                    <p>100% of collected velocity fees flow directly into public utility and living dividend pools, distributed daily to citizens and community-approved public goods.</p>
-                    <div class="spec-metric">
-                        <span class="metric-label">Net Living Security:</span>
-                        <span class="metric-val">100% Guaranteed Living Cost Coverage</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================================================================== -->
-        <!-- 3. THE WHY AND WHAT: PAIRED DIMENSION COMPARISONS                    -->
-        <!-- =================================================================== -->
-        <section id="mechanics" class="section-container">
-            <div class="section-header">
-                <span class="section-tag">PARADIGM SHIFT</span>
-                <h2>The Why and What</h2>
-                <p class="section-desc">Direct architectural comparison between the debt-compound status quo and IOUBI's zero-interest mutual credit ledger.</p>
-            </div>
-
-            <div class="comparison-grid">
-                <!-- Row 1 -->
-                <div class="comp-card legacy-border">
-                    <div class="comp-badge legacy-badge">LEGACY DEBT MONEY</div>
-                    <h3>Interest-Bearing Fiat System</h3>
-                    <ul>
-                        <li><strong>Artificial Scarcity:</strong> Money is minted exclusively as bank debt carrying compound interest tribute (~6% overhead).</li>
-                        <li><strong>Systemic Fragility:</strong> Sluggish velocity (~1.2 turns/yr) requires massive capital debt supplies ($1.4M+ per capita).</li>
-                        <li><strong>Regressive Tax Extraction:</strong> 30%+ income & sales taxation to finance fragmented, bureaucratic welfare safety nets.</li>
-                    </ul>
-                </div>
-
-                <div class="comp-card ioubi-border">
-                    <div class="comp-badge ioubi-badge">IOUBI PROTOCOL</div>
-                    <h3>Zero-Interest Mutual Credit Engine</h3>
-                    <ul>
-                        <li><strong>Abundant Zero-Interest Liquidity:</strong> Money is created instantly at point-of-exchange through mutual credit clearing.</li>
-                        <li><strong>High-Velocity JIT Clearing:</strong> Rapid daily circulation (~1.35 turns/day) reduces required money supply to just ~Δ2,500.</li>
-                        <li><strong>Autonomous Living Dividend:</strong> A 1.4% velocity fee on commerce fully finances 100% of citizens' living floors without taxes.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================================================================== -->
-        <!-- 4. DOCUMENTATION HUB                                                -->
-        <!-- =================================================================== -->
-        <section id="docs" class="section-container">
-            <div class="section-header">
-                <span class="section-tag">KNOWLEDGE BASE</span>
-                <h2>The Documentation Hub</h2>
-                <p class="section-desc">Access official protocol literature, technical specifications, and foundational research papers.</p>
-            </div>
-
-            <div class="docs-grid">
-                <!-- Doc 1: ELI5 -->
-                <div class="doc-card glass-panel">
-                    <div class="doc-badge">BEGINNER GUIDE</div>
-                    <h3>IOUBI Explained in 7 Simple Steps (ELI5)</h3>
-                    <p>A visual, easy-to-understand breakdown of how zero-interest mutual credit restores purchasing power, eliminates inflation, and guarantees universal basic security.</p>
-                    <div class="doc-actions">
-                        <a href="IOUBI_ELI5.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary w-full">
-                            <span>📄 Download ELI5 Primer (PDF)</span>
+                    <h1 class="hero-title">
+                        Universal Basic Income via <span class="gradient-text">Zero-Interest Mutual Credit</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        IOUBI eliminates systemic interest, private bank money creation, and taxation drag by replacing debt-backed fiat with an algorithmic, velocity-driven mutual credit ledger.
+                    </p>
+                    <div class="hero-cta-group">
+                        <a href="#macro-balance-engine" class="btn btn-primary nav-tab-link" data-target-view="view-simulators" data-target-anchor="macro-balance-engine">
+                            <span>⚡ Launch Macroeconomic Simulator</span>
+                        </a>
+                        <a href="#docs" class="btn btn-secondary nav-tab-link" data-target-view="view-docs">
+                            <span>Read Technical Whitepaper</span>
                         </a>
                     </div>
                 </div>
+            </section>
 
-                <!-- Doc 2: Whitepaper -->
-                <div class="doc-card glass-panel">
-                    <div class="doc-badge">TECHNICAL SPEC</div>
-                    <h3>Protocol Whitepaper & Accounting Mechanics</h3>
-                    <p>The rigorous mathematical formalization of the five fundamental mechanics, state transition matrices, and distributed consensus proofs.</p>
-                    <div class="doc-actions">
-                        <a href="Key Specifications_ The Five Fundamental Accounting Mechanics.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full">
-                            <span>📄 View Accounting Specs (PDF)</span>
-                        </a>
-                    </div>
+            <!-- 2. CORE SPECIFICATIONS (THE FIVE FUNDAMENTAL ACCOUNTING MECHANICS) -->
+            <section id="specs" class="section-container">
+                <div class="section-header">
+                    <span class="section-tag">CORE SPECIFICATIONS</span>
+                    <h2>The Five Fundamental Accounting Mechanics</h2>
+                    <p class="section-desc">The immutable mathematical bedrock governing liquidity, solvency, velocity, and non-speculative capital formation.</p>
                 </div>
 
-                <!-- Doc 3: Healing Money -->
-                <div class="doc-card glass-panel">
-                    <div class="doc-badge">FOUNDATIONAL BOOK</div>
-                    <h3>"Healing Money" by Todd McKissick</h3>
-                    <p>The definitive socio-economic treatise diagnosing why compound interest inevitably centralizes power, and how mutual credit heals modern society.</p>
-                    <div class="doc-actions">
-                        <a href="HEALING MONEY.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full">
-                            <span>📖 Read Healing Money (PDF)</span>
-                        </a>
+                <div class="specs-grid">
+                    <!-- Mechanic 1 -->
+                    <div class="spec-card glass-panel">
+                        <div class="spec-num">01</div>
+                        <h3>Deltar (<span class="deltar-font">&#xE002;</span>) — Closed System Numeraire</h3>
+                        <p>A pure unit of account pegged to the median hourly wage of regional labor. Deltar is never mined, lent at interest, or extracted by centralized seigniorage.</p>
+                        <div class="spec-metric">
+                            <span class="metric-label">Peg Mechanism:</span>
+                            <span class="metric-val">1.00 <span class="deltar-font">&#xE002;</span> ≈ Global Normalized Living Floor</span>
+                        </div>
+                    </div>
+
+                    <!-- Mechanic 2 -->
+                    <div class="spec-card glass-panel">
+                        <div class="spec-num">02</div>
+                        <h3>Personal Credit Limits (PCL)</h3>
+                        <p>Automated zero-interest overdraft lines granted to every verified human. Scaled continuously by regional cost of living, savings trend, and daily economic circulation.</p>
+                        <div class="spec-metric">
+                            <span class="metric-label">Base Overdraft Formula:</span>
+                            <span class="metric-val">PCL = (BaseCL × R) + (BaseCL × Trend × Activity)</span>
+                        </div>
+                    </div>
+
+                    <!-- Mechanic 3 -->
+                    <div class="spec-card glass-panel">
+                        <div class="spec-num">03</div>
+                        <h3>Social Credit Limits (SCL) Crowdfunding</h3>
+                        <p>Enterprises cannot mint or borrow money from banks. Instead, individuals gift portions of their daily PCL allowance to trustworthy businesses, subject to strict anti-whale limits.</p>
+                        <div class="spec-metric">
+                            <span class="metric-label">Anti-Whale Rule:</span>
+                            <span class="metric-val">Min 25 Backers | D_max ≤ 4 × D_min</span>
+                        </div>
+                    </div>
+
+                    <!-- Mechanic 4 -->
+                    <div class="spec-card glass-panel">
+                        <div class="spec-num">04</div>
+                        <h3>Logarithmic Progressive Velocity Fee</h3>
+                        <p>A micro-transaction fee (0.01% to 5.0%) calculated using the logarithmic balance scale of both parties. Larger balances pay proportionately higher fees, preventing hoarding.</p>
+                        <div class="spec-metric">
+                            <span class="metric-label">Mean Rate:</span>
+                            <span class="metric-val">1.40% Benchmark Equilibrium</span>
+                        </div>
+                    </div>
+
+                    <!-- Mechanic 5 -->
+                    <div class="spec-card glass-panel">
+                        <div class="spec-num">05</div>
+                        <h3>Democratic Safety Net & Dividend Pools</h3>
+                        <p>100% of collected velocity fees flow directly into public utility and living dividend pools, distributed daily to citizens and community-approved public goods.</p>
+                        <div class="spec-metric">
+                            <span class="metric-label">Net Living Security:</span>
+                            <span class="metric-val">100% Guaranteed Living Cost Coverage</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <!-- 3. THE WHY AND WHAT: PAIRED DIMENSION COMPARISONS -->
+            <section id="mechanics" class="section-container">
+                <div class="section-header">
+                    <span class="section-tag">PARADIGM SHIFT</span>
+                    <h2>The Why and What</h2>
+                    <p class="section-desc">Direct architectural comparison between the debt-compound status quo and IOUBI's zero-interest mutual credit ledger.</p>
+                </div>
+
+                <div class="comparison-grid">
+                    <!-- Legacy Card -->
+                    <div class="comp-card legacy-border">
+                        <div class="comp-badge legacy-badge">LEGACY DEBT MONEY</div>
+                        <h3>Interest-Bearing Fiat System</h3>
+                        <ul>
+                            <li><strong>Artificial Scarcity:</strong> Money is minted exclusively as bank debt carrying compound interest tribute (~6% overhead).</li>
+                            <li><strong>Systemic Fragility:</strong> Sluggish velocity (~1.2 turns/yr) requires massive capital debt supplies ($1.4M+ per capita).</li>
+                            <li><strong>Regressive Tax Extraction:</strong> 30%+ income & sales taxation to finance fragmented, bureaucratic welfare safety nets.</li>
+                        </ul>
+                    </div>
+
+                    <!-- IOUBI Card -->
+                    <div class="comp-card ioubi-border">
+                        <div class="comp-badge ioubi-badge">IOUBI PROTOCOL</div>
+                        <h3>Zero-Interest Mutual Credit Engine</h3>
+                        <ul>
+                            <li><strong>Abundant Zero-Interest Liquidity:</strong> Money is created instantly at point-of-exchange through mutual credit clearing.</li>
+                            <li><strong>High-Velocity JIT Clearing:</strong> Rapid daily circulation (~1.35 turns/day) reduces required money supply to just ~Δ2,500.</li>
+                            <li><strong>Autonomous Living Dividend:</strong> A 1.4% velocity fee on commerce fully finances 100% of citizens' living floors without taxes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
 
         <!-- =================================================================== -->
-        <!-- 5. INTERACTIVE SIMULATORS                                           -->
+        <!-- VIEW 2: INTERACTIVE SIMULATORS TAB                                  -->
         <!-- =================================================================== -->
-        <section id="simulators" class="section-container">
-            <div class="section-header">
-                <span class="section-tag">PROOF-OF-MATH SANDBOX</span>
-                <h2>Interactive Simulators</h2>
-                <p class="section-desc">Test protocol parameters, logarithmic balance fee scaling, enterprise crowdfunding, and macroeconomic dividend clearing in real time.</p>
-            </div>
-
-            <!-- Simulator 1: Progressive Transaction Fee Calculator -->
-            <div class="sandbox-card glass-panel" id="fee-calc-card" style="margin-bottom: 2.5rem;">
-                <div class="tool-header">
-                    <h2>Progressive Transaction Fee Calculator</h2>
-                </div>
-                <p class="tool-desc">Calculates the dynamic velocity fee percentage based on the logarithmic balance scale of both parties.</p>
-
-                <div class="sim-form">
-                    <div class="two-col-inputs">
-                        <div class="form-group">
-                            <label for="input-bal-a">Payor Account's Balance:</label>
-                            <input type="number" id="input-bal-a" value="1250" min="0" max="100000" step="10">
-                            <input type="range" id="slider-bal-a" min="0" max="100000" value="1250" step="10" class="balance-slider">
-                            <div class="fee-contrib-badge" id="contrib-a">Fee contribution: 3.10%</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="input-bal-b">Payee Account's Balance:</label>
-                            <input type="number" id="input-bal-b" value="300" min="0" max="100000" step="10">
-                            <input type="range" id="slider-bal-b" min="0" max="100000" value="300" step="10" class="balance-slider">
-                            <div class="fee-contrib-badge" id="contrib-b">Fee contribution: 2.48%</div>
-                        </div>
-                    </div>
-
-                    <div class="average-fee-box">
-                        <div class="average-fee-title">Average Fee For Transaction</div>
-                        <div class="average-fee-value" id="res-rate">2.79%</div>
-                        <div class="average-fee-formula">Fee % = average(log10(max(10, Balance₁)), log10(max(10, Balance₂))) / 100</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-conversion-rate">Set your time's value. <small class="hint-inline">For viewing prices in your personal time.</small></label>
-                        <div class="input-suffix-group">
-                            <input type="number" id="input-conversion-rate" value="20" min="0.01" max="10000" step="1">
-                            <span class="input-suffix"><span class="deltar-font">&#xE002;</span> / hr</span>
-                        </div>
-                        <input type="range" id="slider-conversion-rate" min="0" max="1000" value="498" step="1" class="balance-slider">
-                        <div class="salary-tier-badge" id="salary-tier-info">
-                            <span class="tier-tag">Benchmark:</span> <strong id="tier-name">Global Average / Median Income</strong> (~<span class="deltar-font">&#xE002;</span>40,000/yr)
-                        </div>
-                    </div>
-
-                    <div class="two-col-inputs">
-                        <div class="form-group">
-                            <label for="input-tx-amount">Transaction Payment In Deltars (<span class="deltar-font">&#xE002;</span>):</label>
-                            <input type="number" id="input-tx-amount" value="50" min="0" step="5">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Price Valued In Your Time:</label>
-                            <div class="time-equiv-badge-box" id="tx-time-equiv">2 hrs 30 mins</div>
-                        </div>
-                    </div>
-
-                    <div class="calc-results-box" id="calc-result">
-                        <div class="unified-table-box">
-                            <div class="unified-table-header">Fee Charged on this transaction</div>
-                            <div class="unified-table-container">
-                                <table class="unified-fee-table">
-                                    <thead>
-                                        <tr>
-                                            <th class="col-metric">Item</th>
-                                            <th>Deltars</th>
-                                            <th>Your Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="row-label">Paid</td>
-                                            <td id="tbl-paid" class="val-deltars">50.000</td>
-                                            <td id="tbl-paid-time" class="val-time">2 hrs 30 mins</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="row-label">Fee</td>
-                                            <td id="tbl-fee" class="val-deltars">1.394</td>
-                                            <td id="tbl-fee-time" class="val-time">4.18 mins</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="row-label">Received</td>
-                                            <td id="tbl-received" class="val-deltars">48.606</td>
-                                            <td id="tbl-received-time" class="val-time">2 hrs 25 mins</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="pool-allocation-breakdown">
-                            <div class="pool-allocation-header">Where this transaction's fee goes:</div>
-                            <div class="pool-grid">
-                                <div class="pool-card">
-                                    <div class="pool-label">Living Dividend Pool (50%)</div>
-                                    <div class="pool-val" id="pool-dividend"><span class="deltar-font">&#xE002;</span>0.697</div>
-                                    <div class="pool-time" id="pool-dividend-time">2.09 mins of work</div>
-                                </div>
-                                <div class="pool-card">
-                                    <div class="pool-label">Public Goods Pool (50%)</div>
-                                    <div class="pool-val" id="pool-public"><span class="deltar-font">&#xE002;</span>0.697</div>
-                                    <div class="pool-time" id="pool-public-time">2.09 mins of work</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Simulator 2: Personal & Enterprise Credit Simulator -->
-            <div class="sandbox-card glass-panel credit-sim-card" id="credit-sim-card" style="margin-bottom: 2.5rem;">
-                <div class="tool-header">
-                    <h2>Personal & Enterprise Credit Simulator</h2>
-                </div>
-                <p class="tool-desc">See how personal activity generates zero-interest credit and how community consensus funds enterprise growth.</p>
-
-                <!-- Stage Preset Switch -->
-                <div class="stage-preset-bar">
-                    <button type="button" class="stage-btn active" id="btn-preset-early">Early Stage</button>
-                    <button type="button" class="stage-btn" id="btn-preset-mid">Mid Stage</button>
-                    <button type="button" class="stage-btn" id="btn-preset-mature">Mature Stage</button>
+        <main class="view-tab hidden-view" id="view-simulators">
+            <section id="simulators" class="section-container">
+                <div class="section-header">
+                    <span class="section-tag">PROOF-OF-MATH SANDBOX</span>
+                    <h2>Interactive Simulators</h2>
+                    <p class="section-desc">Test protocol parameters, logarithmic balance fee scaling, enterprise crowdfunding, and macroeconomic dividend clearing in real time.</p>
                 </div>
 
-                <div class="credit-sim-content">
-                    <!-- TIER 1: Personal Credit Limit (PCL) Inputs -->
-                    <div class="sim-subpanel tier-panel tier-1-panel">
-                        <div class="tier-panel-header">
-                            <span class="tier-badge emerald-badge">TIER 1</span>
-                            <h3>Personal Credit Limit (PCL) Mechanics</h3>
+                <!-- Simulator Jump Navigation Bar -->
+                <div class="simulator-nav-bar">
+                    <a href="#macro-balance-engine" class="sim-nav-pill active">⚡ Macro-Economy & Dividend Engine</a>
+                    <a href="#credit-sim-card" class="sim-nav-pill">📈 Personal & Enterprise Credit Simulator</a>
+                    <a href="#fee-calc-card" class="sim-nav-pill">⚖️ Progressive Transaction Fee Calculator</a>
+                </div>
+
+                <!-- SIMULATOR 1: Macroeconomic Balance & Dividend Engine -->
+                <div class="sandbox-card glass-panel span-full macro-engine-card" id="macro-balance-engine" style="margin-bottom: 3rem;">
+                    <!-- Block 1: Header & Shared Inputs -->
+                    <div class="macro-header-panel">
+                        <div class="tool-header">
+                            <h2>Macroeconomic Balance & Dividend Engine</h2>
                         </div>
+                        <p class="tool-desc">Compare how today's debt-backed system fares against a 1.4% zero-interest velocity fee.</p>
 
-                        <div class="sim-ctrl-group">
-                            <!-- 1. Global Credit Floor -->
-                            <div class="sim-ctrl-item">
+                        <div class="macro-controls-single-col">
+                            <!-- Control 1: Target Cost of Living -->
+                            <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-basecl">Global Credit Floor (Set By Inequality):</label>
-                                    <span class="ctrl-val-badge emerald" id="val-basecl"><span class="deltar-font">&#xE002;</span>2,000</span>
+                                    <label for="slider-living-cost">Target Cost of Living:</label>
+                                    <span class="ctrl-val-badge" id="val-living-cost">$24,000 / yr <small>($65.75 / day)</small></span>
                                 </div>
-                                <div class="sim-slider-wrapper">
-                                    <input type="range" id="slider-basecl" min="2000" max="50000" value="2000" step="500" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
-                                    <div class="sim-floating-tier" id="desc-basecl">
-                                        <span class="tier-main" id="desc-basecl-main"><span class="deltar-font">&#xE002;</span> 2,000</span> <span class="tier-desc" id="desc-basecl-desc">(Low Inequality System Minimum Floor)</span>
+                                <div class="macro-slider-wrapper">
+                                    <input type="range" id="slider-living-cost" min="12000" max="48000" value="24000" step="1000" class="balance-slider">
+                                    <div class="macro-floating-tier" id="tier-living-cost">
+                                        <span class="tier-main" id="tier-living-cost-name">Median Developed Living</span> <span class="tier-desc" id="tier-living-cost-desc">(Essential Stability & Healthcare)</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 2. Regional Cost of Living -->
-                            <div class="sim-ctrl-item">
+                            <!-- Control 2: Commercial Economy to Personal Economy Size Ratio -->
+                            <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-spend">Regional Cost of Living (National Daily Spending):</label>
-                                    <span class="ctrl-val-badge emerald" id="val-spend">1.00x</span>
+                                    <label for="slider-supply-chain">Commercial Economy to Personal Economy Size Ratio: <small class="ctrl-subtitle">(How big is the commercial economy compared to the individual economy)</small></label>
+                                    <span class="ctrl-val-badge" id="val-supply-chain">70 : 1</span>
                                 </div>
-                                <div class="sim-slider-wrapper">
-                                    <input type="range" id="slider-spend" min="2" max="10" value="5" step="1" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
-                                    <div class="sim-floating-tier" id="desc-spend">
-                                        <span class="tier-main" id="desc-spend-main"><span class="deltar-font">&#xE002;</span> 5</span> <span class="tier-desc" id="desc-spend-desc">(Global Baseline Average)</span>
+                                <div class="macro-slider-wrapper">
+                                    <input type="range" id="slider-supply-chain" min="1" max="100" value="70" step="1" class="balance-slider">
+                                    <div class="macro-floating-tier" id="tier-supply-chain">
+                                        <span class="tier-main" id="tier-supply-chain-name">Deep Modern Supply Chain</span> <span class="tier-desc" id="tier-supply-chain-desc">(Global Multi-Tier Distribution, 70:1)</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 3. Balance Trend -->
-                            <div class="sim-ctrl-item">
+                            <!-- Control 3: Circulation Speed (Velocity) -->
+                            <div class="macro-ctrl-item">
                                 <div class="ctrl-label-row">
-                                    <label for="slider-trend">Balance Trend (Median Day of Recent Quarter):</label>
-                                    <span class="ctrl-val-badge emerald" id="val-trend">2.0x</span>
+                                    <label for="slider-velocity">Circulation Speed (Velocity):</label>
+                                    <span class="ctrl-val-badge cyan" id="val-velocity">1.350 turns/day (493 turns/yr)</span>
                                 </div>
-                                <div class="sim-slider-wrapper">
-                                    <input type="range" id="slider-trend" min="1.0" max="100.0" value="2.0" step="0.5" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
-                                    <div class="sim-floating-tier" id="desc-trend">
-                                        <span class="tier-main" id="desc-trend-main">Steady Positive Trend</span> <span class="tier-desc" id="desc-trend-desc">(Consistent Earning & Savings)</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 4. Daily Transaction Count -->
-                            <div class="sim-ctrl-item">
-                                <div class="ctrl-label-row">
-                                    <label for="slider-activity">Daily Transaction Count:</label>
-                                    <span class="ctrl-val-badge emerald" id="val-activity">2.0x</span>
-                                </div>
-                                <div class="sim-slider-wrapper">
-                                    <input type="range" id="slider-activity" min="1.0" max="2.0" value="2.0" step="0.1" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
-                                    <div class="sim-floating-tier" id="desc-activity">
-                                        <span class="tier-main" id="desc-activity-main">High Daily Circulation</span> <span class="tier-desc" id="desc-activity-desc">(6+ transactions/day — 2.0x Max)</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 5. Accumulated Unused SCL Balance -->
-                            <div class="sim-ctrl-item">
-                                <div class="ctrl-label-row">
-                                    <label for="slider-unused-scl">Accumulated Unused SCL Balance:</label>
-                                    <span class="ctrl-val-badge emerald" id="val-unused-scl"><span class="deltar-font">&#xE002;</span>20,000</span>
-                                </div>
-                                <div class="sim-slider-wrapper">
-                                    <input type="range" id="slider-unused-scl" min="0" max="20000" value="10000" step="500" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
-                                    <div class="sim-floating-tier" id="desc-unused-scl">
-                                        <span class="tier-main" id="desc-unused-scl-main">Standard Unspent Balance</span> <span class="tier-desc" id="desc-unused-scl-desc">(Active Reserve)</span>
+                                <div class="macro-slider-wrapper">
+                                    <input type="range" id="slider-velocity" min="0.005" max="5.0" value="1.35" step="0.005" class="balance-slider cyan-slider">
+                                    <div class="macro-floating-tier" id="tier-velocity">
+                                        <span class="tier-main" id="tier-velocity-name">IOUBI Full Equilibrium</span> <span class="tier-desc" id="tier-velocity-desc">(Healthy Daily JIT Clearing)</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Tier 1 Output Card (Emerald Accents) -->
-                        <div class="tier-output-card emerald-card">
-                            <div class="output-stat">
-                                <div class="stat-label-col">
-                                    <span class="stat-label">Calculated Personal Credit Limit (PCL):</span>
-                                    <div class="pcl-formula-subtitle" id="out-pcl-formula">(2,000 × 1.0) + (2,000 × 2.0 × 2.0)</div>
+                        <!-- Primary Action Button -->
+                        <div class="macro-solve-action-bar">
+                            <button type="button" id="btn-solve-coverage" class="btn btn-primary solve-btn">
+                                <span>⚡ SOLVE VELOCITY FOR 100% COVERAGE</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Block 2: Side-by-Side Comparison Grid -->
+                    <div class="macro-dual-grid">
+                        <!-- LEFT CARD: Status Quo -->
+                        <div class="macro-card legacy-card">
+                            <div class="macro-card-tag legacy-tag">Status Quo | High Interest Drag | Slow Velocity</div>
+                            <h3 class="macro-card-title">Status Quo (Legacy Debt & Tax System)</h3>
+
+                            <!-- Progress Bar Above Value Display Boxes -->
+                            <div class="macro-progress-container legacy-progress-box">
+                                <div class="progress-label-row">
+                                    <span>Net Tax Cost For Safety Net:</span>
+                                    <strong class="red-text" id="legacy-coverage-text">-$19.57/day (-29.8% Net Tax Drain)</strong>
                                 </div>
-                                <strong class="stat-value emerald-text" id="out-pcl"><span class="deltar-font">&#xE002;</span>10,000</strong>
+                                <div class="progress-track">
+                                    <div class="progress-fill legacy-fill" id="legacy-progress-fill" style="width: 30%;"></div>
+                                </div>
+                                <div class="progress-scale-labels">
+                                    <span>$0 (Break-Even)</span>
+                                    <span class="marker-drain">-30% Average Tax Drain</span>
+                                    <span>-50% Max Tax Drag</span>
+                                </div>
                             </div>
-                            <div class="output-subgrid">
-                                <div class="sub-stat">
-                                    <span>Daily SCL Accrual Rate:</span>
-                                    <strong id="out-scl-rate"><span class="deltar-font">&#xE002;</span>27.4/day</strong>
+
+                            <div class="macro-metrics-block">
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Real Cost of Living:</span>
+                                        <small class="metric-subtext" id="legacy-col-subtext">Includes 40.0% compound interest overhead across 70 supply chain steps.</small>
+                                    </div>
+                                    <div class="metric-value legacy-val" id="legacy-daily-cost">$65.75/day</div>
                                 </div>
-                                <div class="sub-stat">
-                                    <span>Available SCL to Gift:</span>
-                                    <strong id="out-avail-scl"><span class="deltar-font">&#xE002;</span>10,000</strong>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Net Daily Payout:</span>
+                                        <small class="metric-subtext">Taxes extracted (~30% income & sales) minus fragmented welfare.</small>
+                                    </div>
+                                    <div class="metric-value legacy-val red-text" id="legacy-net-payout">-$19.57/day</div>
+                                </div>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Money Supply:</span>
+                                        <small class="metric-subtext">Total debt capital required to mediate trade at 1.2 turns/year.</small>
+                                    </div>
+                                    <div class="metric-value legacy-val" id="legacy-money-supply">$1,420,000</div>
+                                </div>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Systemic Interest Overhead:</span>
+                                        <small class="metric-subtext">Annual 6.0% interest tribute paid to banks to keep money in existence.</small>
+                                    </div>
+                                    <div class="metric-value legacy-val red-text" id="legacy-interest-cost">$233.42/day</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT CARD: IOUBI System -->
+                        <div class="macro-card ioubi-card">
+                            <div class="macro-card-tag ioubi-tag">IOUBI System | Zero Interest | Velocity Driven</div>
+                            <h3 class="macro-card-title">IOUBI Protocol (Mutual Credit Engine)</h3>
+
+                            <!-- Progress Bar Above Value Display Boxes -->
+                            <div class="macro-progress-container ioubi-progress-box">
+                                <div class="progress-label-row">
+                                    <span>Coverage of Living Needs:</span>
+                                    <strong class="emerald-text" id="ioubi-coverage-text">100.7% Covered</strong>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill ioubi-fill" id="ioubi-progress-fill" style="width: 33.6%;"></div>
+                                    <div class="marker-100-line" title="100% Full Living Floor"></div>
+                                </div>
+                                <div class="progress-scale-labels">
+                                    <span>0%</span>
+                                    <span class="marker-100">100% (Full Living Floor)</span>
+                                    <span>300% (Abundance)</span>
+                                </div>
+                            </div>
+
+                            <div class="macro-metrics-block">
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Real Cost of Living:</span>
+                                        <small class="metric-subtext">Zero interest markup! Products cost 40.0% less at checkout.</small>
+                                    </div>
+                                    <div class="metric-value ioubi-val" id="ioubi-daily-cost"><span class="deltar-font">&#xE002;</span>39.45/day</div>
+                                </div>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Net Daily Living Dividend:</span>
+                                        <small class="metric-subtext">Velocity fee pool automatically covers 100.7% of daily living needs.</small>
+                                    </div>
+                                    <div class="metric-value ioubi-val emerald-text" id="ioubi-net-dividend">+<span class="deltar-font">&#xE002;</span>39.73/day</div>
+                                </div>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Money Supply:</span>
+                                        <small class="metric-subtext">Just-In-Time clearing at 1.350 turns/day reduces money supply by 99.8%!</small>
+                                    </div>
+                                    <div class="metric-value ioubi-val" id="ioubi-money-supply"><span class="deltar-font">&#xE002;</span>2,075</div>
+                                </div>
+
+                                <div class="macro-metric-row">
+                                    <div class="metric-info">
+                                        <span class="metric-label">Systemic Interest Overhead:</span>
+                                        <small class="metric-subtext">Zero interest forever. No banking tribute. Capital remains with producers.</small>
+                                    </div>
+                                    <div class="metric-value ioubi-val emerald-text" id="ioubi-interest-cost"><span class="deltar-font">&#xE002;</span>0.00/day</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- TIER 2: Enterprise Crowdfunding Inputs (Anti-Whale Rules) -->
-                    <div class="sim-subpanel tier-panel tier-2-panel">
-                        <div class="tier-panel-header">
-                            <span class="tier-badge cyan-badge">TIER 2</span>
-                            <h3>Enterprise Crowdfunding (Anti-Whale Protocol)</h3>
-                        </div>
-
-                        <div class="sim-ctrl-group">
-                            <!-- 1. Community Backers -->
-                            <div class="sim-ctrl-item">
-                                <div class="ctrl-label-row">
-                                    <label for="slider-backers">Community Backers (Min 25):</label>
-                                    <span class="ctrl-val-badge emerald" id="val-backers">25 Backers</span>
-                                </div>
-                                <div class="sim-slider-wrapper">
-                                    <input type="range" id="slider-backers" min="25" max="500" value="25" step="1" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
-                                    <div class="sim-floating-tier" id="desc-backers">
-                                        <span class="tier-main" id="desc-backers-main">25 Backers</span> <span class="tier-desc" id="desc-backers-desc">(Minimum Required Group Size)</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 2. Smallest Donor SCL Gift -->
-                            <div class="sim-ctrl-item">
-                                <div class="ctrl-label-row">
-                                    <label for="slider-dmin">Smallest Donor SCL Gift (D_min):</label>
-                                    <span class="ctrl-val-badge emerald" id="val-dmin"><span class="deltar-font">&#xE002;</span>2,000</span>
-                                </div>
-                                <div class="sim-slider-wrapper">
-                                    <input type="range" id="slider-dmin" min="500" max="20000" value="2000" step="500" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
-                                    <div class="sim-floating-tier" id="desc-dmin">
-                                        <span class="tier-main" id="desc-dmin-main"><span class="deltar-font">&#xE002;</span> 2,000</span> <span class="tier-desc" id="desc-dmin-desc">(Micro Supporter Base)</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 3. Largest Donor SCL Gift -->
-                            <div class="sim-ctrl-item">
-                                <div class="ctrl-label-row">
-                                    <label for="slider-dmax">Largest Donor SCL Gift (D_max ≤ 4 × D_min):</label>
-                                    <span class="ctrl-val-badge emerald" id="val-dmax"><span class="deltar-font">&#xE002;</span>8,000</span>
-                                </div>
-                                <div class="sim-slider-wrapper">
-                                    <input type="range" id="slider-dmax" min="2000" max="8000" value="8000" step="500" class="balance-slider emerald-slider" oninput="window.calculateCreditEngine && window.calculateCreditEngine()">
-                                    <div class="sim-floating-tier" id="desc-dmax">
-                                        <span class="tier-main" id="desc-dmax-main">4.0x Max Allowed Spread</span> <span class="tier-desc" id="desc-dmax-desc">(Anti-Whale Rule Limit)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tier 2 Output Card (Cyan Accents) -->
-                        <div class="tier-output-card cyan-card">
-                            <div class="output-stat">
-                                <span class="stat-label">Unlocked Enterprise Credit Line:</span>
-                                <strong class="stat-value cyan-text glow-text" id="out-biz-credit"><span class="deltar-font">&#xE002;</span>125,000</strong>
-                            </div>
-                            <div class="consensus-status-badge" id="out-consensus-status">
-                                ✓ Compliant (Min 25 Backers | Max Gift ≤ 4x Min Gift)
-                            </div>
-                        </div>
+                    <!-- Block 3: Dynamic Macro Equilibrium Banner -->
+                    <div class="macro-outcome-banner" id="macro-outcome-banner">
+                        ⚡ Perfect Macro-Equilibrium Achieved: At 1.350 turns/day, the 1.4% transaction fee on 70 commercial steps fully finances 100.7% of citizens' living floors without taxes.
                     </div>
 
-                    <!-- 24-Month Credit & Overdraft Runway Chart -->
-                    <div class="sim-subpanel chart-panel">
-                        <div class="chart-panel-header">
-                            <h3>24-Month Credit & Overdraft Runway</h3>
-                            <div class="chart-legend">
-                                <span class="legend-item"><span class="legend-dot cyan-dot"></span> SCL Credit Ceiling (Stepped Decay & Refresh)</span>
-                                <span class="legend-item"><span class="legend-dot amber-dot"></span> Enterprise Overdraft Utilization</span>
+                    <!-- Block 4: Inspect the Plumbing -->
+                    <div class="macro-plumbing-wrapper">
+                        <button type="button" class="plumbing-toggle-btn" id="btn-toggle-plumbing" aria-expanded="false">
+                            <span class="toggle-icon">▸</span>
+                            <strong>Inspect the Plumbing (Step-by-Step Mathematical Verification)</strong>
+                        </button>
+                        
+                        <div class="plumbing-drawer" id="macro-plumbing-drawer">
+                            <div class="plumbing-content-grid">
+                                <div class="plumbing-card">
+                                    <h4>1. Legacy System Constants & Assumptions</h4>
+                                    <ul>
+                                        <li><strong>Target Living Standard:</strong> <span id="plum-raw-cost">$24,000.00</span>/yr ($<span id="plum-raw-daily">65.75</span>/day)</li>
+                                        <li><strong>Supply Chain Depth:</strong> <span id="plum-supply-chain">70</span> commercial steps per personal purchase</li>
+                                        <li><strong>Commercial-to-Personal Ratio:</strong> <span id="plum-comm-ratio">70</span>:1</li>
+                                        <li><strong>Annual Velocity ($V_{annual}$):</strong> 1.2 turns per year (Status Quo benchmark)</li>
+                                        <li><strong>Interest Cost:</strong> 6.0% annual weighted average carrying cost on debt capital</li>
+                                        <li><strong>Net Tax Drag:</strong> -29.8% average tax drain for welfare and public overhead</li>
+                                    </ul>
+                                </div>
+
+                                <div class="plumbing-card">
+                                    <h4>2. Status Quo Derived Metrics</h4>
+                                    <ul>
+                                        <li><strong>Total Daily Spending ($E_{total}$):</strong> <span id="plum-legacy-total-spend">$4,668.49</span>/day</li>
+                                        <li><strong>Required Money Supply ($M_{legacy}$):</strong> <span id="plum-legacy-ms">$1,420,000.00</span></li>
+                                        <li><strong>Daily Interest Tribute:</strong> <span id="plum-legacy-int">$233.42</span>/day ($85,200.00/yr per capita)</li>
+                                        <li><strong>Net Daily Welfare Payout:</strong> <span id="plum-legacy-net">-$19.57</span>/day (Citizens are net tax-negative)</li>
+                                    </ul>
+                                </div>
+
+                                <div class="plumbing-card">
+                                    <h4>3. IOUBI Engine Transformations</h4>
+                                    <ul>
+                                        <li><strong>Zero Interest Effect:</strong> Cost of living drops from $<span id="plum-raw-daily-2">65.75</span> to <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-col">39.45</span>/day</li>
+                                        <li><strong>Daily Velocity ($V_{daily}$):</strong> <span id="plum-ioubi-v">1.350</span> turns/day (<span id="plum-ioubi-v-yr">493</span> turns/year)</li>
+                                        <li><strong>Total Daily Spending ($E_{total}$):</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-total-spend">2,801.10</span>/day</li>
+                                        <li><strong>Required Money Supply ($M_{IOUBI}$):</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-ms">2,074.89</span> (Money supply down by 99.8%)</li>
+                                        <li><strong>Daily Fee Pool Collected (1.4%):</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-fee-pool">39.22</span>/day</li>
+                                        <li><strong>Daily Living Dividend Distributed:</strong> +<span class="deltar-font">&#xE002;</span><span id="plum-ioubi-net-div">39.73</span>/day</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class="runway-canvas-container">
-                            <canvas id="credit-runway-canvas" width="600" height="240"></canvas>
-                        </div>
-                        <div class="runway-summary-text">
-                            Demonstrates the 25% quarterly decay of donated SCL limits alongside a 6 month community backing renewal.
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Simulator 3: Macroeconomic Balance & Dividend Engine -->
-            <div class="sandbox-card glass-panel span-full macro-engine-card" id="macro-balance-engine">
-                <!-- Block 1: Header & Shared Inputs (Full-Width Top Panel) -->
-                <div class="macro-header-panel">
+                <!-- SIMULATOR 2: Personal & Enterprise Credit Simulator -->
+                <div class="sandbox-card glass-panel credit-sim-card" id="credit-sim-card" style="margin-bottom: 3rem;">
                     <div class="tool-header">
-                        <h2>Macroeconomic Balance & Dividend Engine</h2>
+                        <h2>Personal & Enterprise Credit Simulator</h2>
                     </div>
-                    <p class="tool-desc">Compare how today's debt-backed system fares against a 1.4% zero-interest velocity fee.</p>
+                    <p class="tool-desc">See how personal activity generates zero-interest credit and how community consensus funds enterprise growth.</p>
 
-                    <div class="macro-controls-single-col">
-                        <!-- Control 1: Target Cost of Living -->
-                        <div class="macro-ctrl-item">
-                            <div class="ctrl-label-row">
-                                <label for="slider-living-cost">Target Cost of Living:</label>
-                                <span class="ctrl-val-badge" id="val-living-cost">$24,000 / yr <small>($65.75 / day)</small></span>
-                            </div>
-                            <div class="macro-slider-wrapper">
-                                <input type="range" id="slider-living-cost" min="12000" max="48000" value="24000" step="1000" class="balance-slider" oninput="window.calculateMacroEngineV3 && window.calculateMacroEngineV3()">
-                                <div class="macro-floating-tier" id="tier-living-cost">
-                                    <span class="tier-main" id="tier-living-cost-name">Median Developed Living</span> <span class="tier-desc" id="tier-living-cost-desc">(Essential Stability & Healthcare)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Control 2: Commercial Economy to Personal Economy Size Ratio -->
-                        <div class="macro-ctrl-item">
-                            <div class="ctrl-label-row">
-                                <label for="slider-supply-chain">Commercial Economy to Personal Economy Size Ratio: <small class="ctrl-subtitle">(How big is the commercial economy compared to the individual economy)</small></label>
-                                <span class="ctrl-val-badge" id="val-supply-chain">70 : 1</span>
-                            </div>
-                            <div class="macro-slider-wrapper">
-                                <input type="range" id="slider-supply-chain" min="1" max="100" value="70" step="1" class="balance-slider" oninput="window.calculateMacroEngineV3 && window.calculateMacroEngineV3()">
-                                <div class="macro-floating-tier" id="tier-supply-chain">
-                                    <span class="tier-main" id="tier-supply-chain-name">Deep Modern Supply Chain</span> <span class="tier-desc" id="tier-supply-chain-desc">(Global Multi-Tier Distribution, 70:1)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Control 3: Circulation Speed (Velocity) -->
-                        <div class="macro-ctrl-item">
-                            <div class="ctrl-label-row">
-                                <label for="slider-velocity">Circulation Speed (Velocity):</label>
-                                <span class="ctrl-val-badge cyan" id="val-velocity">1.350 turns/day (493 turns/yr)</span>
-                            </div>
-                            <div class="macro-slider-wrapper">
-                                <input type="range" id="slider-velocity" min="0.005" max="5.0" value="1.35" step="0.005" class="balance-slider cyan-slider" oninput="window.calculateMacroEngineV3 && window.calculateMacroEngineV3()">
-                                <div class="macro-floating-tier" id="tier-velocity">
-                                    <span class="tier-main" id="tier-velocity-name">IOUBI Full Equilibrium</span> <span class="tier-desc" id="tier-velocity-desc">(Healthy Daily JIT Clearing)</span>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Stage Preset Switch -->
+                    <div class="stage-preset-bar">
+                        <button type="button" class="stage-btn active" id="btn-preset-early">Early Stage</button>
+                        <button type="button" class="stage-btn" id="btn-preset-mid">Mid Stage</button>
+                        <button type="button" class="stage-btn" id="btn-preset-mature">Mature Stage</button>
                     </div>
 
-                    <!-- Primary Action Button -->
-                    <div class="macro-solve-action-bar">
-                        <button type="button" id="btn-solve-coverage" class="btn btn-primary solve-btn">
-                            <span>⚡ SOLVE VELOCITY FOR 100% COVERAGE</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Block 2: Side-by-Side Comparison Grid (Dual Full-Width Columns) -->
-                <div class="macro-dual-grid">
-                    <!-- LEFT CARD: Status Quo (Legacy Debt & Tax System) -->
-                    <div class="macro-card legacy-card">
-                        <div class="macro-card-tag legacy-tag">Status Quo | High Interest Drag | Slow Velocity</div>
-                        <h3 class="macro-card-title">Status Quo (Legacy Debt & Tax System)</h3>
-
-                        <!-- Progress Bar Above Value Display Boxes -->
-                        <div class="macro-progress-container legacy-progress-box">
-                            <div class="progress-label-row">
-                                <span>Net Tax Cost For Safety Net:</span>
-                                <strong class="red-text" id="legacy-coverage-text">-$19.57/day (-29.8% Net Tax Drain)</strong>
+                    <div class="credit-sim-content">
+                        <!-- TIER 1: Personal Credit Limit (PCL) Inputs -->
+                        <div class="sim-subpanel tier-panel tier-1-panel">
+                            <div class="tier-panel-header">
+                                <span class="tier-badge emerald-badge">TIER 1</span>
+                                <h3>Personal Credit Limit (PCL) Mechanics</h3>
                             </div>
-                            <div class="progress-track">
-                                <div class="progress-fill legacy-fill" id="legacy-progress-fill" style="width: 30%;"></div>
+
+                            <div class="sim-ctrl-group">
+                                <!-- 1. Global Credit Floor -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-basecl">Global Credit Floor (Set By Inequality):</label>
+                                        <span class="ctrl-val-badge emerald" id="val-basecl"><span class="deltar-font">&#xE002;</span>2,000</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-basecl" min="2000" max="50000" value="2000" step="500" class="balance-slider emerald-slider">
+                                        <div class="sim-floating-tier" id="desc-basecl">
+                                            <span class="tier-main" id="desc-basecl-main"><span class="deltar-font">&#xE002;</span> 2,000</span> <span class="tier-desc" id="desc-basecl-desc">(Low Inequality System Minimum Floor)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 2. Regional Cost of Living -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-spend">Regional Cost of Living (National Daily Spending):</label>
+                                        <span class="ctrl-val-badge emerald" id="val-spend">1.00x</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-spend" min="2" max="10" value="5" step="1" class="balance-slider emerald-slider">
+                                        <div class="sim-floating-tier" id="desc-spend">
+                                            <span class="tier-main" id="desc-spend-main"><span class="deltar-font">&#xE002;</span> 5</span> <span class="tier-desc" id="desc-spend-desc">(Global Baseline Average)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 3. Balance Trend -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-trend">Balance Trend (Median Day of Recent Quarter):</label>
+                                        <span class="ctrl-val-badge emerald" id="val-trend">2.0x</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-trend" min="1.0" max="100.0" value="2.0" step="0.5" class="balance-slider emerald-slider">
+                                        <div class="sim-floating-tier" id="desc-trend">
+                                            <span class="tier-main" id="desc-trend-main">Steady Positive Trend</span> <span class="tier-desc" id="desc-trend-desc">(Consistent Earning & Savings)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 4. Daily Transaction Count -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-activity">Daily Transaction Count:</label>
+                                        <span class="ctrl-val-badge emerald" id="val-activity">2.0x</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-activity" min="1.0" max="2.0" value="2.0" step="0.1" class="balance-slider emerald-slider">
+                                        <div class="sim-floating-tier" id="desc-activity">
+                                            <span class="tier-main" id="desc-activity-main">High Daily Circulation</span> <span class="tier-desc" id="desc-activity-desc">(6+ transactions/day — 2.0x Max)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 5. Accumulated Unused SCL Balance -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-unused-scl">Accumulated Unused SCL Balance:</label>
+                                        <span class="ctrl-val-badge emerald" id="val-unused-scl"><span class="deltar-font">&#xE002;</span>20,000</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-unused-scl" min="0" max="20000" value="10000" step="500" class="balance-slider emerald-slider">
+                                        <div class="sim-floating-tier" id="desc-unused-scl">
+                                            <span class="tier-main" id="desc-unused-scl-main">Standard Unspent Balance</span> <span class="tier-desc" id="desc-unused-scl-desc">(Active Reserve)</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="progress-scale-labels">
-                                <span>$0 (Break-Even)</span>
-                                <span class="marker-drain">-30% Average Tax Drain</span>
-                                <span>-50% Max Tax Drag</span>
+
+                            <!-- Tier 1 Output Card -->
+                            <div class="tier-output-card emerald-card">
+                                <div class="output-stat">
+                                    <div class="stat-label-col">
+                                        <span class="stat-label">Calculated Personal Credit Limit (PCL):</span>
+                                        <div class="pcl-formula-subtitle" id="out-pcl-formula">(2,000 × 1.0) + (2,000 × 2.0 × 2.0)</div>
+                                    </div>
+                                    <strong class="stat-value emerald-text" id="out-pcl"><span class="deltar-font">&#xE002;</span>10,000</strong>
+                                </div>
+                                <div class="output-subgrid">
+                                    <div class="sub-stat">
+                                        <span>Daily SCL Accrual Rate:</span>
+                                        <strong id="out-scl-rate"><span class="deltar-font">&#xE002;</span>27.4/day</strong>
+                                    </div>
+                                    <div class="sub-stat">
+                                        <span>Available SCL to Gift:</span>
+                                        <strong id="out-avail-scl"><span class="deltar-font">&#xE002;</span>10,000</strong>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="macro-metrics-block">
-                            <div class="macro-metric-row">
-                                <div class="metric-info">
-                                    <span class="metric-label">Real Cost of Living:</span>
-                                    <small class="metric-subtext" id="legacy-col-subtext">Includes 40.0% compound interest overhead across 70 supply chain steps.</small>
-                                </div>
-                                <div class="metric-value legacy-val" id="legacy-daily-cost">$65.75/day</div>
+                        <!-- TIER 2: Enterprise Crowdfunding Inputs (Anti-Whale Rules) -->
+                        <div class="sim-subpanel tier-panel tier-2-panel">
+                            <div class="tier-panel-header">
+                                <span class="tier-badge cyan-badge">TIER 2</span>
+                                <h3>Enterprise Crowdfunding (Anti-Whale Protocol)</h3>
                             </div>
 
-                            <div class="macro-metric-row">
-                                <div class="metric-info">
-                                    <span class="metric-label">Net Daily Payout:</span>
-                                    <small class="metric-subtext">Taxes extracted (~30% income & sales) minus fragmented welfare.</small>
+                            <div class="sim-ctrl-group">
+                                <!-- 1. Community Backers -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-backers">Community Backers (Min 25):</label>
+                                        <span class="ctrl-val-badge emerald" id="val-backers">25 Backers</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-backers" min="25" max="500" value="25" step="1" class="balance-slider emerald-slider">
+                                        <div class="sim-floating-tier" id="desc-backers">
+                                            <span class="tier-main" id="desc-backers-main">25 Backers</span> <span class="tier-desc" id="desc-backers-desc">(Minimum Required Group Size)</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="metric-value legacy-val red-text" id="legacy-net-payout">-$19.57/day</div>
+
+                                <!-- 2. Smallest Donor SCL Gift -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-dmin">Smallest Donor SCL Gift (D_min):</label>
+                                        <span class="ctrl-val-badge emerald" id="val-dmin"><span class="deltar-font">&#xE002;</span>2,000</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-dmin" min="500" max="20000" value="2000" step="500" class="balance-slider emerald-slider">
+                                        <div class="sim-floating-tier" id="desc-dmin">
+                                            <span class="tier-main" id="desc-dmin-main"><span class="deltar-font">&#xE002;</span> 2,000</span> <span class="tier-desc" id="desc-dmin-desc">(Micro Supporter Base)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 3. Largest Donor SCL Gift -->
+                                <div class="sim-ctrl-item">
+                                    <div class="ctrl-label-row">
+                                        <label for="slider-dmax">Largest Donor SCL Gift (D_max ≤ 4 × D_min):</label>
+                                        <span class="ctrl-val-badge emerald" id="val-dmax"><span class="deltar-font">&#xE002;</span>8,000</span>
+                                    </div>
+                                    <div class="sim-slider-wrapper">
+                                        <input type="range" id="slider-dmax" min="2000" max="8000" value="8000" step="500" class="balance-slider emerald-slider">
+                                        <div class="sim-floating-tier" id="desc-dmax">
+                                            <span class="tier-main" id="desc-dmax-main">4.0x Max Allowed Spread</span> <span class="tier-desc" id="desc-dmax-desc">(Anti-Whale Rule Limit)</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="macro-metric-row">
-                                <div class="metric-info">
-                                    <span class="metric-label">Money Supply:</span>
-                                    <small class="metric-subtext">Total debt capital required to mediate trade at 1.2 turns/year.</small>
+                            <!-- Tier 2 Output Card -->
+                            <div class="tier-output-card cyan-card">
+                                <div class="output-stat">
+                                    <span class="stat-label">Unlocked Enterprise Credit Line:</span>
+                                    <strong class="stat-value cyan-text glow-text" id="out-biz-credit"><span class="deltar-font">&#xE002;</span>125,000</strong>
                                 </div>
-                                <div class="metric-value legacy-val" id="legacy-money-supply">$1,420,000</div>
-                            </div>
-
-                            <div class="macro-metric-row">
-                                <div class="metric-info">
-                                    <span class="metric-label">Systemic Interest Overhead:</span>
-                                    <small class="metric-subtext">Annual 6.0% interest tribute paid to banks to keep money in existence.</small>
+                                <div class="consensus-status-badge" id="out-consensus-status">
+                                    ✓ Compliant (Min 25 Backers | Max Gift ≤ 4x Min Gift)
                                 </div>
-                                <div class="metric-value legacy-val red-text" id="legacy-interest-cost">$233.42/day</div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- RIGHT CARD: IOUBI System (Zero-Interest & Velocity-Driven) -->
-                    <div class="macro-card ioubi-card">
-                        <div class="macro-card-tag ioubi-tag">IOUBI System | Zero Interest | Velocity Driven</div>
-                        <h3 class="macro-card-title">IOUBI Protocol (Mutual Credit Engine)</h3>
-
-                        <!-- Progress Bar Above Value Display Boxes (0% to 300% range, 100% in middle) -->
-                        <div class="macro-progress-container ioubi-progress-box">
-                            <div class="progress-label-row">
-                                <span>Coverage of Living Needs:</span>
-                                <strong class="emerald-text" id="ioubi-coverage-text">100.7% Covered</strong>
-                            </div>
-                            <div class="progress-track">
-                                <div class="progress-fill ioubi-fill" id="ioubi-progress-fill" style="width: 33.6%;"></div>
-                                <div class="marker-100-line" title="100% Full Living Floor"></div>
-                            </div>
-                            <div class="progress-scale-labels">
-                                <span>0%</span>
-                                <span class="marker-100">100% (Full Living Floor)</span>
-                                <span>300% (Abundance)</span>
-                            </div>
-                        </div>
-
-                        <div class="macro-metrics-block">
-                            <div class="macro-metric-row">
-                                <div class="metric-info">
-                                    <span class="metric-label">Real Cost of Living:</span>
-                                    <small class="metric-subtext">Zero interest markup! Products cost 40.0% less at checkout.</small>
+                        <!-- 24-Month Credit & Overdraft Runway Chart -->
+                        <div class="sim-subpanel chart-panel">
+                            <div class="chart-panel-header">
+                                <h3>24-Month Credit & Overdraft Runway</h3>
+                                <div class="chart-legend">
+                                    <span class="legend-item"><span class="legend-dot cyan-dot"></span> SCL Credit Ceiling (Stepped Decay & Refresh)</span>
+                                    <span class="legend-item"><span class="legend-dot amber-dot"></span> Enterprise Overdraft Utilization</span>
                                 </div>
-                                <div class="metric-value ioubi-val" id="ioubi-daily-cost"><span class="deltar-font">&#xE002;</span>39.45/day</div>
                             </div>
-
-                            <div class="macro-metric-row">
-                                <div class="metric-info">
-                                    <span class="metric-label">Net Daily Living Dividend:</span>
-                                    <small class="metric-subtext">Velocity fee pool automatically covers 100.7% of daily living needs.</small>
-                                </div>
-                                <div class="metric-value ioubi-val emerald-text" id="ioubi-net-dividend">+<span class="deltar-font">&#xE002;</span>39.73/day</div>
+                            <div class="runway-canvas-container">
+                                <canvas id="credit-runway-canvas" width="600" height="240"></canvas>
                             </div>
-
-                            <div class="macro-metric-row">
-                                <div class="metric-info">
-                                    <span class="metric-label">Money Supply:</span>
-                                    <small class="metric-subtext">Just-In-Time clearing at 1.350 turns/day reduces money supply by 99.8%!</small>
-                                </div>
-                                <div class="metric-value ioubi-val" id="ioubi-money-supply"><span class="deltar-font">&#xE002;</span>2,075</div>
-                            </div>
-
-                            <div class="macro-metric-row">
-                                <div class="metric-info">
-                                    <span class="metric-label">Systemic Interest Overhead:</span>
-                                    <small class="metric-subtext">Zero interest forever. No banking tribute. Capital remains with producers.</small>
-                                </div>
-                                <div class="metric-value ioubi-val emerald-text" id="ioubi-interest-cost"><span class="deltar-font">&#xE002;</span>0.00/day</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Block 3: Dynamic Macro Equilibrium Banner -->
-                <div class="macro-outcome-banner" id="macro-outcome-banner">
-                    ⚡ Perfect Macro-Equilibrium Achieved: At 1.350 turns/day, the 1.4% transaction fee on 70 commercial steps fully finances 100.7% of citizens' living floors without taxes.
-                </div>
-
-                <!-- Block 4: Inspect the Plumbing (Collapsible Verification Drawer) -->
-                <div class="macro-plumbing-wrapper">
-                    <button type="button" class="plumbing-toggle-btn" id="btn-toggle-plumbing" aria-expanded="false">
-                        <span class="toggle-icon">▸</span>
-                        <strong>Inspect the Plumbing (Step-by-Step Mathematical Verification)</strong>
-                    </button>
-                    
-                    <div class="plumbing-drawer" id="macro-plumbing-drawer">
-                        <div class="plumbing-content-grid">
-                            <div class="plumbing-card">
-                                <h4>1. Legacy System Constants & Assumptions</h4>
-                                <ul>
-                                    <li><strong>Target Living Standard:</strong> <span id="plum-raw-cost">$24,000.00</span>/yr ($<span id="plum-raw-daily">65.75</span>/day)</li>
-                                    <li><strong>Supply Chain Depth:</strong> <span id="plum-supply-chain">70</span> commercial steps per personal purchase</li>
-                                    <li><strong>Commercial-to-Personal Ratio:</strong> <span id="plum-comm-ratio">70</span>:1</li>
-                                    <li><strong>Annual Velocity ($V_{annual}$):</strong> 1.2 turns per year (Status Quo benchmark)</li>
-                                    <li><strong>Interest Cost:</strong> 6.0% annual weighted average carrying cost on debt capital</li>
-                                    <li><strong>Net Tax Drag:</strong> -29.8% average tax drain for welfare and public overhead</li>
-                                </ul>
-                            </div>
-
-                            <div class="plumbing-card">
-                                <h4>2. Status Quo Derived Metrics</h4>
-                                <ul>
-                                    <li><strong>Total Daily Spending ($E_{total}$):</strong> <span id="plum-legacy-total-spend">$4,668.49</span>/day</li>
-                                    <li><strong>Required Money Supply ($M_{legacy}$):</strong> <span id="plum-legacy-ms">$1,420,000.00</span></li>
-                                    <li><strong>Daily Interest Tribute:</strong> <span id="plum-legacy-int">$233.42</span>/day ($85,200.00/yr per capita)</li>
-                                    <li><strong>Net Daily Welfare Payout:</strong> <span id="plum-legacy-net">-$19.57</span>/day (Citizens are net tax-negative)</li>
-                                </div>
-
-                            <div class="plumbing-card">
-                                <h4>3. IOUBI Engine Transformations</h4>
-                                <ul>
-                                    <li><strong>Zero Interest Effect:</strong> Cost of living drops from $<span id="plum-raw-daily-2">65.75</span> to <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-col">39.45</span>/day</li>
-                                    <li><strong>Daily Velocity ($V_{daily}$):</strong> <span id="plum-ioubi-v">1.350</span> turns/day (<span id="plum-ioubi-v-yr">493</span> turns/year)</li>
-                                    <li><strong>Total Daily Spending ($E_{total}$):</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-total-spend">2,801.10</span>/day</li>
-                                    <li><strong>Required Money Supply ($M_{IOUBI}$):</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-ms">2,074.89</span> (Money supply down by 99.8%)</li>
-                                    <li><strong>Daily Fee Pool Collected (1.4%):</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-fee-pool">39.22</span>/day</li>
-                                    <li><strong>Daily Living Dividend Distributed:</strong> +<span class="deltar-font">&#xE002;</span><span id="plum-ioubi-net-div">39.73</span>/day</li>
-                                </ul>
+                            <div class="runway-summary-text">
+                                Demonstrates the 25% quarterly decay of donated SCL limits alongside a 6 month community backing renewal.
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+
+                <!-- SIMULATOR 3: Progressive Transaction Fee Calculator -->
+                <div class="sandbox-card glass-panel" id="fee-calc-card">
+                    <div class="tool-header">
+                        <h2>Progressive Transaction Fee Calculator</h2>
+                    </div>
+                    <p class="tool-desc">Calculates the dynamic velocity fee percentage based on the logarithmic balance scale of both parties.</p>
+
+                    <div class="sim-form">
+                        <div class="two-col-inputs">
+                            <div class="form-group">
+                                <label for="input-bal-a">Payor Account's Balance:</label>
+                                <input type="number" id="input-bal-a" value="1250" min="0" max="100000" step="10">
+                                <input type="range" id="slider-bal-a" min="0" max="100000" value="1250" step="10" class="balance-slider">
+                                <div class="fee-contrib-badge" id="contrib-a">Fee contribution: 3.10%</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-bal-b">Payee Account's Balance:</label>
+                                <input type="number" id="input-bal-b" value="300" min="0" max="100000" step="10">
+                                <input type="range" id="slider-bal-b" min="0" max="100000" value="300" step="10" class="balance-slider">
+                                <div class="fee-contrib-badge" id="contrib-b">Fee contribution: 2.48%</div>
+                            </div>
+                        </div>
+
+                        <div class="average-fee-box">
+                            <div class="average-fee-title">Average Fee For Transaction</div>
+                            <div class="average-fee-value" id="res-rate">2.79%</div>
+                            <div class="average-fee-formula">Fee % = average(log10(max(10, Balance₁)), log10(max(10, Balance₂))) / 100</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-conversion-rate">Set your time's value. <small class="hint-inline">For viewing prices in your personal time.</small></label>
+                            <div class="input-suffix-group">
+                                <input type="number" id="input-conversion-rate" value="20" min="0.01" max="10000" step="1">
+                                <span class="input-suffix"><span class="deltar-font">&#xE002;</span> / hr</span>
+                            </div>
+                            <input type="range" id="slider-conversion-rate" min="0" max="1000" value="498" step="1" class="balance-slider">
+                            <div class="salary-tier-badge" id="salary-tier-info">
+                                <span class="tier-tag">Benchmark:</span> <strong id="tier-name">Global Average / Median Income</strong> (~<span class="deltar-font">&#xE002;</span>40,000/yr)
+                            </div>
+                        </div>
+
+                        <div class="two-col-inputs">
+                            <div class="form-group">
+                                <label for="input-tx-amount">Transaction Payment In Deltars (<span class="deltar-font">&#xE002;</span>):</label>
+                                <input type="number" id="input-tx-amount" value="50" min="0" step="5">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Price Valued In Your Time:</label>
+                                <div class="time-equiv-badge-box" id="tx-time-equiv">2 hrs 30 mins</div>
+                            </div>
+                        </div>
+
+                        <div class="calc-results-box" id="calc-result">
+                            <div class="unified-table-box">
+                                <div class="unified-table-header">Fee Charged on this transaction</div>
+                                <div class="unified-table-container">
+                                    <table class="unified-fee-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-metric">Item</th>
+                                                <th>Deltars</th>
+                                                <th>Your Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="row-label">Paid</td>
+                                                <td id="tbl-paid" class="val-deltars">50.000</td>
+                                                <td id="tbl-paid-time" class="val-time">2 hrs 30 mins</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="row-label">Fee</td>
+                                                <td id="tbl-fee" class="val-deltars">1.394</td>
+                                                <td id="tbl-fee-time" class="val-time">4.18 mins</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="row-label">Received</td>
+                                                <td id="tbl-received" class="val-deltars">48.606</td>
+                                                <td id="tbl-received-time" class="val-time">2 hrs 25 mins</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="pool-allocation-breakdown">
+                                <div class="pool-allocation-header">Where this transaction's fee goes:</div>
+                                <div class="pool-grid">
+                                    <div class="pool-card">
+                                        <div class="pool-label">Living Dividend Pool (50%)</div>
+                                        <div class="pool-val" id="pool-dividend"><span class="deltar-font">&#xE002;</span>0.697</div>
+                                        <div class="pool-time" id="pool-dividend-time">2.09 mins of work</div>
+                                    </div>
+                                    <div class="pool-card">
+                                        <div class="pool-label">Public Goods Pool (50%)</div>
+                                        <div class="pool-val" id="pool-public"><span class="deltar-font">&#xE002;</span>0.697</div>
+                                        <div class="pool-time" id="pool-public-time">2.09 mins of work</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
 
         <!-- =================================================================== -->
-        <!-- 6. FAQ & KNOWLEDGE BASE                                             -->
+        <!-- VIEW 3: DOCUMENTATION HUB TAB                                       -->
         <!-- =================================================================== -->
-        <section id="faq" class="section-container">
-            <div class="section-header">
-                <span class="section-tag">KNOWLEDGE BASE</span>
-                <h2>Frequently Asked Questions</h2>
-                <p class="section-desc">Search protocol mechanics, economic guarantees, zero-interest credit limits, and real-world implementation rules.</p>
-            </div>
-
-            <!-- Search Bar -->
-            <div class="faq-search-wrapper">
-                <div class="faq-search-box">
-                    <span class="faq-search-icon">🔍</span>
-                    <input type="text" id="faq-search-input" class="faq-search-input" placeholder="Search questions, formulas, or concepts (e.g. 'decay', 'Deltar', 'housing', 'anti-whale')...">
-                    <button type="button" id="faq-search-clear" class="faq-search-clear" style="display: none;">✕</button>
+        <main class="view-tab hidden-view" id="view-docs">
+            <section id="docs" class="section-container">
+                <div class="section-header">
+                    <span class="section-tag">KNOWLEDGE BASE</span>
+                    <h2>The Documentation Hub</h2>
+                    <p class="section-desc">Access official protocol literature, technical specifications, and foundational research papers.</p>
                 </div>
-            </div>
 
-            <!-- Category Filter Pills -->
-            <div class="faq-filter-bar">
-                <button type="button" class="faq-filter-pill active" data-category="all">All Categories (12)</button>
-                <button type="button" class="faq-filter-pill" data-category="1">1. Fundamentals & Deltar</button>
-                <button type="button" class="faq-filter-pill" data-category="2">2. Personal Credit</button>
-                <button type="button" class="faq-filter-pill" data-category="3">3. Business & Social Credit</button>
-                <button type="button" class="faq-filter-pill" data-category="4">4. Safety Nets & Fee Pool</button>
-                <button type="button" class="faq-filter-pill" data-category="5">5. Real-World & Housing</button>
-            </div>
-
-            <!-- FAQ Accordion Container -->
-            <div class="faq-accordion-container" id="faq-accordion-container">
-                <!-- CATEGORY 1 -->
-                <div class="faq-category-group" data-category="1">
-                    <div class="faq-category-header">
-                        <span class="category-num-tag">SECTION 1</span>
-                        <h3>System Fundamentals, Deltar Currency & Debt Elimination</h3>
-                    </div>
-
-                    <!-- Q1 -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">1. What is IOUBI, and how is it fundamentally different from traditional money?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p><strong>IOUBI (Universal Basic Income via Mutual Credit)</strong> is a decentralized, zero-interest monetary system that replaces debt-backed fiat currency with an algorithmic mutual credit ledger. In the traditional banking system, money is loaned into existence with compound interest attached—meaning more debt always exists than there is money to repay it. IOUBI eliminates private bank credit creation entirely. Money exists as an accounting unit (the Deltar) created at the point of exchange through zero-interest personal overdraft limits and settled via a dynamic velocity fee.</p>
-                            </div>
+                <div class="docs-grid">
+                    <!-- Doc 1: ELI5 -->
+                    <div class="doc-card glass-panel">
+                        <div class="doc-badge">BEGINNER GUIDE</div>
+                        <h3>IOUBI Explained in 7 Simple Steps (ELI5)</h3>
+                        <p>A visual, easy-to-understand breakdown of how zero-interest mutual credit restores purchasing power, eliminates inflation, and guarantees universal basic security.</p>
+                        <div class="doc-actions">
+                            <a href="IOUBI_ELI5.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary w-full">
+                                <span>📄 Download ELI5 Primer (PDF)</span>
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Q2 -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">2. What is the Deltar (<span class="deltar-font">&#xE002;</span>), and how is its value stabilized?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p>The <strong>Deltar (<span class="deltar-font">&#xE002;</span>)</strong> is the native closed-system numeraire of the IOUBI protocol. Unlike fiat currencies that inflate endlessly, the Deltar is pegged to the global normalized cost of one hour of median human labor and essential living needs. Because money supply dynamically expands and contracts strictly with trade volume (Just-In-Time clearing), the Deltar maintains absolute purchasing power parity without inflation or deflation.</p>
-                            </div>
+                    <!-- Doc 2: Whitepaper -->
+                    <div class="doc-card glass-panel">
+                        <div class="doc-badge">TECHNICAL SPEC</div>
+                        <h3>Protocol Whitepaper & Accounting Mechanics</h3>
+                        <p>The rigorous mathematical formalization of the five fundamental mechanics, state transition matrices, and distributed consensus proofs.</p>
+                        <div class="doc-actions">
+                            <a href="Key Specifications_ The Five Fundamental Accounting Mechanics.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full">
+                                <span>📄 View Accounting Specs (PDF)</span>
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Q3 -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">3. How does IOUBI eliminate inflation without a central bank?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p>Inflation in fiat systems is caused by expanding the money supply faster than the production of real goods and services, combined with interest tribute. In IOUBI, no unbacked money is ever printed. Money is issued strictly as a temporary negative balance during a legitimate transaction and is destroyed as accounts return toward zero through trade. When trade speeds up, velocity handles the volume rather than inflating the permanent money stock.</p>
-                            </div>
+                    <!-- Doc 3: Healing Money -->
+                    <div class="doc-card glass-panel">
+                        <div class="doc-badge">FOUNDATIONAL BOOK</div>
+                        <h3>"Healing Money" by Todd McKissick</h3>
+                        <p>The definitive socio-economic treatise diagnosing why compound interest inevitably centralizes power, and how mutual credit heals modern society.</p>
+                        <div class="doc-actions">
+                            <a href="HEALING MONEY.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full">
+                                <span>📖 Read Healing Money (PDF)</span>
+                            </a>
                         </div>
                     </div>
                 </div>
-
-                <!-- CATEGORY 2 -->
-                <div class="faq-category-group" data-category="2">
-                    <div class="faq-category-header">
-                        <span class="category-num-tag">SECTION 2</span>
-                        <h3>Personal Credit Limits (PCL), Spending Trend & Activity</h3>
-                    </div>
-
-                    <!-- Q4 -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">4. How is my Personal Credit Limit (PCL) calculated?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p>Your Personal Credit Limit is governed by an objective mathematical formula:</p>
-                                <p><code>PCL = (BaseCL × R) + (BaseCL × Trend × Activity)</code></p>
-                                <ul>
-                                    <li><strong>BaseCL:</strong> The global baseline credit floor, dynamically adjusted to offset systemic inequality.</li>
-                                    <li><strong>R (Regional Cost Modifier):</strong> Adjusts the floor for local cost of living ($2/day = 0.20x, $5/day = 1.00x, $10/day = 2.00x).</li>
-                                    <li><strong>Trend:</strong> Tracks your recent median balance trajectory (1.0x to 100.0x), rewarding steady earnings and savings.</li>
-                                    <li><strong>Activity:</strong> A multiplier (1.0x to 2.0x) based on your daily transaction frequency, incentivizing active circulation.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Q5 (Updated Document Revision) -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">5. What is the difference between Personal Credit (PCL) and Social Credit (SCL)?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p><strong>Personal Credit Limits (PCL)</strong> belong exclusively to verified individuals for personal living needs and earn dynamic growth based on activity and savings. <strong>Social Credit Limits (SCL)</strong>, by contrast, represent the community-allocated credit capacity of businesses and enterprises. Businesses <em>never</em> receive daily automated UBI or automated credit limits. Instead, businesses must earn their credit capacity through <strong>voluntary community SCL donations</strong> from real customers who trust them.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CATEGORY 3 -->
-                <div class="faq-category-group" data-category="3">
-                    <div class="faq-category-header">
-                        <span class="category-num-tag">SECTION 3</span>
-                        <h3>Business Crowdfunding, Anti-Whale Rules & SCL Decay</h3>
-                    </div>
-
-                    <!-- Q6 -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">6. How does a business get funded without banks or venture capitalists?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p>Enterprises raise capital via <strong>Decentralized SCL Crowdfunding</strong>. Citizens allocate unused portions of their SCL accrual to businesses they support. To prevent monopolistic capture, all crowdfunding campaigns must comply with strict <strong>Anti-Whale Rules</strong>:</p>
-                                <ul>
-                                    <li><strong>Minimum Backers:</strong> At least 25 unique verified individuals must back the enterprise.</li>
-                                    <li><strong>Spread Limit:</strong> The largest individual gift (D_max) cannot exceed 4 times the smallest gift (D_min).</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Q7 (Updated Document Revision) -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">7. What is SCL Quarterly Decay, and why is it necessary?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p>All enterprise Social Credit Limits undergo an automatic <strong>25% quarterly decay</strong> (reducing by 25% every 3 months). This mechanic prevents defunct corporations or bad actors from sitting on massive idle credit lines forever. To maintain its credit ceiling over time, an enterprise must continuously deliver real value, quality goods, and responsive service to earn periodic renewals from its community backer base.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CATEGORY 4 -->
-                <div class="faq-category-group" data-category="4">
-                    <div class="faq-category-header">
-                        <span class="category-num-tag">SECTION 4</span>
-                        <h3>Velocity Fees, Living Dividend Pools & Governance</h3>
-                    </div>
-
-                    <!-- Q8 -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">8. How does the Progressive Transaction Fee work?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p>Instead of flat sales taxes, IOUBI uses a logarithmic balance fee:</p>
-                                <p><code>Fee % = average(log10(max(10, Bal_A)), log10(max(10, Bal_B))) / 100</code></p>
-                                <p>A transaction between small everyday balances carries a tiny ~1% fee, while transactions between massive corporate balances scale up to 4–5%. This creates a natural anti-hoarding pressure without requiring audits or IRS bureaucracy.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Q9 -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">9. Where do the collected transaction fees go?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p><strong>100% of fees</strong> are routed to public utility smart contracts:</p>
-                                <ul>
-                                    <li><strong>50% — Living Dividend Pool:</strong> Disbursed daily to every verified citizen, guaranteeing basic living security.</li>
-                                    <li><strong>50% — Public Goods & Infrastructure Pool:</strong> Allocated transparently by democratic citizen voting and peer juries for healthcare, education, transit, and ecological regeneration.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Q10 (Updated Document Revision) -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">10. How are pool allocations adjusted democratically?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p>Pool distributions are governed by continuous daily citizen voting based on Social Jury recommendations. To ensure economic stability, voting results can shift allocations by a maximum rate of <strong>0.001% per day</strong> (requiring 1,000 continuous days of supermajority voting to move an allocation by 1%). This prevents sudden budget shocks while remaining fully responsive to long-term public priorities.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CATEGORY 5 -->
-                <div class="faq-category-group" data-category="5">
-                    <div class="faq-category-header">
-                        <span class="category-num-tag">SECTION 5</span>
-                        <h3>Real-World Implementation, Housing & Technology</h3>
-                    </div>
-
-                    <!-- Q11 (Updated Document Revision) -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">11. How does IOUBI handle large purchases like primary homeownership?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p>In IOUBI, earning and saving both raise overdraft limits for <strong>primary homeownership</strong> without thirty-year compound interest mortgages. Because homes are purchased through zero-interest mutual credit rather than leveraged bank debt, housing costs decrease by over 50%. Speculative real estate hoarding is eliminated because unused secondary properties face steep progressive velocity holding fees.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Q12 (Updated Document Revision) -->
-                    <div class="faq-accordion-item">
-                        <button type="button" class="faq-question-btn" aria-expanded="false">
-                            <span class="faq-q-text">12. What happens as AI and automation replace human jobs?</span>
-                            <span class="faq-toggle-icon">+</span>
-                        </button>
-                        <div class="faq-answer-pane">
-                            <div class="faq-answer-body">
-                                <p>Under legacy capitalism, AI-driven automation causes unemployment and economic collapse because workers lose income to buy goods. Under IOUBI, automation lowers production costs while velocity fees on automated commercial transactions fully fund the living dividend pool. Like rainwater circulating through a thriving garden, technological abundance is automatically recycled into universal human purchasing power.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-no-results" id="faq-no-results" style="display: none;">
-                    <p>No matching questions found for your search query.</p>
-                    <small>Try searching for "PCL", "SCL", "Deltar", "decay", "fee", or "housing".</small>
-                </div>
-            </div>
-        </section>
+            </section>
+        </main>
 
         <!-- =================================================================== -->
-        <!-- 7. IOUBI PROJECT 2026 STATUS & ROADMAP                              -->
+        <!-- VIEW 4: FAQ & KNOWLEDGE BASE TAB                                    -->
         <!-- =================================================================== -->
-        <section id="roadmap" class="section-container">
-            <div class="section-header">
-                <span class="section-tag">ENGINEERING TRAJECTORY</span>
-                <h2>IOUBI Project 2026 Status & Roadmap</h2>
-                <p class="section-desc">Engineering trajectory transitioning zero-interest mutual credit from deterministic specification to live pilot launch.</p>
-            </div>
+        <main class="view-tab hidden-view" id="view-faq">
+            <section id="faq" class="section-container">
+                <div class="section-header">
+                    <span class="section-tag">KNOWLEDGE BASE</span>
+                    <h2>Frequently Asked Questions</h2>
+                    <p class="section-desc">Search protocol mechanics, economic guarantees, zero-interest credit limits, and real-world implementation rules.</p>
+                </div>
 
-            <div class="roadmap-main-card">
-                <!-- Top Summary Readout -->
-                <div class="roadmap-summary-header">
-                    <h3>
-                        <span>⚡</span>
-                        <span>2026 Core Protocol Trajectory</span>
-                    </h3>
-                    <div class="roadmap-percent-badge">
-                        <span class="pulse-dot"></span>
-                        <span>51.4% Complete (Week 18 of 35)</span>
+                <!-- Search Bar -->
+                <div class="faq-search-wrapper">
+                    <div class="faq-search-box">
+                        <span class="faq-search-icon">🔍</span>
+                        <input type="text" id="faq-search-input" class="faq-search-input" placeholder="Search questions, formulas, or concepts (e.g. 'decay', 'Deltar', 'housing', 'anti-whale')...">
+                        <button type="button" id="faq-search-clear" class="faq-search-clear" style="display: none;">✕</button>
                     </div>
                 </div>
 
-                <!-- LARGE FOCUSED HORIZONTAL PROGRESS TIMELINE BAR -->
-                <div class="roadmap-timeline-wrapper">
-                    <!-- Progress Bar Track -->
-                    <div class="roadmap-timeline-bar-track">
-                        <div class="roadmap-timeline-bar-fill"></div>
-                        <span class="timeline-bound-label timeline-bound-start">Apr 07 (Start)</span>
-                        <span class="timeline-bound-label timeline-bound-end">Dec 08 (Pilot)</span>
+                <!-- Category Filter Pills -->
+                <div class="faq-filter-bar">
+                    <button type="button" class="faq-filter-pill active" data-category="all">All Categories (12)</button>
+                    <button type="button" class="faq-filter-pill" data-category="1">1. Fundamentals & Deltar</button>
+                    <button type="button" class="faq-filter-pill" data-category="2">2. Personal Credit</button>
+                    <button type="button" class="faq-filter-pill" data-category="3">3. Business & Social Credit</button>
+                    <button type="button" class="faq-filter-pill" data-category="4">4. Safety Nets & Fee Pool</button>
+                    <button type="button" class="faq-filter-pill" data-category="5">5. Real-World & Housing</button>
+                </div>
+
+                <!-- FAQ Accordion Container -->
+                <div class="faq-accordion-container" id="faq-accordion-container">
+                    <!-- CATEGORY 1 -->
+                    <div class="faq-category-group" data-category="1">
+                        <div class="faq-category-header">
+                            <span class="category-num-tag">SECTION 1</span>
+                            <h3>System Fundamentals, Deltar Currency & Debt Elimination</h3>
+                        </div>
+
+                        <!-- Q1 -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">1. What is IOUBI, and how is it fundamentally different from traditional money?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p><strong>IOUBI (Universal Basic Income via Mutual Credit)</strong> is a decentralized, zero-interest monetary system that replaces debt-backed fiat currency with an algorithmic mutual credit ledger. In the traditional banking system, money is loaned into existence with compound interest attached—meaning more debt always exists than there is money to repay it. IOUBI eliminates private bank credit creation entirely. Money exists as an accounting unit (the Deltar) created at the point of exchange through zero-interest personal overdraft limits and settled via a dynamic velocity fee.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">2. What is the Deltar (<span class="deltar-font">&#xE002;</span>), and how is its value stabilized?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>The <strong>Deltar (<span class="deltar-font">&#xE002;</span>)</strong> is the native closed-system numeraire of the IOUBI protocol. Unlike fiat currencies that inflate endlessly, the Deltar is pegged to the global normalized cost of one hour of median human labor and essential living needs. Because money supply dynamically expands and contracts strictly with trade volume (Just-In-Time clearing), the Deltar maintains absolute purchasing power parity without inflation or deflation.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">3. How does IOUBI eliminate inflation without a central bank?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Inflation in fiat systems is caused by expanding the money supply faster than the production of real goods and services, combined with interest tribute. In IOUBI, no unbacked money is ever printed. Money is issued strictly as a temporary negative balance during a legitimate transaction and is destroyed as accounts return toward zero through trade. When trade speeds up, velocity handles the volume rather than inflating the permanent money stock.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- 8 Milestone Nodes Proportional to Week Completion -->
-                    <div class="roadmap-nodes-container">
-                        <!-- Phase 1: Week 4 (11.4%) -->
-                        <div class="roadmap-phase-node completed" style="left: 11.4%;" tabindex="0">
-                            <div class="node-content-top">
-                                <span class="node-date">May 05</span>
-                            </div>
-                            <div class="node-pin">✓</div>
-                            <div class="node-content-bottom">
-                                <span class="node-title">Engine Foundations</span>
-                            </div>
-                            <div class="node-tooltip-bubble">
-                                <div class="tooltip-phase-header">
-                                    <span class="tooltip-phase-num">Phase 1 (Week 4)</span>
-                                    <span class="tooltip-phase-status completed">COMPLETED</span>
-                                </div>
-                                <div class="tooltip-phase-body">
-                                    Private repository setup, 100% deterministic economic math engine, BaseCL/PCL/SCL formulas, 1.4% transaction fee algorithms, and regional cost balancing.
+                    <!-- CATEGORY 2 -->
+                    <div class="faq-category-group" data-category="2">
+                        <div class="faq-category-header">
+                            <span class="category-num-tag">SECTION 2</span>
+                            <h3>Personal Credit Limits (PCL), Spending Trend & Activity</h3>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">4. How is my Personal Credit Limit (PCL) calculated?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Your Personal Credit Limit is governed by an objective mathematical formula:</p>
+                                    <p><code>PCL = (BaseCL × R) + (BaseCL × Trend × Activity)</code></p>
+                                    <ul>
+                                        <li><strong>BaseCL:</strong> The global baseline credit floor, dynamically adjusted to offset systemic inequality.</li>
+                                        <li><strong>R (Regional Cost Modifier):</strong> Adjusts the floor for local cost of living ($2/day = 0.20x, $5/day = 1.00x, $10/day = 2.00x).</li>
+                                        <li><strong>Trend:</strong> Tracks your recent median balance trajectory (1.0x to 100.0x), rewarding steady earnings and savings.</li>
+                                        <li><strong>Activity:</strong> A multiplier (1.0x to 2.0x) based on your daily transaction frequency, incentivizing active circulation.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Phase 2: Week 8 (22.9%) -->
-                        <div class="roadmap-phase-node completed" style="left: 22.9%;" tabindex="0">
-                            <div class="node-content-top">
-                                <span class="node-date">Jun 02</span>
-                            </div>
-                            <div class="node-pin">✓</div>
-                            <div class="node-content-bottom">
-                                <span class="node-title">Ledger & State Engine</span>
-                            </div>
-                            <div class="node-tooltip-bubble">
-                                <div class="tooltip-phase-header">
-                                    <span class="tooltip-phase-num">Phase 2 (Week 8)</span>
-                                    <span class="tooltip-phase-status completed">COMPLETED</span>
+                        <!-- Q5 (Updated Document Revision) -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">5. What is the difference between Personal Credit (PCL) and Social Credit (SCL)?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p><strong>Personal Credit Limits (PCL)</strong> belong exclusively to verified individuals for personal living needs and earn dynamic growth based on activity and savings. <strong>Social Credit Limits (SCL)</strong>, by contrast, represent the community-allocated credit capacity of businesses and enterprises. Businesses <em>never</em> receive daily automated UBI or automated credit limits. Instead, businesses must earn their credit capacity through <strong>voluntary community SCL donations</strong> from real customers who trust them.</p>
                                 </div>
-                                <div class="tooltip-phase-body">
-                                    Append-only cryptographically linked transaction ledger, late pending event handlers, and synchronization proofing.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORY 3 -->
+                    <div class="faq-category-group" data-category="3">
+                        <div class="faq-category-header">
+                            <span class="category-num-tag">SECTION 3</span>
+                            <h3>Business Crowdfunding, Anti-Whale Rules & SCL Decay</h3>
+                        </div>
+
+                        <!-- Q6 -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">6. How does a business get funded without banks or venture capitalists?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Enterprises raise capital via <strong>Decentralized SCL Crowdfunding</strong>. Citizens allocate unused portions of their SCL accrual to businesses they support. To prevent monopolistic capture, all crowdfunding campaigns must comply with strict <strong>Anti-Whale Rules</strong>:</p>
+                                    <ul>
+                                        <li><strong>Minimum Backers:</strong> At least 25 unique verified individuals must back the enterprise.</li>
+                                        <li><strong>Spread Limit:</strong> The largest individual gift (D_max) cannot exceed 4 times the smallest gift (D_min).</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Phase 3: Week 13 (37.1%) -->
-                        <div class="roadmap-phase-node completed" style="left: 37.1%;" tabindex="0">
-                            <div class="node-content-top">
-                                <span class="node-date">Jul 07</span>
-                            </div>
-                            <div class="node-pin">✓</div>
-                            <div class="node-content-bottom">
-                                <span class="node-title">Distributed Topology</span>
-                            </div>
-                            <div class="node-tooltip-bubble">
-                                <div class="tooltip-phase-header">
-                                    <span class="tooltip-phase-num">Phase 3 (Week 13)</span>
-                                    <span class="tooltip-phase-status completed">COMPLETED</span>
+                        <!-- Q7 (Updated Document Revision) -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">7. What is SCL Quarterly Decay, and why is it necessary?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>All enterprise Social Credit Limits undergo an automatic <strong>25% quarterly decay</strong> (reducing by 25% every 3 months). This mechanic prevents defunct corporations or bad actors from sitting on massive idle credit lines forever. To maintain its credit ceiling over time, an enterprise must continuously deliver real value, quality goods, and responsive service to earn periodic renewals from its community backer base.</p>
                                 </div>
-                                <div class="tooltip-phase-body">
-                                    Tiered L1/L2/L3 node communications, regional routing, daily macro-epoch distribution, and stale-leader fencing.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORY 4 -->
+                    <div class="faq-category-group" data-category="4">
+                        <div class="faq-category-header">
+                            <span class="category-num-tag">SECTION 4</span>
+                            <h3>Velocity Fees, Living Dividend Pools & Governance</h3>
+                        </div>
+
+                        <!-- Q8 -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">8. How does the Progressive Transaction Fee work?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Instead of flat sales taxes, IOUBI uses a logarithmic balance fee:</p>
+                                    <p><code>Fee % = average(log10(max(10, Bal_A)), log10(max(10, Bal_B))) / 100</code></p>
+                                    <p>A transaction between small everyday balances carries a tiny ~1% fee, while transactions between massive corporate balances scale up to 4–5%. This creates a natural anti-hoarding pressure without requiring audits or IRS bureaucracy.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Phase 4: Week 18 (51.4%) -->
-                        <div class="roadmap-phase-node completed" style="left: 51.4%;" tabindex="0">
-                            <div class="node-content-top">
-                                <span class="node-date">Aug 11</span>
-                            </div>
-                            <div class="node-pin">✓</div>
-                            <div class="node-content-bottom">
-                                <span class="node-title">Cryptographic Security</span>
-                            </div>
-                            <div class="node-tooltip-bubble">
-                                <div class="tooltip-phase-header">
-                                    <span class="tooltip-phase-num">Phase 4 (Week 18)</span>
-                                    <span class="tooltip-phase-status completed">COMPLETED</span>
-                                </div>
-                                <div class="tooltip-phase-body">
-                                    Zero-knowledge identity verifiers, passkey/WebAuthn integration, biometric boundary scoring, and audit logging.
+                        <!-- Q9 -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">9. Where do the collected transaction fees go?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p><strong>100% of fees</strong> are routed to public utility smart contracts:</p>
+                                    <ul>
+                                        <li><strong>50% — Living Dividend Pool:</strong> Disbursed daily to every verified citizen, guaranteeing basic living security.</li>
+                                        <li><strong>50% — Public Goods & Infrastructure Pool:</strong> Allocated transparently by democratic citizen voting and peer juries for healthcare, education, transit, and ecological regeneration.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Phase 5: Week 23 (65.7%) - ACTIVE HIGHLIGHTED -->
-                        <div class="roadmap-phase-node active-stage" style="left: 65.7%;" tabindex="0">
-                            <div class="node-content-top">
-                                <span class="node-date">Sep 15</span>
-                            </div>
-                            <div class="node-pin">⚡</div>
-                            <div class="node-content-bottom">
-                                <span class="node-title">Governance & Jury System</span>
-                            </div>
-                            <div class="node-tooltip-bubble">
-                                <div class="tooltip-phase-header">
-                                    <span class="tooltip-phase-num">Phase 5 (Week 23)</span>
-                                    <span class="tooltip-phase-status upcoming">UPCOMING (ACTIVE)</span>
+                        <!-- Q10 (Updated Document Revision) -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">10. How are pool allocations adjusted democratically?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Pool distributions are governed by continuous daily citizen voting based on Social Jury recommendations. To ensure economic stability, voting results can shift allocations by a maximum rate of <strong>0.001% per day</strong> (requiring 1,000 continuous days of supermajority voting to move an allocation by 1%). This prevents sudden budget shocks while remaining fully responsive to long-term public priorities.</p>
                                 </div>
-                                <div class="tooltip-phase-body">
-                                    Peer jury selection hooks, official public department voting rules, and transparent consensus tracking.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORY 5 -->
+                    <div class="faq-category-group" data-category="5">
+                        <div class="faq-category-header">
+                            <span class="category-num-tag">SECTION 5</span>
+                            <h3>Real-World Implementation, Housing & Technology</h3>
+                        </div>
+
+                        <!-- Q11 (Updated Document Revision) -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">11. How does IOUBI handle large purchases like primary homeownership?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>In IOUBI, earning and saving both raise overdraft limits for <strong>primary homeownership</strong> without thirty-year compound interest mortgages. Because homes are purchased through zero-interest mutual credit rather than leveraged bank debt, housing costs decrease by over 50%. Speculative real estate hoarding is eliminated because unused secondary properties face steep progressive velocity holding fees.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Phase 6: Week 27 (77.1%) -->
-                        <div class="roadmap-phase-node" style="left: 77.1%;" tabindex="0">
-                            <div class="node-content-top">
-                                <span class="node-date">Oct 13</span>
-                            </div>
-                            <div class="node-pin"></div>
-                            <div class="node-content-bottom">
-                                <span class="node-title">Production PWA App</span>
-                            </div>
-                            <div class="node-tooltip-bubble">
-                                <div class="tooltip-phase-header">
-                                    <span class="tooltip-phase-num">Phase 6 (Week 27)</span>
-                                    <span class="tooltip-phase-status future">UPCOMING</span>
-                                </div>
-                                <div class="tooltip-phase-body">
-                                    End-to-end mobile & web application, personal checking UI, business kiosk mode, and governance dashboards.
+                        <!-- Q12 (Updated Document Revision) -->
+                        <div class="faq-accordion-item">
+                            <button type="button" class="faq-question-btn" aria-expanded="false">
+                                <span class="faq-q-text">12. What happens as AI and automation replace human jobs?</span>
+                                <span class="faq-toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer-pane">
+                                <div class="faq-answer-body">
+                                    <p>Under legacy capitalism, AI-driven automation causes unemployment and economic collapse because workers lose income to buy goods. Under IOUBI, automation lowers production costs while velocity fees on automated commercial transactions fully fund the living dividend pool. Like rainwater circulating through a thriving garden, technological abundance is automatically recycled into universal human purchasing power.</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Phase 7: Week 31 (88.6%) -->
-                        <div class="roadmap-phase-node" style="left: 88.6%;" tabindex="0">
-                            <div class="node-content-top">
-                                <span class="node-date">Nov 10</span>
-                            </div>
-                            <div class="node-pin"></div>
-                            <div class="node-content-bottom">
-                                <span class="node-title">Adversarial Hardening</span>
-                            </div>
-                            <div class="node-tooltip-bubble">
-                                <div class="tooltip-phase-header">
-                                    <span class="tooltip-phase-num">Phase 7 (Week 31)</span>
-                                    <span class="tooltip-phase-status future">UPCOMING</span>
-                                </div>
-                                <div class="tooltip-phase-body">
-                                    Security stress-testing, attack simulations, race-condition fixes, and anti-abuse protocols.
-                                </div>
-                            </div>
+                    <div class="faq-no-results" id="faq-no-results" style="display: none;">
+                        <p>No matching questions found for your search query.</p>
+                        <small>Try searching for "PCL", "SCL", "Deltar", "decay", "fee", or "housing".</small>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 5: ROADMAP TAB                                                 -->
+        <!-- =================================================================== -->
+        <main class="view-tab hidden-view" id="view-roadmap">
+            <section id="roadmap" class="section-container">
+                <div class="section-header">
+                    <span class="section-tag">ENGINEERING TRAJECTORY</span>
+                    <h2>IOUBI Project 2026 Status & Roadmap</h2>
+                    <p class="section-desc">Engineering trajectory transitioning zero-interest mutual credit from deterministic specification to live pilot launch.</p>
+                </div>
+
+                <div class="roadmap-main-card">
+                    <!-- Top Summary Readout -->
+                    <div class="roadmap-summary-header">
+                        <h3>
+                            <span>⚡</span>
+                            <span>2026 Core Protocol Trajectory</span>
+                        </h3>
+                        <div class="roadmap-percent-badge">
+                            <span class="pulse-dot"></span>
+                            <span>51.4% Complete (Week 18 of 35)</span>
+                        </div>
+                    </div>
+
+                    <!-- LARGE FOCUSED HORIZONTAL PROGRESS TIMELINE BAR -->
+                    <div class="roadmap-timeline-wrapper">
+                        <!-- Progress Bar Track -->
+                        <div class="roadmap-timeline-bar-track">
+                            <div class="roadmap-timeline-bar-fill"></div>
+                            <span class="timeline-bound-label timeline-bound-start">Apr 07 (Start)</span>
+                            <span class="timeline-bound-label timeline-bound-end">Dec 08 (Pilot)</span>
                         </div>
 
-                        <!-- Phase 8: Week 35 (100%) - PILOT TARGET -->
-                        <div class="roadmap-phase-node" style="left: 100%;" tabindex="0">
-                            <div class="node-content-top">
-                                <span class="node-date">Dec 08</span>
-                            </div>
-                            <div class="node-pin">🚀</div>
-                            <div class="node-content-bottom">
-                                <span class="node-title">Controlled Live Pilot</span>
-                            </div>
-                            <div class="node-tooltip-bubble">
-                                <div class="tooltip-phase-header">
-                                    <span class="tooltip-phase-num">Phase 8 (Week 35)</span>
-                                    <span class="tooltip-phase-status future">UPCOMING (PILOT)</span>
+                        <!-- 8 Milestone Nodes Proportional to Week Completion -->
+                        <div class="roadmap-nodes-container">
+                            <!-- Phase 1: Week 4 (11.4%) -->
+                            <div class="roadmap-phase-node completed" style="left: 11.4%;" tabindex="0">
+                                <div class="node-content-top">
+                                    <span class="node-date">May 05</span>
                                 </div>
-                                <div class="tooltip-phase-body">
-                                    Deployment of the first real-world cohort, live transaction monitoring, and macro-economic metric verification.
+                                <div class="node-pin">✓</div>
+                                <div class="node-content-bottom">
+                                    <span class="node-title">Engine Foundations</span>
+                                </div>
+                                <div class="node-tooltip-bubble">
+                                    <div class="tooltip-phase-header">
+                                        <span class="tooltip-phase-num">Phase 1 (Week 4)</span>
+                                        <span class="tooltip-phase-status completed">COMPLETED</span>
+                                    </div>
+                                    <div class="tooltip-phase-body">
+                                        Private repository setup, 100% deterministic economic math engine, BaseCL/PCL/SCL formulas, 1.4% transaction fee algorithms, and regional cost balancing.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 2: Week 8 (22.9%) -->
+                            <div class="roadmap-phase-node completed" style="left: 22.9%;" tabindex="0">
+                                <div class="node-content-top">
+                                    <span class="node-date">Jun 02</span>
+                                </div>
+                                <div class="node-pin">✓</div>
+                                <div class="node-content-bottom">
+                                    <span class="node-title">Ledger & State Engine</span>
+                                </div>
+                                <div class="node-tooltip-bubble">
+                                    <div class="tooltip-phase-header">
+                                        <span class="tooltip-phase-num">Phase 2 (Week 8)</span>
+                                        <span class="tooltip-phase-status completed">COMPLETED</span>
+                                    </div>
+                                    <div class="tooltip-phase-body">
+                                        Append-only cryptographically linked transaction ledger, late pending event handlers, and synchronization proofing.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 3: Week 13 (37.1%) -->
+                            <div class="roadmap-phase-node completed" style="left: 37.1%;" tabindex="0">
+                                <div class="node-content-top">
+                                    <span class="node-date">Jul 07</span>
+                                </div>
+                                <div class="node-pin">✓</div>
+                                <div class="node-content-bottom">
+                                    <span class="node-title">Distributed Topology</span>
+                                </div>
+                                <div class="node-tooltip-bubble">
+                                    <div class="tooltip-phase-header">
+                                        <span class="tooltip-phase-num">Phase 3 (Week 13)</span>
+                                        <span class="tooltip-phase-status completed">COMPLETED</span>
+                                    </div>
+                                    <div class="tooltip-phase-body">
+                                        Tiered L1/L2/L3 node communications, regional routing, daily macro-epoch distribution, and stale-leader fencing.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 4: Week 18 (51.4%) -->
+                            <div class="roadmap-phase-node completed" style="left: 51.4%;" tabindex="0">
+                                <div class="node-content-top">
+                                    <span class="node-date">Aug 11</span>
+                                </div>
+                                <div class="node-pin">✓</div>
+                                <div class="node-content-bottom">
+                                    <span class="node-title">Cryptographic Security</span>
+                                </div>
+                                <div class="node-tooltip-bubble">
+                                    <div class="tooltip-phase-header">
+                                        <span class="tooltip-phase-num">Phase 4 (Week 18)</span>
+                                        <span class="tooltip-phase-status completed">COMPLETED</span>
+                                    </div>
+                                    <div class="tooltip-phase-body">
+                                        Zero-knowledge identity verifiers, passkey/WebAuthn integration, biometric boundary scoring, and audit logging.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 5: Week 23 (65.7%) - ACTIVE HIGHLIGHTED -->
+                            <div class="roadmap-phase-node active-stage" style="left: 65.7%;" tabindex="0">
+                                <div class="node-content-top">
+                                    <span class="node-date">Sep 15</span>
+                                </div>
+                                <div class="node-pin">⚡</div>
+                                <div class="node-content-bottom">
+                                    <span class="node-title">Governance & Jury System</span>
+                                </div>
+                                <div class="node-tooltip-bubble">
+                                    <div class="tooltip-phase-header">
+                                        <span class="tooltip-phase-num">Phase 5 (Week 23)</span>
+                                        <span class="tooltip-phase-status upcoming">UPCOMING (ACTIVE)</span>
+                                    </div>
+                                    <div class="tooltip-phase-body">
+                                        Peer jury selection hooks, official public department voting rules, and transparent consensus tracking.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 6: Week 27 (77.1%) -->
+                            <div class="roadmap-phase-node" style="left: 77.1%;" tabindex="0">
+                                <div class="node-content-top">
+                                    <span class="node-date">Oct 13</span>
+                                </div>
+                                <div class="node-pin"></div>
+                                <div class="node-content-bottom">
+                                    <span class="node-title">Production PWA App</span>
+                                </div>
+                                <div class="node-tooltip-bubble">
+                                    <div class="tooltip-phase-header">
+                                        <span class="tooltip-phase-num">Phase 6 (Week 27)</span>
+                                        <span class="tooltip-phase-status future">UPCOMING</span>
+                                    </div>
+                                    <div class="tooltip-phase-body">
+                                        End-to-end mobile & web application, personal checking UI, business kiosk mode, and governance dashboards.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 7: Week 31 (88.6%) -->
+                            <div class="roadmap-phase-node" style="left: 88.6%;" tabindex="0">
+                                <div class="node-content-top">
+                                    <span class="node-date">Nov 10</span>
+                                </div>
+                                <div class="node-pin"></div>
+                                <div class="node-content-bottom">
+                                    <span class="node-title">Adversarial Hardening</span>
+                                </div>
+                                <div class="node-tooltip-bubble">
+                                    <div class="tooltip-phase-header">
+                                        <span class="tooltip-phase-num">Phase 7 (Week 31)</span>
+                                        <span class="tooltip-phase-status future">UPCOMING</span>
+                                    </div>
+                                    <div class="tooltip-phase-body">
+                                        Security stress-testing, attack simulations, race-condition fixes, and anti-abuse protocols.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phase 8: Week 35 (100%) - PILOT TARGET -->
+                            <div class="roadmap-phase-node" style="left: 100%;" tabindex="0">
+                                <div class="node-content-top">
+                                    <span class="node-date">Dec 08</span>
+                                </div>
+                                <div class="node-pin">🚀</div>
+                                <div class="node-content-bottom">
+                                    <span class="node-title">Controlled Live Pilot</span>
+                                </div>
+                                <div class="node-tooltip-bubble">
+                                    <div class="tooltip-phase-header">
+                                        <span class="tooltip-phase-num">Phase 8 (Week 35)</span>
+                                        <span class="tooltip-phase-status future">UPCOMING (PILOT)</span>
+                                    </div>
+                                    <div class="tooltip-phase-body">
+                                        Deployment of the first real-world cohort, live transaction monitoring, and macro-economic metric verification.
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </main>
 
         <!-- =================================================================== -->
-        <!-- 8. GLOBAL FOOTER ARCHITECTURE                                       -->
+        <!-- GLOBAL 3-COLUMN FOOTER                                              -->
         <!-- =================================================================== -->
         <footer class="footer">
             <div class="footer-3col-container">
@@ -1261,12 +1285,12 @@
                 <div class="footer-col">
                     <h4>Navigation</h4>
                     <div class="footer-nav-grid">
-                        <a href="#macro-balance-engine">Macro Simulator</a>
-                        <a href="#credit-sim-card">Credit Simulator</a>
-                        <a href="#fee-calc-card">Fee Calculator</a>
-                        <a href="#faq">FAQ Knowledge Base</a>
-                        <a href="#roadmap">2026 Roadmap</a>
-                        <a href="#docs">Documentation Hub</a>
+                        <a href="#macro-balance-engine" class="nav-tab-link" data-target-view="view-simulators" data-target-anchor="macro-balance-engine">Macro Simulator</a>
+                        <a href="#credit-sim-card" class="nav-tab-link" data-target-view="view-simulators" data-target-anchor="credit-sim-card">Credit Simulator</a>
+                        <a href="#fee-calc-card" class="nav-tab-link" data-target-view="view-simulators" data-target-anchor="fee-calc-card">Fee Calculator</a>
+                        <a href="#faq" class="nav-tab-link" data-target-view="view-faq">FAQ Knowledge Base</a>
+                        <a href="#roadmap" class="nav-tab-link" data-target-view="view-roadmap">2026 Roadmap</a>
+                        <a href="#docs" class="nav-tab-link" data-target-view="view-docs">Documentation Hub</a>
                     </div>
                 </div>
 
