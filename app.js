@@ -432,39 +432,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ctx.clearRect(0, 0, w, h);
 
-        const padLeft = 65;
-        const padRight = 25;
-        const padTop = 25;
-        const padBottom = 35;
+        const padLeft = 74;
+        const padRight = 32;
+        const padTop = 22;
+        const padBottom = 38;
 
         const graphW = w - padLeft - padRight;
         const graphH = h - padTop - padBottom;
 
-        const maxCap = Math.max(1000, initialCredit * 1.45);
+        // 6 vertical grid boxes of resolution in height:
+        // Peak is Month 6 = 1.25 * initialCredit (5 boxes)
+        // 1st quarter is Month 0-3 = 1.00 * initialCredit (4 boxes)
+        // 5 / 4 = 1.25 -> exactly 25% taller!
+        // 6 boxes total = 1.50 * initialCredit (maxCap)
+        const ySteps = 6;
+        const stepVal = initialCredit / 4;
+        const maxCap = Math.max(600, stepVal * ySteps);
 
-        // 9 Checkpoints: 0m, 3m, 6m (Renewal Event), 9m, 12m, 15m, 18m (Ramps to 0), 21m, 24m
+        // 9 Checkpoints: Month 0 through Month 24
         const quarters = [
-            { m: 0, label: 'M0', decay: 1.0 },
-            { m: 3, label: 'M3', decay: 0.75 },
-            { m: 6, label: 'M6', decay: 1.25 },   // 6-Month Renewal Boost (+100% batch added to remaining 50%)
-            { m: 9, label: 'M9', decay: 1.00 },   // 25% decay on both batches
-            { m: 12, label: 'M12', decay: 0.50 }, // Batch 1 expires, Batch 2 at 50%
-            { m: 15, label: 'M15', decay: 0.25 }, // Batch 2 at 25%
-            { m: 18, label: 'M18', decay: 0.00 }, // Batch 2 expires (Zero Mark)
-            { m: 21, label: 'M21', decay: 0.00 },
-            { m: 24, label: 'M24', decay: 0.00 }
+            { m: 0, label: 'Month 0', decay: 1.0 },
+            { m: 3, label: 'Month 3', decay: 0.75 },
+            { m: 6, label: 'Month 6', decay: 1.25 },   // 6-Month Renewal Boost (+100% batch added to remaining 50%)
+            { m: 9, label: 'Month 9', decay: 1.00 },   // 25% decay on both batches
+            { m: 12, label: 'Month 12', decay: 0.50 }, // Batch 1 expires, Batch 2 at 50%
+            { m: 15, label: 'Month 15', decay: 0.25 }, // Batch 2 at 25%
+            { m: 18, label: 'Month 18', decay: 0.00 }, // Batch 2 expires (Zero Mark)
+            { m: 21, label: 'Month 21', decay: 0.00 },
+            { m: 24, label: 'Month 24', decay: 0.00 }
         ];
 
-        // Draw horizontal grid lines & Y-axis labels
+        // Format chart Y-axis numbers cleanly with round units
+        function formatChartYAxisVal(val) {
+            if (val === 0) return '0';
+            if (val >= 1000000) {
+                const mVal = val / 1000000;
+                return mVal % 1 === 0 ? mVal.toFixed(0) + 'M' : mVal.toFixed(2) + 'M';
+            }
+            if (val >= 1000) {
+                const kVal = val / 1000;
+                return kVal % 1 === 0 ? kVal.toFixed(0) + 'k' : (kVal * 10 % 1 === 0 ? kVal.toFixed(1) + 'k' : kVal.toFixed(2) + 'k');
+            }
+            return Math.round(val).toLocaleString();
+        }
+
+        // Draw horizontal grid lines & Y-axis labels with custom Deltar font
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
         ctx.lineWidth = 1;
-        ctx.font = '10px JetBrains Mono, monospace';
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#94a3b8';
         ctx.textAlign = 'right';
 
-        const ySteps = 4;
         for (let i = 0; i <= ySteps; i++) {
-            const val = (maxCap / ySteps) * i;
+            const val = stepVal * i;
             const y = padTop + graphH - (i / ySteps) * graphH;
 
             ctx.beginPath();
@@ -472,16 +491,16 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.lineTo(w - padRight, y);
             ctx.stroke();
 
-            let valStr = '0';
-            if (val >= 1000000) valStr = (val / 1000000).toFixed(1) + 'M';
-            else if (val >= 1000) valStr = Math.round(val / 1000) + 'k';
-            else valStr = Math.round(val).toString();
-
-            ctx.fillText('Δ' + valStr, padLeft - 8, y + 3);
+            const valStr = formatChartYAxisVal(val);
+            ctx.font = '10.5px DeltarFont, "JetBrains Mono", monospace';
+            ctx.fillText('\uE002 ' + valStr, padLeft - 8, y + 3.5);
         }
 
         // Draw X-axis grid lines & Month labels
         ctx.textAlign = 'center';
+        const fontSize = w < 540 ? '8.5px' : '9.5px';
+        ctx.font = `${fontSize} "JetBrains Mono", monospace`;
+
         quarters.forEach((q, i) => {
             const x = padLeft + (i / (quarters.length - 1)) * graphW;
             ctx.beginPath();
@@ -523,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = 'rgba(0, 240, 255, 0.06)';
         ctx.fill();
 
-        // 2. Draw Enterprise Overdraft Utilization Curve (Amber Oscillating Spikes Ramping to 0 at M18)
+        // 2. Draw Enterprise Overdraft Utilization Curve (Amber Oscillating Spikes Ramping to 0 at Month 18)
         ctx.beginPath();
         const curvePoints = [];
         const subSteps = 64; // Smooth interpolation across 24 months
@@ -539,9 +558,9 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (monthFrac < 12) activeCeiling = initialCredit * 1.00;
             else if (monthFrac < 15) activeCeiling = initialCredit * 0.50;
             else if (monthFrac < 18) activeCeiling = initialCredit * 0.25;
-            else activeCeiling = 0; // Expired at M18
+            else activeCeiling = 0; // Expired at Month 18
 
-            // Utilization spikes rising to slightly fill steps, ramping to zero at M18
+            // Utilization spikes rising to slightly fill steps, ramping to zero at Month 18
             let actualUtilization = 0;
             if (monthFrac < 18) {
                 const rampFactor = Math.max(0, 1 - (monthFrac / 18));
@@ -582,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const baseCL = parseFloat(sliderBaseCL.value) || 2000;
         const nationalSpend = parseFloat(sliderSpend.value) || 5;
-        const trend = parseFloat(sliderTrend.value) || 2.0;
+        const rawTrend = parseFloat(sliderTrend.value) !== undefined ? parseFloat(sliderTrend.value) : 2.0;
         const activity = parseFloat(sliderActivity.value) || 2.0;
 
         // 1. Regional Modifier R ($2 = 0.2x, $5 = 1.0x, $10 = 2.0x)
@@ -596,8 +615,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         R = Math.min(2.0, Math.max(0.2, R));
 
-        // 2. Personal Credit Limit (PCL) Calculation
-        const PCL = (baseCL * R) + (baseCL * trend * activity);
+        // 2. Trend Multiplier (1.0x for <= 1.00, up to 100.0x for >= 100.00)
+        let trendMultiplier = 1.0;
+        if (rawTrend <= 1.0) {
+            trendMultiplier = 1.0;
+        } else if (rawTrend >= 100.0) {
+            trendMultiplier = 100.0;
+        } else {
+            trendMultiplier = rawTrend;
+        }
+
+        // 3. Personal Credit Limit (PCL) Calculation
+        const PCL = (baseCL * R) + (baseCL * trendMultiplier * activity);
         const dailySCLRate = PCL / 365;
 
         // Dynamic max on Accumulated Unused SCL Balance (double the PCL currently shown)
@@ -645,21 +674,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         updateFloatingPosition(sliderSpend, descSpend, 2, 10, nationalSpend);
 
-        if (valTrend) valTrend.textContent = `${trend.toFixed(1)}x`;
+        // Balance Trend display & floating subtext (range: -10 to 120, multiplier: 1.0x to 100.0x)
+        if (valTrend) valTrend.textContent = `${trendMultiplier.toFixed(1)}x`;
         if (descTrendMain && descTrendDesc) {
-            const trendDeltarVal = Math.round(baseCL * trend);
-            descTrendMain.innerHTML = `<span class="deltar-font">&#xE002;</span> ${trendDeltarVal.toLocaleString()}`;
-            if (trend === 1.0) {
+            const formattedRawTrend = rawTrend % 1 === 0 ? rawTrend.toFixed(0) : rawTrend.toFixed(1);
+            descTrendMain.innerHTML = `<span class="deltar-font">&#xE002;</span> ${formattedRawTrend}`;
+            if (rawTrend <= 1.0) {
                 descTrendDesc.textContent = '(1.0x Baseline Floor)';
-            } else if (trend <= 5.0) {
+            } else if (rawTrend <= 5.0) {
                 descTrendDesc.textContent = '(Consistent Earning & Savings)';
-            } else if (trend <= 20.0) {
+            } else if (rawTrend <= 20.0) {
                 descTrendDesc.textContent = '(Active Credit Building)';
-            } else {
+            } else if (rawTrend <= 100.0) {
                 descTrendDesc.textContent = '(Motivated Savings & Elite Capital)';
+            } else {
+                descTrendDesc.textContent = '(100.0x Maximum Multiplier Cap)';
             }
         }
-        updateFloatingPosition(sliderTrend, descTrend, 1.0, 100.0, trend);
+        updateFloatingPosition(sliderTrend, descTrend, -10.0, 120.0, rawTrend);
 
         if (valActivity) valActivity.textContent = `${activity.toFixed(1)}x`;
         if (descActivityMain && descActivityDesc) {
@@ -697,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Tier 1 Summary Cards & Active PCL Formula (Concise, no leading prefix)
         if (outPCL) outPCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(PCL).toLocaleString()}`;
         if (outPCLFormula) {
-            outPCLFormula.textContent = `(${Math.round(baseCL).toLocaleString()} × ${R.toFixed(1)}) + (${Math.round(baseCL).toLocaleString()} × ${trend.toFixed(1)} × ${activity.toFixed(1)})`;
+            outPCLFormula.textContent = `(${Math.round(baseCL).toLocaleString()} × ${R.toFixed(1)}) + (${Math.round(baseCL).toLocaleString()} × ${trendMultiplier.toFixed(1)} × ${activity.toFixed(1)})`;
         }
         if (outSCLRate) outSCLRate.innerHTML = `<span class="deltar-font">&#xE002;</span>${dailySCLRate.toFixed(1)}/day`;
         if (outAvailSCL) outAvailSCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(unusedSCL).toLocaleString()}`;
