@@ -647,18 +647,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (valTrend) valTrend.textContent = `${trend.toFixed(1)}x`;
         if (descTrendMain && descTrendDesc) {
+            const trendDeltarVal = Math.round(baseCL * trend);
+            descTrendMain.innerHTML = `<span class="deltar-font">&#xE002;</span> ${trendDeltarVal.toLocaleString()}`;
             if (trend === 1.0) {
-                descTrendMain.textContent = 'Flat / Neutral History';
                 descTrendDesc.textContent = '(1.0x Baseline Floor)';
             } else if (trend <= 5.0) {
-                descTrendMain.textContent = 'Steady Positive Trend';
                 descTrendDesc.textContent = '(Consistent Earning & Savings)';
             } else if (trend <= 20.0) {
-                descTrendMain.textContent = 'Strong Motivated Savings';
                 descTrendDesc.textContent = '(Active Credit Building)';
             } else {
-                descTrendMain.textContent = 'Exceptional Capital Growth';
-                descTrendDesc.textContent = '(Motivated Savings & Elite Credit Building)';
+                descTrendDesc.textContent = '(Motivated Savings & Elite Capital)';
             }
         }
         updateFloatingPosition(sliderTrend, descTrend, 1.0, 100.0, trend);
@@ -685,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 descUnusedSCLDesc.textContent = '(Building Reserve)';
             } else if (unusedSCL <= 0.5 * maxUnusedSCL) {
                 descUnusedSCLMain.textContent = 'Standard Unspent Balance';
-                descUnusedSCLDesc.textContent = '(Active Gifting Reserve)';
+                descUnusedSCLDesc.textContent = '(Active Reserve)';
             } else if (unusedSCL <= 0.8 * maxUnusedSCL) {
                 descUnusedSCLMain.textContent = 'High Accumulated Reserve';
                 descUnusedSCLDesc.textContent = '(Substantial Capacity)';
@@ -750,7 +748,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const initialBusinessCredit = backers * dAvg;
 
             if (outBizCredit) outBizCredit.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(initialBusinessCredit).toLocaleString()}`;
-            if (outConsensusStatus) outConsensusStatus.textContent = '✓ Compliant (Min 25 Backers | Max Gift ≤ 4x Min Gift)';
+            if (outConsensusStatus) {
+                outConsensusStatus.innerHTML = `${backers} Backers × Avg <span class="deltar-font">&#xE002;</span>${Math.round(dAvg).toLocaleString()} = <span class="deltar-font">&#xE002;</span>${Math.round(initialBusinessCredit).toLocaleString()}`;
+            }
 
             // Draw 24-Month Runway Chart
             drawCreditRunwayChart(initialBusinessCredit);
@@ -1363,7 +1363,99 @@ document.addEventListener('DOMContentLoaded', () => {
     handleHashNavigation();
 
     // ----------------------------------------------------------------------
-    // 9. Roadmap Phase Milestone Nodes Tap / Click Handler (Mobile/Touch)
+    // 9. Collapsible Plumbing & Fee Pool Drawer Controllers
+    // ----------------------------------------------------------------------
+    const btnTogglePlumbing = document.getElementById('btn-toggle-plumbing');
+    const macroPlumbingDrawer = document.getElementById('macro-plumbing-drawer');
+
+    if (btnTogglePlumbing && macroPlumbingDrawer) {
+        btnTogglePlumbing.addEventListener('click', () => {
+            const isOpen = macroPlumbingDrawer.classList.contains('open');
+            if (isOpen) {
+                macroPlumbingDrawer.classList.remove('open');
+                btnTogglePlumbing.classList.remove('open');
+                btnTogglePlumbing.setAttribute('aria-expanded', 'false');
+            } else {
+                macroPlumbingDrawer.classList.add('open');
+                btnTogglePlumbing.classList.add('open');
+                btnTogglePlumbing.setAttribute('aria-expanded', 'true');
+            }
+        });
+    }
+
+    const btnToggleFeePool = document.getElementById('btn-toggle-fee-pool');
+    const feePoolDrawer = document.getElementById('fee-pool-drawer');
+
+    if (btnToggleFeePool && feePoolDrawer) {
+        btnToggleFeePool.addEventListener('click', () => {
+            const isOpen = feePoolDrawer.classList.contains('open');
+            if (isOpen) {
+                feePoolDrawer.classList.remove('open');
+                btnToggleFeePool.classList.remove('open');
+                btnToggleFeePool.setAttribute('aria-expanded', 'false');
+            } else {
+                feePoolDrawer.classList.add('open');
+                btnToggleFeePool.classList.add('open');
+                btnToggleFeePool.setAttribute('aria-expanded', 'true');
+            }
+        });
+    }
+
+    // ----------------------------------------------------------------------
+    // 10. Dynamic Roadmap Progress Engine (34-Week Schedule & Calendar Tracking)
+    // ----------------------------------------------------------------------
+    function initRoadmapProgress() {
+        const weekTicsContainer = document.getElementById('roadmap-week-tics');
+        if (weekTicsContainer) {
+            weekTicsContainer.innerHTML = '';
+            const totalWeeks = 34;
+            for (let w = 0; w <= totalWeeks; w++) {
+                const tic = document.createElement('div');
+                tic.className = 'week-tic' + (w % 4 === 0 ? ' major-tic' : '');
+                weekTicsContainer.appendChild(tic);
+            }
+        }
+
+        // Project Start: April 7, 2026
+        const projectStartDate = new Date(2026, 3, 7);
+        const now = new Date(); // Current date (2026-08-14)
+        const totalWeeks = 34;
+        const totalWorkdays = totalWeeks * 5; // 170 workdays
+
+        // Calculate elapsed calendar days
+        const diffTime = now.getTime() - projectStartDate.getTime();
+        const elapsedCalendarDays = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+
+        // Convert calendar days to working days (5 working days per 7 calendar days)
+        const elapsedFullWeeks = Math.floor(elapsedCalendarDays / 7);
+        const remainingDays = elapsedCalendarDays % 7;
+        const elapsedWorkdays = (elapsedFullWeeks * 5) + Math.min(5, remainingDays);
+
+        // Progress percentage & current week
+        const progressPct = Math.min(100, Math.max(0, (elapsedWorkdays / totalWorkdays) * 100));
+        const currentWeekNum = Math.min(totalWeeks, Math.max(1, Math.floor(elapsedCalendarDays / 7) + 1));
+
+        // Update UI Badges & Progress Fill Bar
+        const badgeEl = document.getElementById('roadmap-pct-text');
+        if (badgeEl) {
+            badgeEl.textContent = `${progressPct.toFixed(1)}% Complete (Week ${currentWeekNum} of ${totalWeeks})`;
+        }
+
+        const navStatusBadge = document.getElementById('nav-status-badge');
+        if (navStatusBadge) {
+            navStatusBadge.innerHTML = `<span class="pulse-dot"></span> 2026 Core: ${progressPct.toFixed(1)}% | Week ${currentWeekNum}`;
+        }
+
+        const barFill = document.querySelector('.roadmap-timeline-bar-fill');
+        if (barFill) {
+            barFill.style.width = `${progressPct.toFixed(1)}%`;
+        }
+    }
+
+    initRoadmapProgress();
+
+    // ----------------------------------------------------------------------
+    // 11. Roadmap Phase Milestone Nodes Tap / Click Handler (Mobile/Touch)
     // ----------------------------------------------------------------------
     const phaseNodes = document.querySelectorAll('.roadmap-phase-node');
     phaseNodes.forEach(node => {
@@ -1382,7 +1474,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ----------------------------------------------------------------------
-    // 10. Initial Simulator Runs & Resize Redraws
+    // 12. Initial Simulator Runs & Resize Redraws
     // ----------------------------------------------------------------------
     if (typeof window.calculateFeeFormula === 'function') {
         window.calculateFeeFormula();

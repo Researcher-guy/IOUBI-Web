@@ -1880,52 +1880,135 @@ main#app-main {
     text-align: center;
 }
 
-/* Deep-Dive Collapsible Accordion */
-.macro-accordion-box {
-    margin-top: 1rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 0.5rem;
+/* ==========================================================================
+   Inspect the Plumbing (Step-by-Step Mathematical Verification Drawer)
+   ========================================================================== */
+
+.macro-plumbing-wrapper {
+    margin-top: 1.5rem;
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    border-radius: 0.75rem;
+    background: #0d1117;
     overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
 }
 
-.macro-details summary {
-    padding: 1rem 1.25rem;
+.plumbing-toggle-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    padding: 1.1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--accent-cyan);
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+}
+
+.plumbing-toggle-btn:hover {
+    background: rgba(0, 240, 255, 0.06);
+    color: #00ff9d;
+}
+
+.plumbing-toggle-btn .toggle-icon {
+    font-size: 1rem;
+    transition: transform 0.25s ease;
+}
+
+.plumbing-toggle-btn.open .toggle-icon {
+    transform: rotate(90deg);
+}
+
+.plumbing-drawer {
+    display: none;
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: #06090e;
+    animation: fadeInTab 0.25s ease;
+}
+
+.plumbing-drawer.open {
+    display: block;
+}
+
+.plumbing-content-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+.plumbing-card {
+    background: #0d1117;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.65rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.2s ease;
+}
+
+.plumbing-card:hover {
+    border-color: rgba(0, 240, 255, 0.35);
+}
+
+.plumbing-card h4 {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
     font-weight: 700;
     color: var(--accent-cyan);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    list-style: none;
-}
-
-.macro-details summary::-webkit-details-marker {
-    display: none;
-}
-
-.macro-details[open] summary {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.macro-accordion-content {
-    padding: 1.25rem;
-}
-
-.terminal-proof-box {
-    background: #050811;
-    border: 1px solid rgba(0, 240, 255, 0.25);
-    font-family: var(--font-mono);
-    color: #a5f3fc;
-    padding: 1.25rem;
-    border-radius: 0.5rem;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    font-size: 0.85rem;
-    line-height: 1.6;
     margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+}
+
+.plumbing-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    font-size: 0.82rem;
+    color: #cbd5e1;
+    line-height: 1.45;
+}
+
+.plumbing-card li {
+    position: relative;
+    padding-left: 1rem;
+}
+
+.plumbing-card li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--accent-cyan);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.plumbing-card li strong {
+    color: #f0f6fc;
+}
+
+.plumbing-card li span {
+    font-family: var(--font-mono);
+    color: #00ff9d;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .plumbing-content-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* SCL Crowdfund Layout */
@@ -2278,100 +2361,135 @@ main#app-main {
 }
 
 /* ==========================================================================
-   6. PROJECT ROADMAP & DEVELOPMENT PROGRESS
+   Where this transaction's fee goes (Deep Dive Pool Allocation Drawer)
    ========================================================================== */
 
-.roadmap-timeline-box {
-    padding: 3rem;
-}
-
-.timeline-stepper-horizontal {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3.5rem;
-}
-
-.timeline-step {
-    position: relative;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+.fee-pool-dropdown-wrapper {
+    margin-top: 1.75rem;
+    border: 1px solid rgba(0, 240, 255, 0.25);
     border-radius: 0.75rem;
+    background: #0d1117;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
 }
 
-.timeline-step.active {
-    border-color: var(--accent-cyan);
-    box-shadow: 0 0 15px var(--accent-glow);
-}
-
-.step-badge {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    background: var(--accent-cyan);
-    color: var(--bg-dark);
-    font-weight: 700;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    margin-bottom: 0.75rem;
-}
-
-.step-badge.pending { background: rgba(255, 255, 255, 0.1); color: var(--text-muted); }
-.step-badge.target { background: var(--accent-magenta); color: #fff; }
-
-.timeline-step h4 {
-    font-size: 1.25rem;
-    margin-bottom: 0.2rem;
-}
-
-.step-title {
-    font-size: 0.95rem;
+.fee-pool-toggle-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    padding: 1.1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     color: var(--accent-cyan);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
 }
 
-.step-desc {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+.fee-pool-toggle-btn:hover {
+    background: rgba(0, 240, 255, 0.06);
+    color: #00ff9d;
 }
 
-.bridge-funding-box {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 2rem;
+.fee-pool-toggle-btn .toggle-icon {
+    font-size: 1rem;
+    transition: transform 0.25s ease;
 }
 
-.bridge-funding-box h3 {
-    font-size: 1.35rem;
-    margin-bottom: 0.5rem;
+.fee-pool-toggle-btn.open .toggle-icon {
+    transform: rotate(90deg);
 }
 
-.bridge-funding-box p {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
+.fee-pool-drawer {
+    display: none;
+    padding: 1.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: #06090e;
+    animation: fadeInTab 0.25s ease;
 }
 
-.needs-grid {
+.fee-pool-drawer.open {
+    display: block;
+}
+
+.fee-pool-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
 }
 
-.need-item {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+.fee-pool-card {
+    background: #0d1117;
+    border-radius: 0.65rem;
     padding: 1.25rem;
-    border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.need-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
-.need-item strong { font-size: 0.95rem; color: #fff; }
-.need-item small { font-size: 0.8rem; color: var(--text-muted); }
+.fee-pool-card.emerald-pool-card {
+    border-color: rgba(0, 255, 157, 0.3);
+}
+
+.fee-pool-card.cyan-pool-card {
+    border-color: rgba(0, 240, 255, 0.3);
+}
+
+.fee-pool-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.fee-pool-card-header h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.fee-pool-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.fee-pool-val {
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #00ff9d;
+}
+
+.fee-pool-card.cyan-pool-card .fee-pool-val {
+    color: var(--accent-cyan);
+}
+
+.fee-pool-time {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.fee-pool-desc {
+    font-size: 0.82rem;
+    color: #8b949e;
+    line-height: 1.45;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .fee-pool-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 /* ==========================================================================
    7. FAQ / KNOWLEDGE BASE COMPONENT STYLES
@@ -2828,57 +2946,84 @@ main#app-main {
 /* Horizontal Timeline Progress Bar System */
 .roadmap-timeline-wrapper {
     position: relative;
-    padding: 3.5rem 1.5rem 5.5rem;
+    padding: 1rem 1rem 6rem 1rem;
     margin: 0 auto;
+}
+
+/* Elevated Top Start (Apr 07) and End (Dec 01) Labels inside the box */
+.roadmap-track-top-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #94a3b8;
+    padding: 0 4px;
+}
+
+.track-label-start strong {
+    color: #00ff9d;
+    font-weight: 700;
+}
+
+.track-label-end strong {
+    color: var(--accent-cyan);
+    font-weight: 700;
 }
 
 .roadmap-timeline-bar-track {
     position: relative;
     width: 100%;
-    height: 14px;
-    background: rgba(255, 255, 255, 0.08);
+    height: 16px;
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 999px;
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
+    overflow: visible;
 }
 
 .roadmap-timeline-bar-fill {
     height: 100%;
-    width: 51.4%;
+    width: 54.7%;
     background: linear-gradient(90deg, #00f0ff, #00ff9d);
     border-radius: 999px;
     box-shadow: 0 0 20px rgba(0, 255, 157, 0.7);
     transition: width 0.8s ease-in-out;
 }
 
-/* Start (Apr 07) and End (Dec 08) Base Labels */
-.timeline-bound-label {
+/* 34-Week Linear Grid Tic Marks */
+.roadmap-week-tics {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-dim);
-    white-space: nowrap;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    border-radius: 999px;
 }
 
-.timeline-bound-start {
-    right: calc(100% + 12px);
-    color: #00ff9d;
+.week-tic {
+    width: 1px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.12);
+    position: relative;
 }
 
-.timeline-bound-end {
-    left: calc(100% + 12px);
-    color: #64748b;
+.week-tic.major-tic {
+    background: rgba(0, 240, 255, 0.35);
+    width: 2px;
 }
 
 /* Phase Milestone Nodes Along the Bar */
 .roadmap-nodes-container {
     position: absolute;
-    top: 0;
-    left: 1.5rem;
-    right: 1.5rem;
-    height: 100%;
+    top: calc(1rem + 2.2rem + 1.25rem);
+    left: 1rem;
+    right: 1rem;
+    height: 16px;
     pointer-events: none;
 }
 

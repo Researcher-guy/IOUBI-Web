@@ -73,8 +73,8 @@
                 </nav>
 
                 <div class="nav-actions">
-                    <a href="#roadmap" class="status-badge nav-tab-link" data-target-view="view-roadmap" style="text-decoration: none; cursor: pointer;">
-                        <span class="pulse-dot"></span> 2026 Core: 51.4% | Phase 5
+                    <a href="#roadmap" class="status-badge nav-tab-link" id="nav-status-badge" data-target-view="view-roadmap" style="text-decoration: none; cursor: pointer;">
+                        <span class="pulse-dot"></span> 2026 Core: 54.7% | Week 19
                     </a>
                 </div>
             </div>
@@ -408,7 +408,7 @@
                         ⚡ Perfect Macro-Equilibrium Achieved: At 1.350 turns/day, the 1.4% transaction fee on 70 commercial steps fully finances 100.7% of citizens' living floors without taxes.
                     </div>
 
-                    <!-- Block 4: Inspect the Plumbing -->
+                    <!-- Block 4: Inspect the Plumbing (Pretty Box Grid inside Collapsible Drawer) -->
                     <div class="macro-plumbing-wrapper">
                         <button type="button" class="plumbing-toggle-btn" id="btn-toggle-plumbing" aria-expanded="false">
                             <span class="toggle-icon">▸</span>
@@ -423,7 +423,7 @@
                                         <li><strong>Target Living Standard:</strong> <span id="plum-raw-cost">$24,000.00</span>/yr ($<span id="plum-raw-daily">65.75</span>/day)</li>
                                         <li><strong>Supply Chain Depth:</strong> <span id="plum-supply-chain">70</span> commercial steps per personal purchase</li>
                                         <li><strong>Commercial-to-Personal Ratio:</strong> <span id="plum-comm-ratio">70</span>:1</li>
-                                        <li><strong>Annual Velocity ($V_{annual}$):</strong> 1.2 turns per year (Status Quo benchmark)</li>
+                                        <li><strong>Annual Velocity (V):</strong> 1.2 turns per year (Status Quo benchmark)</li>
                                         <li><strong>Interest Cost:</strong> 6.0% annual weighted average carrying cost on debt capital</li>
                                         <li><strong>Net Tax Drag:</strong> -29.8% average tax drain for welfare and public overhead</li>
                                     </ul>
@@ -432,8 +432,8 @@
                                 <div class="plumbing-card">
                                     <h4>2. Status Quo Derived Metrics</h4>
                                     <ul>
-                                        <li><strong>Total Daily Spending ($E_{total}$):</strong> <span id="plum-legacy-total-spend">$4,668.49</span>/day</li>
-                                        <li><strong>Required Money Supply ($M_{legacy}$):</strong> <span id="plum-legacy-ms">$1,420,000.00</span></li>
+                                        <li><strong>Total Daily Spending:</strong> <span id="plum-legacy-total-spend">$4,668.49</span>/day</li>
+                                        <li><strong>Required Money Supply:</strong> <span id="plum-legacy-ms">$1,420,000.00</span></li>
                                         <li><strong>Daily Interest Tribute:</strong> <span id="plum-legacy-int">$233.42</span>/day ($85,200.00/yr per capita)</li>
                                         <li><strong>Net Daily Welfare Payout:</strong> <span id="plum-legacy-net">-$19.57</span>/day (Citizens are net tax-negative)</li>
                                     </ul>
@@ -443,9 +443,9 @@
                                     <h4>3. IOUBI Engine Transformations</h4>
                                     <ul>
                                         <li><strong>Zero Interest Effect:</strong> Cost of living drops from $<span id="plum-raw-daily-2">65.75</span> to <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-col">39.45</span>/day</li>
-                                        <li><strong>Daily Velocity ($V_{daily}$):</strong> <span id="plum-ioubi-v">1.350</span> turns/day (<span id="plum-ioubi-v-yr">493</span> turns/year)</li>
-                                        <li><strong>Total Daily Spending ($E_{total}$):</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-total-spend">2,801.10</span>/day</li>
-                                        <li><strong>Required Money Supply ($M_{IOUBI}$):</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-ms">2,074.89</span> (Money supply down by 99.8%)</li>
+                                        <li><strong>Daily Velocity (V):</strong> <span id="plum-ioubi-v">1.350</span> turns/day (<span id="plum-ioubi-v-yr">493</span> turns/year)</li>
+                                        <li><strong>Total Daily Spending:</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-total-spend">2,801.10</span>/day</li>
+                                        <li><strong>Required Money Supply:</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-ms">2,074.89</span> (Money supply down by 99.8%)</li>
                                         <li><strong>Daily Fee Pool Collected (1.4%):</strong> <span class="deltar-font">&#xE002;</span><span id="plum-ioubi-fee-pool">39.22</span>/day</li>
                                         <li><strong>Daily Living Dividend Distributed:</strong> +<span class="deltar-font">&#xE002;</span><span id="plum-ioubi-net-div">39.73</span>/day</li>
                                     </ul>
@@ -492,10 +492,10 @@
                                     </div>
                                 </div>
 
-                                <!-- 2. Regional Cost of Living -->
+                                <!-- 2. Regional Cost of Living (Average Daily Spending) -->
                                 <div class="sim-ctrl-item">
                                     <div class="ctrl-label-row">
-                                        <label for="slider-spend">Regional Cost of Living (National Daily Spending):</label>
+                                        <label for="slider-spend">Regional Cost of Living (Average Daily Spending):</label>
                                         <span class="ctrl-val-badge emerald" id="val-spend">1.00x</span>
                                     </div>
                                     <div class="sim-slider-wrapper">
@@ -506,16 +506,16 @@
                                     </div>
                                 </div>
 
-                                <!-- 3. Balance Trend -->
+                                <!-- 3. Balance Trend (Median Change of Recent Quarter) -->
                                 <div class="sim-ctrl-item">
                                     <div class="ctrl-label-row">
-                                        <label for="slider-trend">Balance Trend (Median Day of Recent Quarter):</label>
+                                        <label for="slider-trend">Balance Trend (Median Change of Recent Quarter):</label>
                                         <span class="ctrl-val-badge emerald" id="val-trend">2.0x</span>
                                     </div>
                                     <div class="sim-slider-wrapper">
                                         <input type="range" id="slider-trend" min="1.0" max="100.0" value="2.0" step="0.5" class="balance-slider emerald-slider">
                                         <div class="sim-floating-tier" id="desc-trend">
-                                            <span class="tier-main" id="desc-trend-main">Steady Positive Trend</span> <span class="tier-desc" id="desc-trend-desc">(Consistent Earning & Savings)</span>
+                                            <span class="tier-main" id="desc-trend-main"><span class="deltar-font">&#xE002;</span> 4,000</span> <span class="tier-desc" id="desc-trend-desc">(Consistent Earning & Savings)</span>
                                         </div>
                                     </div>
                                 </div>
@@ -571,11 +571,11 @@
                             </div>
                         </div>
 
-                        <!-- TIER 2: Enterprise Crowdfunding Inputs (Anti-Whale Rules) -->
+                        <!-- TIER 2: Enterprise Crowdfunding -->
                         <div class="sim-subpanel tier-panel tier-2-panel">
                             <div class="tier-panel-header">
                                 <span class="tier-badge cyan-badge">TIER 2</span>
-                                <h3>Enterprise Crowdfunding (Anti-Whale Protocol)</h3>
+                                <h3>Enterprise Crowdfunding</h3>
                             </div>
 
                             <div class="sim-ctrl-group">
@@ -629,7 +629,7 @@
                                     <strong class="stat-value cyan-text glow-text" id="out-biz-credit"><span class="deltar-font">&#xE002;</span>125,000</strong>
                                 </div>
                                 <div class="consensus-status-badge" id="out-consensus-status">
-                                    ✓ Compliant (Min 25 Backers | Max Gift ≤ 4x Min Gift)
+                                    25 Backers × Avg <span class="deltar-font">&#xE002;</span>5,000 = <span class="deltar-font">&#xE002;</span>125,000
                                 </div>
                             </div>
                         </div>
@@ -740,18 +740,40 @@
                                 </div>
                             </div>
 
-                            <div class="pool-allocation-breakdown">
-                                <div class="pool-allocation-header">Where this transaction's fee goes:</div>
-                                <div class="pool-grid">
-                                    <div class="pool-card">
-                                        <div class="pool-label">Living Dividend Pool (50%)</div>
-                                        <div class="pool-val" id="pool-dividend"><span class="deltar-font">&#xE002;</span>0.697</div>
-                                        <div class="pool-time" id="pool-dividend-time">2.09 mins of work</div>
-                                    </div>
-                                    <div class="pool-card">
-                                        <div class="pool-label">Public Goods Pool (50%)</div>
-                                        <div class="pool-val" id="pool-public"><span class="deltar-font">&#xE002;</span>0.697</div>
-                                        <div class="pool-time" id="pool-public-time">2.09 mins of work</div>
+                            <!-- "Where this transaction's fee goes" Deep Dive Dropdown Box -->
+                            <div class="fee-pool-dropdown-wrapper">
+                                <button type="button" class="fee-pool-toggle-btn" id="btn-toggle-fee-pool" aria-expanded="false">
+                                    <span class="toggle-icon">▸</span>
+                                    <strong>Where this transaction's fee goes (Deep Dive Pool Allocation)</strong>
+                                </button>
+                                
+                                <div class="fee-pool-drawer" id="fee-pool-drawer">
+                                    <div class="fee-pool-grid">
+                                        <!-- Pool 1: Living Dividend -->
+                                        <div class="fee-pool-card emerald-pool-card">
+                                            <div class="fee-pool-card-header">
+                                                <span class="pool-badge emerald-badge">50% POOL</span>
+                                                <h4>Living Dividend Pool</h4>
+                                            </div>
+                                            <div class="fee-pool-stat-row">
+                                                <span class="fee-pool-val" id="pool-dividend"><span class="deltar-font">&#xE002;</span>0.697</span>
+                                                <span class="fee-pool-time" id="pool-dividend-time">2.09 mins of work</span>
+                                            </div>
+                                            <p class="fee-pool-desc">Distributed automatically each morning to every verified citizen's account, guaranteeing unconditioned basic living security without tax bureaucracies.</p>
+                                        </div>
+
+                                        <!-- Pool 2: Public Goods & Infrastructure -->
+                                        <div class="fee-pool-card cyan-pool-card">
+                                            <div class="fee-pool-card-header">
+                                                <span class="pool-badge cyan-badge">50% POOL</span>
+                                                <h4>Public Goods & Infrastructure Pool</h4>
+                                            </div>
+                                            <div class="fee-pool-stat-row">
+                                                <span class="fee-pool-val" id="pool-public"><span class="deltar-font">&#xE002;</span>0.697</span>
+                                                <span class="fee-pool-time" id="pool-public-time">2.09 mins of work</span>
+                                            </div>
+                                            <p class="fee-pool-desc">Directed transparently by democratic citizen voting and peer juries for healthcare, clean transit, ecological restoration, and open education.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1072,7 +1094,7 @@
             <section id="roadmap" class="section-container">
                 <div class="section-header">
                     <span class="section-tag">ENGINEERING TRAJECTORY</span>
-                    <h2>IOUBI Project 2026 Status & Roadmap</h2>
+                    <h2>2026 IOUBI Project Build Current Progress</h2>
                     <p class="section-desc">Engineering trajectory transitioning zero-interest mutual credit from deterministic specification to live pilot launch.</p>
                 </div>
 
@@ -1085,23 +1107,30 @@
                         </h3>
                         <div class="roadmap-percent-badge">
                             <span class="pulse-dot"></span>
-                            <span>51.4% Complete (Week 18 of 35)</span>
+                            <span id="roadmap-pct-text">54.7% Complete (Week 19 of 34)</span>
                         </div>
                     </div>
 
                     <!-- LARGE FOCUSED HORIZONTAL PROGRESS TIMELINE BAR -->
                     <div class="roadmap-timeline-wrapper">
-                        <!-- Progress Bar Track -->
-                        <div class="roadmap-timeline-bar-track">
-                            <div class="roadmap-timeline-bar-fill"></div>
-                            <span class="timeline-bound-label timeline-bound-start">Apr 07 (Start)</span>
-                            <span class="timeline-bound-label timeline-bound-end">Dec 08 (Pilot)</span>
+                        <!-- Elevated Top Start & End Labels (inside main card) -->
+                        <div class="roadmap-track-top-labels">
+                            <span class="track-label-start">Project Start: <strong class="emerald-text">Apr 07</strong></span>
+                            <span class="track-label-end">Estimated Pilot Launch: <strong class="cyan-text">Dec 01</strong></span>
                         </div>
 
-                        <!-- 8 Milestone Nodes Proportional to Week Completion -->
+                        <!-- 34-Week Linear Progress Bar Track with Minor Week Tic Lines -->
+                        <div class="roadmap-timeline-bar-track">
+                            <div class="roadmap-timeline-bar-fill" style="width: 54.7%;"></div>
+                            <div class="roadmap-week-tics" id="roadmap-week-tics">
+                                <!-- 34 Linear Week Grid Tics -->
+                            </div>
+                        </div>
+
+                        <!-- 8 Milestone Nodes Proportional to Week Completion (Total 34 Weeks) -->
                         <div class="roadmap-nodes-container">
-                            <!-- Phase 1: Week 4 (11.4%) -->
-                            <div class="roadmap-phase-node completed" style="left: 11.4%;" tabindex="0">
+                            <!-- Phase 1: Week 4 (11.76%) -->
+                            <div class="roadmap-phase-node completed" style="left: 11.76%;" tabindex="0">
                                 <div class="node-content-top">
                                     <span class="node-date">May 05</span>
                                 </div>
@@ -1120,10 +1149,10 @@
                                 </div>
                             </div>
 
-                            <!-- Phase 2: Week 8 (22.9%) -->
-                            <div class="roadmap-phase-node completed" style="left: 22.9%;" tabindex="0">
+                            <!-- Phase 2: Week 7 (20.59%) -->
+                            <div class="roadmap-phase-node completed" style="left: 20.59%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Jun 02</span>
+                                    <span class="node-date">May 26</span>
                                 </div>
                                 <div class="node-pin">✓</div>
                                 <div class="node-content-bottom">
@@ -1131,7 +1160,7 @@
                                 </div>
                                 <div class="node-tooltip-bubble">
                                     <div class="tooltip-phase-header">
-                                        <span class="tooltip-phase-num">Phase 2 (Week 8)</span>
+                                        <span class="tooltip-phase-num">Phase 2 (Week 7)</span>
                                         <span class="tooltip-phase-status completed">COMPLETED</span>
                                     </div>
                                     <div class="tooltip-phase-body">
@@ -1140,10 +1169,10 @@
                                 </div>
                             </div>
 
-                            <!-- Phase 3: Week 13 (37.1%) -->
-                            <div class="roadmap-phase-node completed" style="left: 37.1%;" tabindex="0">
+                            <!-- Phase 3: Week 11 (32.35%) -->
+                            <div class="roadmap-phase-node completed" style="left: 32.35%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Jul 07</span>
+                                    <span class="node-date">Jun 23</span>
                                 </div>
                                 <div class="node-pin">✓</div>
                                 <div class="node-content-bottom">
@@ -1151,7 +1180,7 @@
                                 </div>
                                 <div class="node-tooltip-bubble">
                                     <div class="tooltip-phase-header">
-                                        <span class="tooltip-phase-num">Phase 3 (Week 13)</span>
+                                        <span class="tooltip-phase-num">Phase 3 (Week 11)</span>
                                         <span class="tooltip-phase-status completed">COMPLETED</span>
                                     </div>
                                     <div class="tooltip-phase-body">
@@ -1160,8 +1189,8 @@
                                 </div>
                             </div>
 
-                            <!-- Phase 4: Week 18 (51.4%) -->
-                            <div class="roadmap-phase-node completed" style="left: 51.4%;" tabindex="0">
+                            <!-- Phase 4: Week 18 (52.94%) - COMPLETED ANCHOR -->
+                            <div class="roadmap-phase-node completed" style="left: 52.94%;" tabindex="0">
                                 <div class="node-content-top">
                                     <span class="node-date">Aug 11</span>
                                 </div>
@@ -1180,10 +1209,10 @@
                                 </div>
                             </div>
 
-                            <!-- Phase 5: Week 23 (65.7%) - ACTIVE HIGHLIGHTED -->
-                            <div class="roadmap-phase-node active-stage" style="left: 65.7%;" tabindex="0">
+                            <!-- Phase 5: Week 21 (61.76%) - ACTIVE HIGHLIGHTED -->
+                            <div class="roadmap-phase-node active-stage" style="left: 61.76%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Sep 15</span>
+                                    <span class="node-date">Sep 01</span>
                                 </div>
                                 <div class="node-pin">⚡</div>
                                 <div class="node-content-bottom">
@@ -1191,7 +1220,7 @@
                                 </div>
                                 <div class="node-tooltip-bubble">
                                     <div class="tooltip-phase-header">
-                                        <span class="tooltip-phase-num">Phase 5 (Week 23)</span>
+                                        <span class="tooltip-phase-num">Phase 5 (Week 21)</span>
                                         <span class="tooltip-phase-status upcoming">UPCOMING (ACTIVE)</span>
                                     </div>
                                     <div class="tooltip-phase-body">
@@ -1200,10 +1229,10 @@
                                 </div>
                             </div>
 
-                            <!-- Phase 6: Week 27 (77.1%) -->
-                            <div class="roadmap-phase-node" style="left: 77.1%;" tabindex="0">
+                            <!-- Phase 6: Week 24 (70.59%) -->
+                            <div class="roadmap-phase-node" style="left: 70.59%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Oct 13</span>
+                                    <span class="node-date">Sep 22</span>
                                 </div>
                                 <div class="node-pin"></div>
                                 <div class="node-content-bottom">
@@ -1211,7 +1240,7 @@
                                 </div>
                                 <div class="node-tooltip-bubble">
                                     <div class="tooltip-phase-header">
-                                        <span class="tooltip-phase-num">Phase 6 (Week 27)</span>
+                                        <span class="tooltip-phase-num">Phase 6 (Week 24)</span>
                                         <span class="tooltip-phase-status future">UPCOMING</span>
                                     </div>
                                     <div class="tooltip-phase-body">
@@ -1220,10 +1249,10 @@
                                 </div>
                             </div>
 
-                            <!-- Phase 7: Week 31 (88.6%) -->
-                            <div class="roadmap-phase-node" style="left: 88.6%;" tabindex="0">
+                            <!-- Phase 7: Week 28 (82.35%) -->
+                            <div class="roadmap-phase-node" style="left: 82.35%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Nov 10</span>
+                                    <span class="node-date">Oct 20</span>
                                 </div>
                                 <div class="node-pin"></div>
                                 <div class="node-content-bottom">
@@ -1231,7 +1260,7 @@
                                 </div>
                                 <div class="node-tooltip-bubble">
                                     <div class="tooltip-phase-header">
-                                        <span class="tooltip-phase-num">Phase 7 (Week 31)</span>
+                                        <span class="tooltip-phase-num">Phase 7 (Week 28)</span>
                                         <span class="tooltip-phase-status future">UPCOMING</span>
                                     </div>
                                     <div class="tooltip-phase-body">
@@ -1240,10 +1269,10 @@
                                 </div>
                             </div>
 
-                            <!-- Phase 8: Week 35 (100%) - PILOT TARGET -->
+                            <!-- Phase 8: Week 34 (100.0%) - PILOT TARGET -->
                             <div class="roadmap-phase-node" style="left: 100%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Dec 08</span>
+                                    <span class="node-date">Dec 01</span>
                                 </div>
                                 <div class="node-pin">🚀</div>
                                 <div class="node-content-bottom">
@@ -1251,7 +1280,7 @@
                                 </div>
                                 <div class="node-tooltip-bubble">
                                     <div class="tooltip-phase-header">
-                                        <span class="tooltip-phase-num">Phase 8 (Week 35)</span>
+                                        <span class="tooltip-phase-num">Phase 8 (Week 34)</span>
                                         <span class="tooltip-phase-status future">UPCOMING (PILOT)</span>
                                     </div>
                                     <div class="tooltip-phase-body">
@@ -1302,7 +1331,7 @@
                         <span>Development Core Active</span>
                     </div>
                     <div class="footer-epoch-badge">
-                        Daily Macro Epoch: 2026.225
+                        Daily Macro Epoch: 2026.226
                     </div>
                     <a href="https://github.com/Researcher-guy/IOUBI-Web" target="_blank" rel="noopener noreferrer" class="footer-repo-link">
                         GitHub: Researcher-guy/IOUBI-Web ↗
