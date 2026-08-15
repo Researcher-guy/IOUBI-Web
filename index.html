@@ -46,7 +46,7 @@
                             <a href="#macro-balance-engine" class="dropdown-item nav-tab-link" data-target-view="view-simulators" data-target-anchor="macro-balance-engine">
                                 <span class="dropdown-icon">⚡</span>
                                 <div class="dropdown-text">
-                                    <strong>Macro-Economy & Dividend Engine</strong>
+                                    <strong>Macro-Economy Personal-Enterprize Balance</strong>
                                     <small>Compare status quo debt drag vs. IOUBI velocity equilibrium</small>
                                 </div>
                             </a>
@@ -54,14 +54,14 @@
                                 <span class="dropdown-icon">📈</span>
                                 <div class="dropdown-text">
                                     <strong>Personal & Enterprise Credit Simulator</strong>
-                                    <small>Explore PCL formulas, anti-whale rules & 24-mo runway</small>
+                                    <small>Model PCL formulas, Anti-Whale Crowdfunding, & SCL decay</small>
                                 </div>
                             </a>
                             <a href="#fee-calc-card" class="dropdown-item nav-tab-link" data-target-view="view-simulators" data-target-anchor="fee-calc-card">
                                 <span class="dropdown-icon">⚖️</span>
                                 <div class="dropdown-text">
                                     <strong>Progressive Transaction Fee Calculator</strong>
-                                    <small>Logarithmic balance scaling & personal time valuation</small>
+                                    <small>Interactive dual-balance logarithmic fee simulation</small>
                                 </div>
                             </a>
                         </div>
@@ -102,7 +102,7 @@
                             <span>⚡ Launch Macroeconomic Simulator</span>
                         </a>
                         <a href="#docs" class="btn btn-secondary nav-tab-link" data-target-view="view-docs">
-                            <span>Read Technical Whitepaper</span>
+                            <span>Read Technical Whitepaper (Released Soon)</span>
                         </a>
                     </div>
                 </div>
@@ -221,19 +221,19 @@
 
                 <!-- Simulator Jump Navigation Bar -->
                 <div class="simulator-nav-bar">
-                    <a href="#macro-balance-engine" class="sim-nav-pill active">⚡ Macro-Economy & Dividend Engine</a>
+                    <a href="#macro-balance-engine" class="sim-nav-pill active">⚡ Macro-Economy Personal-Enterprize Balance</a>
                     <a href="#credit-sim-card" class="sim-nav-pill">📈 Personal & Enterprise Credit Simulator</a>
                     <a href="#fee-calc-card" class="sim-nav-pill">⚖️ Progressive Transaction Fee Calculator</a>
                 </div>
 
-                <!-- SIMULATOR 1: Macroeconomic Balance & Dividend Engine -->
+                <!-- SIMULATOR 1: Macro-Economy Personal-Enterprize Balance -->
                 <div class="sandbox-card glass-panel span-full macro-engine-card" id="macro-balance-engine" style="margin-bottom: 3rem;">
                     <!-- Block 1: Header & Shared Inputs -->
                     <div class="macro-header-panel">
                         <div class="tool-header">
-                            <h2>Macroeconomic Balance & Dividend Engine</h2>
+                            <h2>Macro-Economy Personal-Enterprize Balance</h2>
                         </div>
-                        <p class="tool-desc">Compare how today's debt-backed system fares against a 1.4% zero-interest velocity fee.</p>
+                        <p class="tool-desc">Can the existing debt-backed system or a no-interest 1.4% velocity fee, afford UBI dividends?</p>
 
                         <div class="macro-controls-single-col">
                             <!-- Control 1: Target Cost of Living -->
@@ -664,15 +664,15 @@
                         <div class="two-col-inputs">
                             <div class="form-group">
                                 <label for="input-bal-a">Payor Account's Balance:</label>
-                                <input type="number" id="input-bal-a" value="1250" min="0" max="100000" step="10">
-                                <input type="range" id="slider-bal-a" min="0" max="100000" value="1250" step="10" class="balance-slider">
+                                <input type="number" id="input-bal-a" value="1250" min="-100" max="100000" step="10">
+                                <input type="range" id="slider-bal-a" min="-100" max="100000" value="1250" step="10" class="balance-slider">
                                 <div class="fee-contrib-badge" id="contrib-a">Fee contribution: 3.10%</div>
                             </div>
 
                             <div class="form-group">
                                 <label for="input-bal-b">Payee Account's Balance:</label>
-                                <input type="number" id="input-bal-b" value="300" min="0" max="100000" step="10">
-                                <input type="range" id="slider-bal-b" min="0" max="100000" value="300" step="10" class="balance-slider">
+                                <input type="number" id="input-bal-b" value="300" min="-100" max="100000" step="10">
+                                <input type="range" id="slider-bal-b" min="-100" max="100000" value="300" step="10" class="balance-slider">
                                 <div class="fee-contrib-badge" id="contrib-b">Fee contribution: 2.48%</div>
                             </div>
                         </div>
@@ -684,7 +684,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="input-conversion-rate">Set your time's value. <small class="hint-inline">For viewing prices in your personal time.</small></label>
+                            <label for="input-conversion-rate">Set your time's value. <small class="hint-inline">Only affects viewing prices in your personal time.</small></label>
                             <div class="input-suffix-group">
                                 <input type="number" id="input-conversion-rate" value="20" min="0.01" max="10000" step="1">
                                 <span class="input-suffix"><span class="deltar-font">&#xE002;</span> / hr</span>
@@ -748,31 +748,44 @@
                                 </button>
                                 
                                 <div class="fee-pool-drawer" id="fee-pool-drawer">
-                                    <div class="fee-pool-grid">
-                                        <!-- Pool 1: Living Dividend -->
+                                    <div class="fee-pool-grid-3col">
+                                        <!-- Pool 1: Living Dividend (UBI) - 75% -->
                                         <div class="fee-pool-card emerald-pool-card">
                                             <div class="fee-pool-card-header">
-                                                <span class="pool-badge emerald-badge">50% POOL</span>
-                                                <h4>Living Dividend Pool</h4>
+                                                <span class="pool-badge emerald-badge">75% POOL</span>
+                                                <h4>Living Dividend Pool (UBI)</h4>
                                             </div>
                                             <div class="fee-pool-stat-row">
-                                                <span class="fee-pool-val" id="pool-dividend"><span class="deltar-font">&#xE002;</span>0.697</span>
-                                                <span class="fee-pool-time" id="pool-dividend-time">2.09 mins of work</span>
+                                                <span class="fee-pool-val" id="pool-dividend"><span class="deltar-font">&#xE002;</span>1.046</span>
+                                                <span class="fee-pool-time" id="pool-dividend-time">3.14 mins of work</span>
                                             </div>
                                             <p class="fee-pool-desc">Distributed automatically each morning to every verified citizen's account, guaranteeing unconditioned basic living security without tax bureaucracies.</p>
                                         </div>
 
-                                        <!-- Pool 2: Public Goods & Infrastructure -->
+                                        <!-- Pool 2: Public Goods Pool (Ins and Grants) - 20% -->
                                         <div class="fee-pool-card cyan-pool-card">
                                             <div class="fee-pool-card-header">
-                                                <span class="pool-badge cyan-badge">50% POOL</span>
-                                                <h4>Public Goods & Infrastructure Pool</h4>
+                                                <span class="pool-badge cyan-badge">20% POOL</span>
+                                                <h4>Public Goods Pool (Ins and Grants)</h4>
                                             </div>
                                             <div class="fee-pool-stat-row">
-                                                <span class="fee-pool-val" id="pool-public"><span class="deltar-font">&#xE002;</span>0.697</span>
-                                                <span class="fee-pool-time" id="pool-public-time">2.09 mins of work</span>
+                                                <span class="fee-pool-val" id="pool-public"><span class="deltar-font">&#xE002;</span>0.279</span>
+                                                <span class="fee-pool-time" id="pool-public-time">0.84 mins of work</span>
                                             </div>
-                                            <p class="fee-pool-desc">Directed transparently by democratic citizen voting and peer juries for healthcare, clean transit, ecological restoration, and open education.</p>
+                                            <p class="fee-pool-desc">Directed transparently by democratic citizen voting and peer juries for healthcare, mutual insurance, clean transit, ecological restoration, and open grants.</p>
+                                        </div>
+
+                                        <!-- Pool 3: Government Contribution Pool (Individually allocated) - 5% -->
+                                        <div class="fee-pool-card indigo-pool-card">
+                                            <div class="fee-pool-card-header">
+                                                <span class="pool-badge indigo-badge">5% POOL</span>
+                                                <h4>Government Contribution Pool (Individually allocated)</h4>
+                                            </div>
+                                            <div class="fee-pool-stat-row">
+                                                <span class="fee-pool-val" id="pool-gov"><span class="deltar-font">&#xE002;</span>0.070</span>
+                                                <span class="fee-pool-time" id="pool-gov-time">0.21 mins of work</span>
+                                            </div>
+                                            <p class="fee-pool-desc">Directly and individually allocated by each transaction participant to municipal services and civic infrastructure of their choice.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -809,24 +822,24 @@
 
                     <!-- Doc 2: Whitepaper -->
                     <div class="doc-card glass-panel">
-                        <div class="doc-badge">TECHNICAL SPEC</div>
+                        <div class="doc-badge">TECHNICAL SPEC • RELEASED SOON</div>
                         <h3>Protocol Whitepaper & Accounting Mechanics</h3>
                         <p>The rigorous mathematical formalization of the five fundamental mechanics, state transition matrices, and distributed consensus proofs.</p>
                         <div class="doc-actions">
                             <a href="Key Specifications_ The Five Fundamental Accounting Mechanics.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full">
-                                <span>📄 View Accounting Specs (PDF)</span>
+                                <span>📄 View Accounting Specs (PDF) — Whitepaper (Released Soon)</span>
                             </a>
                         </div>
                     </div>
 
                     <!-- Doc 3: Healing Money -->
                     <div class="doc-card glass-panel">
-                        <div class="doc-badge">FOUNDATIONAL BOOK</div>
+                        <div class="doc-badge">FOUNDATIONAL BOOK • PUBLISHED SOON</div>
                         <h3>"Healing Money" by Todd McKissick</h3>
                         <p>The definitive socio-economic treatise diagnosing why compound interest inevitably centralizes power, and how mutual credit heals modern society.</p>
                         <div class="doc-actions">
                             <a href="HEALING MONEY.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full">
-                                <span>📖 Read Healing Money (PDF)</span>
+                                <span>📖 Read Healing Money (PDF) — "Healing Money" by Todd McKissick (Published Soon)</span>
                             </a>
                         </div>
                     </div>
@@ -1144,7 +1157,7 @@
                                         <span class="tooltip-phase-status completed">COMPLETED</span>
                                     </div>
                                     <div class="tooltip-phase-body">
-                                        Private repository setup, 100% deterministic economic math engine, BaseCL/PCL/SCL formulas, 1.4% transaction fee algorithms, and regional cost balancing.
+                                        Private repository setup, 100% deterministic economic math engine, BaseCL/PCL/SCL formulas, 1.4% transaction fee algorithms, regional cost balancing, and <strong>Whitepaper (Released Soon)</strong>.
                                     </div>
                                 </div>
                             </div>
@@ -1164,7 +1177,7 @@
                                         <span class="tooltip-phase-status completed">COMPLETED</span>
                                     </div>
                                     <div class="tooltip-phase-body">
-                                        Append-only cryptographically linked transaction ledger, late pending event handlers, and synchronization proofing.
+                                        Append-only cryptographically linked transaction ledger, late pending event handlers, synchronization proofing, and <strong>"Healing Money" by Todd McKissick (Published Soon)</strong>.
                                     </div>
                                 </div>
                             </div>

@@ -222,12 +222,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function calculatePerZero() {
         if (!inputBalA || !inputBalB) return;
 
-        const rawBalA = Math.max(0, parseFloat(inputBalA.value) || 0);
-        const rawBalB = Math.max(0, parseFloat(inputBalB.value) || 0);
+        const rawBalA = parseFloat(inputBalA.value);
+        const rawBalB = parseFloat(inputBalB.value);
 
-        // Floor of 10 for log function resulting in log floor of 1.00
-        const logA = Math.log10(Math.max(10, rawBalA));
-        const logB = Math.log10(Math.max(10, rawBalB));
+        const valBalA = isNaN(rawBalA) ? 0 : rawBalA;
+        const valBalB = isNaN(rawBalB) ? 0 : rawBalB;
+
+        // Floor of 10 for log function resulting in log floor of 1.00%
+        const logA = Math.log10(Math.max(10, valBalA));
+        const logB = Math.log10(Math.max(10, valBalB));
 
         if (contribA) contribA.textContent = `Fee contribution: ${logA.toFixed(2)}%`;
         if (contribB) contribB.textContent = `Fee contribution: ${logB.toFixed(2)}%`;
@@ -270,9 +273,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tblReceived) tblReceived.textContent = formatNumberWithCommas(receivedAmount, 3);
         if (tblReceivedTime) tblReceivedTime.textContent = formatSmartDuration(receivedHours);
 
-        // Pool breakdown: 100% Pool, UBI (75%), Social (20%), Gov (5%)
+        // Pool breakdown: Living Dividend (UBI - 75%), Public Goods (20%), Gov Contribution (5%)
         const ubiFee = feeAmount * 0.75;
-        const socialFee = feeAmount * 0.20;
+        const publicGoodsFee = feeAmount * 0.20;
         const govFee = feeAmount * 0.05;
 
         if (tblPool) tblPool.textContent = formatNumberWithCommas(feeAmount, 3);
@@ -281,11 +284,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tblUbi) tblUbi.textContent = formatNumberWithCommas(ubiFee, 3);
         if (tblUbiTime) tblUbiTime.textContent = formatSmartDuration(ubiFee / convRate);
 
-        if (tblSocial) tblSocial.textContent = formatNumberWithCommas(socialFee, 3);
-        if (tblSocialTime) tblSocialTime.textContent = formatSmartDuration(socialFee / convRate);
+        if (tblSocial) tblSocial.textContent = formatNumberWithCommas(publicGoodsFee, 3);
+        if (tblSocialTime) tblSocialTime.textContent = formatSmartDuration(publicGoodsFee / convRate);
 
         if (tblGov) tblGov.textContent = formatNumberWithCommas(govFee, 3);
         if (tblGovTime) tblGovTime.textContent = formatSmartDuration(govFee / convRate);
+
+        // Deep Dive Pool Cards
+        const poolDividend = document.getElementById('pool-dividend');
+        const poolDividendTime = document.getElementById('pool-dividend-time');
+        const poolPublic = document.getElementById('pool-public');
+        const poolPublicTime = document.getElementById('pool-public-time');
+        const poolGov = document.getElementById('pool-gov');
+        const poolGovTime = document.getElementById('pool-gov-time');
+
+        if (poolDividend) poolDividend.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(ubiFee, 3)}`;
+        if (poolDividendTime) poolDividendTime.textContent = `${formatSmartDuration(ubiFee / convRate)} of work`;
+
+        if (poolPublic) poolPublic.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(publicGoodsFee, 3)}`;
+        if (poolPublicTime) poolPublicTime.textContent = `${formatSmartDuration(publicGoodsFee / convRate)} of work`;
+
+        if (poolGov) poolGov.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(govFee, 3)}`;
+        if (poolGovTime) poolGovTime.textContent = `${formatSmartDuration(govFee / convRate)} of work`;
     }
     window.calculatePerZero = calculatePerZero;
 
@@ -450,13 +470,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxCap = Math.max(600, stepVal * ySteps);
 
         // 9 Checkpoints: Month 0 through Month 24
+        // Initial fundraise = 125k (1.00)
+        // M0-M3: 125k (1.00)
+        // M3-M6: falls 25% (31.25k) -> 93.75k (0.75)
+        // M6-M9: falls 25% (31.25k) to 62.5k, plus +125k renewal -> 187.5k (1.50)
+        // M9-M12: both fall by 31.25k each (-62.5k) -> 125k (1.00)
+        // M12-M15: double fall repeats (-62.5k) -> 62.5k (0.50)
+        // M15-M18: falls 31.25k -> 31.25k (0.25)
+        // M18-M24: falls 31.25k -> 0.00
         const quarters = [
-            { m: 0, label: 'Month 0', decay: 1.0 },
+            { m: 0, label: 'Month 0', decay: 1.00 },
             { m: 3, label: 'Month 3', decay: 0.75 },
-            { m: 6, label: 'Month 6', decay: 1.25 },   // 6-Month Renewal Boost (+100% batch added to remaining 50%)
-            { m: 9, label: 'Month 9', decay: 1.00 },   // 25% decay on both batches
-            { m: 12, label: 'Month 12', decay: 0.50 }, // Batch 1 expires, Batch 2 at 50%
-            { m: 15, label: 'Month 15', decay: 0.25 }, // Batch 2 at 25%
+            { m: 6, label: 'Month 6', decay: 1.50 },   // 6-Month Renewal Boost (Remaining 0.50 + New 1.00 = 1.50)
+            { m: 9, label: 'Month 9', decay: 1.00 },   // Double-fall -0.50 (Remaining 0.25 + 0.75 = 1.00)
+            { m: 12, label: 'Month 12', decay: 0.50 }, // Batch 1 completes, Batch 2 at 50% = 0.50
+            { m: 15, label: 'Month 15', decay: 0.25 }, // Batch 2 at 25% = 0.25
             { m: 18, label: 'Month 18', decay: 0.00 }, // Batch 2 expires (Zero Mark)
             { m: 21, label: 'Month 21', decay: 0.00 },
             { m: 24, label: 'Month 24', decay: 0.00 }
@@ -542,30 +570,32 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = 'rgba(0, 240, 255, 0.06)';
         ctx.fill();
 
-        // 2. Draw Enterprise Overdraft Utilization Curve (Amber Oscillating Spikes Ramping to 0 at Month 18)
+        // 2. Draw Enterprise Overdraft Utilization Curve (Wavy / Spiky line tracking below stepped line)
         ctx.beginPath();
         const curvePoints = [];
-        const subSteps = 64; // Smooth interpolation across 24 months
+        const subSteps = 80; // Smooth interpolation across 24 months
         for (let s = 0; s <= subSteps; s++) {
             const monthFrac = (s / subSteps) * 24;
             const x = padLeft + (monthFrac / 24) * graphW;
 
             // Determine active ceiling at this month
             let activeCeiling = 0;
-            if (monthFrac < 3) activeCeiling = initialCredit * 1.0;
+            if (monthFrac < 3) activeCeiling = initialCredit * 1.00;
             else if (monthFrac < 6) activeCeiling = initialCredit * 0.75;
-            else if (monthFrac < 9) activeCeiling = initialCredit * 1.25; // 6-Mo Renewal Boost
+            else if (monthFrac < 9) activeCeiling = initialCredit * 1.50; // 6-Mo Renewal Boost to 187.5k
             else if (monthFrac < 12) activeCeiling = initialCredit * 1.00;
             else if (monthFrac < 15) activeCeiling = initialCredit * 0.50;
             else if (monthFrac < 18) activeCeiling = initialCredit * 0.25;
             else activeCeiling = 0; // Expired at Month 18
 
-            // Utilization spikes rising to slightly fill steps, ramping to zero at Month 18
+            // Wavy / spiky utilization that follows but remains comfortably below the stepped line
             let actualUtilization = 0;
             if (monthFrac < 18) {
-                const rampFactor = Math.max(0, 1 - (monthFrac / 18));
-                const wave = 0.60 + 0.28 * Math.sin(monthFrac * 1.6);
-                actualUtilization = activeCeiling * Math.max(0.18, Math.min(0.88, wave)) * Math.sqrt(rampFactor);
+                const baseWave = 0.58 + 0.14 * Math.sin(monthFrac * 1.7) + 0.08 * Math.cos(monthFrac * 3.6);
+                const spikeNoise = 0.07 * Math.sin(monthFrac * 8.4 + 1.2);
+                const utilRatio = Math.max(0.32, Math.min(0.82, baseWave + spikeNoise));
+                const rampFactor = monthFrac >= 16 ? Math.max(0, (18 - monthFrac) / 2) : 1;
+                actualUtilization = activeCeiling * utilRatio * rampFactor;
             }
 
             const y = padTop + graphH - (actualUtilization / maxCap) * graphH;
@@ -820,7 +850,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (stage === 'mid') {
             if (sliderBaseCL) sliderBaseCL.value = 4000;
             if (sliderSpend) sliderSpend.value = 5;
-            if (sliderTrend) sliderTrend.value = 2.0;
+            if (sliderTrend) sliderTrend.value = 25.0;
             if (sliderActivity) sliderActivity.value = 2.0;
             if (sliderBackers) sliderBackers.value = 50;
             if (sliderDmin) sliderDmin.value = 4000;
@@ -828,15 +858,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 sliderDmax.max = 16000;
                 sliderDmax.value = 16000;
             }
-            // PCL = 20,000 -> max unused SCL = 40,000
+            // PCL = (4000*1) + (4000*25*2) = 4000 + 200000 = 204,000 -> max unused SCL = 408,000
             if (sliderUnusedSCL) {
-                sliderUnusedSCL.max = 40000;
-                sliderUnusedSCL.value = 20000;
+                sliderUnusedSCL.max = 408000;
+                sliderUnusedSCL.value = 100000;
             }
         } else if (stage === 'mature') {
             if (sliderBaseCL) sliderBaseCL.value = 10000;
             if (sliderSpend) sliderSpend.value = 5;
-            if (sliderTrend) sliderTrend.value = 2.0;
+            if (sliderTrend) sliderTrend.value = 30.0;
             if (sliderActivity) sliderActivity.value = 2.0;
             if (sliderBackers) sliderBackers.value = 500;
             if (sliderDmin) sliderDmin.value = 20000;
@@ -844,10 +874,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 sliderDmax.max = 80000;
                 sliderDmax.value = 80000;
             }
-            // PCL = 50,000 -> max unused SCL = 100,000
+            // PCL = (10000*1) + (10000*30*2) = 10000 + 600000 = 610,000 -> max unused SCL = 1,220,000
             if (sliderUnusedSCL) {
-                sliderUnusedSCL.max = 100000;
-                sliderUnusedSCL.value = 50000;
+                sliderUnusedSCL.max = 1220000;
+                sliderUnusedSCL.value = 500000;
             }
         }
 
