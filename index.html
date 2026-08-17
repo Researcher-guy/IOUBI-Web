@@ -118,57 +118,52 @@
 
                 <div class="specs-grid">
                     <!-- Mechanic 1 -->
-                    <div class="spec-card glass-panel">
-                        <div class="spec-num">01</div>
-                        <h3>Deltar (<span class="deltar-font">&#xE002;</span>) — Closed System Numeraire</h3>
-                        <p>A pure unit of account pegged to the median hourly wage of regional labor. Deltar is never mined, lent at interest, or extracted by centralized seigniorage.</p>
-                        <div class="spec-metric">
-                            <span class="metric-label">Peg Mechanism:</span>
-                            <span class="metric-val">1.00 <span class="deltar-font">&#xE002;</span> ≈ Global Normalized Living Floor</span>
+                    <div class="spec-box-card">
+                        <div class="spec-cyan-num">01</div>
+                        <h3 class="spec-box-title">Deltar (<span class="deltar-font">&#xE002;</span>) — Closed System Numeraire</h3>
+                        <p class="spec-box-text">A pure unit of account pegged to the median hourly wage of regional labor. Deltar is never mined, lent at interest, or extracted by centralized seigniorage.</p>
+                        <div class="spec-box-footer">
+                            <strong>Peg Mechanism:</strong> 1.00 <span class="deltar-font">&#xE002;</span> ≈ Global Normalized Living Floor
                         </div>
                     </div>
 
                     <!-- Mechanic 2 -->
-                    <div class="spec-card glass-panel">
-                        <div class="spec-num">02</div>
-                        <h3>Personal Credit Limits (PCL)</h3>
-                        <p>Automated zero-interest overdraft lines granted to every verified human. Scaled continuously by regional cost of living, savings trend, and daily economic circulation.</p>
-                        <div class="spec-metric">
-                            <span class="metric-label">Base Overdraft Formula:</span>
-                            <span class="metric-val">PCL = (BaseCL × R) + (BaseCL × Trend × Activity)</span>
+                    <div class="spec-box-card">
+                        <div class="spec-cyan-num">02</div>
+                        <h3 class="spec-box-title">Personal Credit Limits (PCL)</h3>
+                        <p class="spec-box-text">Automatic zero-interest overdraft lines granted to every verified human. Adjusted continuously by regional cost of living, savings trend, and daily economic circulation.</p>
+                        <div class="spec-box-footer">
+                            <strong>Base Overdraft Formula:</strong> PCL = (BaseCL × R) + (BaseCL × Trend × Activity)
                         </div>
                     </div>
 
                     <!-- Mechanic 3 -->
-                    <div class="spec-card glass-panel">
-                        <div class="spec-num">03</div>
-                        <h3>Social Credit Limits (SCL) Crowdfunding</h3>
-                        <p>Enterprises cannot mint or borrow money from banks. Instead, individuals gift portions of their daily PCL allowance to trustworthy businesses, subject to strict anti-whale limits.</p>
-                        <div class="spec-metric">
-                            <span class="metric-label">Anti-Whale Rule:</span>
-                            <span class="metric-val">Min 25 Backers | D_max ≤ 4 × D_min</span>
+                    <div class="spec-box-card">
+                        <div class="spec-cyan-num">03</div>
+                        <h3 class="spec-box-title">Social Credit Limits (SCL) Crowdfunding</h3>
+                        <p class="spec-box-text">Enterprises cannot mint or borrow money from banks. Instead, individuals accrue SCL based on their PCL, which they can only gift to their chosen businesses in groups of 25 people or more. Businesses must continue to fundraise SCL if they want to continue to run a deficit.</p>
+                        <div class="spec-box-footer">
+                            <strong>Anti-Whale Rule:</strong> Min 25 Backers | Largest donation cannot be more than 4 times the smallest donation
                         </div>
                     </div>
 
                     <!-- Mechanic 4 -->
-                    <div class="spec-card glass-panel">
-                        <div class="spec-num">04</div>
-                        <h3>Logarithmic Progressive Velocity Fee</h3>
-                        <p>A micro-transaction fee (0.01% to 5.0%) calculated using the logarithmic balance scale of both parties. Larger balances pay proportionately higher fees, preventing hoarding.</p>
-                        <div class="spec-metric">
-                            <span class="metric-label">Mean Rate:</span>
-                            <span class="metric-val">1.40% Benchmark Equilibrium</span>
+                    <div class="spec-box-card">
+                        <div class="spec-cyan-num">04</div>
+                        <h3 class="spec-box-title">Logarithmic Progressive Velocity Fee</h3>
+                        <p class="spec-box-text">A fee is charged on every transaction, based on the balance held in those two accounts - 1% min for all overdrafted accounts or 10% if both accounts have 10 decimal places (10 billion).</p>
+                        <div class="spec-box-footer">
+                            <strong>Equilibrium Benchmark:</strong> 1.40% Mean Velocity Rate
                         </div>
                     </div>
 
                     <!-- Mechanic 5 -->
-                    <div class="spec-card glass-panel">
-                        <div class="spec-num">05</div>
-                        <h3>Democratic Safety Net & Dividend Pools</h3>
-                        <p>100% of collected velocity fees flow directly into public utility and living dividend pools, distributed daily to citizens and community-approved public goods.</p>
-                        <div class="spec-metric">
-                            <span class="metric-label">Net Living Security:</span>
-                            <span class="metric-val">100% Guaranteed Living Cost Coverage</span>
+                    <div class="spec-box-card">
+                        <div class="spec-cyan-num">05</div>
+                        <h3 class="spec-box-title">Democratic Safety Net & Dividend Pools</h3>
+                        <p class="spec-box-text">All the fees from yesterday become today's daily safety net and personal dividend. This covers a tax contribution, insurance premium and a UBI that each trend toward society's needs for them.</p>
+                        <div class="spec-box-footer">
+                            <strong>Net Living Security:</strong> 100% Guaranteed Living Cost Coverage
                         </div>
                     </div>
                 </div>
@@ -182,27 +177,85 @@
                     <p class="section-desc">Direct architectural comparison between the debt-compound status quo and IOUBI's zero-interest mutual credit ledger.</p>
                 </div>
 
-                <div class="comparison-grid">
-                    <!-- Legacy Card -->
-                    <div class="comp-card legacy-border">
-                        <div class="comp-badge legacy-badge">LEGACY DEBT MONEY</div>
-                        <h3>Interest-Bearing Fiat System</h3>
-                        <ul>
-                            <li><strong>Artificial Scarcity:</strong> Money is minted exclusively as bank debt carrying compound interest tribute (~6% overhead).</li>
-                            <li><strong>Systemic Fragility:</strong> Sluggish velocity (~1.2 turns/yr) requires massive capital debt supplies ($1.4M+ per capita).</li>
-                            <li><strong>Regressive Tax Extraction:</strong> 30%+ income & sales taxation to finance fragmented, bureaucratic welfare safety nets.</li>
-                        </ul>
+                <div class="comparison-systems-grid">
+                    <!-- Legacy System Column -->
+                    <div class="comp-system-card legacy-card-wrap">
+                        <div class="comp-system-header">
+                            <span class="comp-badge legacy-badge">LEGACY DEBT MONEY</span>
+                            <h3>Interest-Bearing Fiat System</h3>
+                        </div>
+
+                        <div class="comp-items-stack">
+                            <!-- Item 1 -->
+                            <div class="comp-box-item legacy-item-box">
+                                <div class="comp-item-num coral-num">01</div>
+                                <h4 class="comp-item-title">Artificial Scarcity</h4>
+                                <p class="comp-item-text">Money is minted exclusively as bank debt carrying compound interest tribute (~6% overhead).</p>
+                                <div class="comp-item-footer">
+                                    <strong>Status Quo Drag:</strong> Compounding Interest Overhead
+                                </div>
+                            </div>
+
+                            <!-- Item 2 -->
+                            <div class="comp-box-item legacy-item-box">
+                                <div class="comp-item-num coral-num">02</div>
+                                <h4 class="comp-item-title">Systemic Fragility</h4>
+                                <p class="comp-item-text">Sluggish velocity (~1.2 turns/yr) requires massive capital debt supplies ($1.4M+ per capita).</p>
+                                <div class="comp-item-footer">
+                                    <strong>Capital Burden:</strong> Sluggish Velocity Requires Debt Hoarding
+                                </div>
+                            </div>
+
+                            <!-- Item 3 -->
+                            <div class="comp-box-item legacy-item-box">
+                                <div class="comp-item-num coral-num">03</div>
+                                <h4 class="comp-item-title">Regressive Tax Extraction</h4>
+                                <p class="comp-item-text">30%+ income & sales taxation to finance fragmented, bureaucratic welfare safety nets.</p>
+                                <div class="comp-item-footer">
+                                    <strong>Fiscal Drag:</strong> 30%+ Income & Sales Tax Bureaucracies
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- IOUBI Card -->
-                    <div class="comp-card ioubi-border">
-                        <div class="comp-badge ioubi-badge">IOUBI PROTOCOL</div>
-                        <h3>Zero-Interest Mutual Credit Engine</h3>
-                        <ul>
-                            <li><strong>Abundant Zero-Interest Liquidity:</strong> Money is created instantly at point-of-exchange through mutual credit clearing.</li>
-                            <li><strong>High-Velocity JIT Clearing:</strong> Rapid daily circulation (~1.35 turns/day) reduces required money supply to just ~Δ2,500.</li>
-                            <li><strong>Autonomous Living Dividend:</strong> A 1.4% velocity fee on commerce fully finances 100% of citizens' living floors without taxes.</li>
-                        </ul>
+                    <!-- IOUBI System Column -->
+                    <div class="comp-system-card ioubi-card-wrap">
+                        <div class="comp-system-header">
+                            <span class="comp-badge ioubi-badge">IOUBI PROTOCOL</span>
+                            <h3>Zero-Interest Mutual Credit Engine</h3>
+                        </div>
+
+                        <div class="comp-items-stack">
+                            <!-- Item 1 -->
+                            <div class="comp-box-item ioubi-item-box">
+                                <div class="comp-item-num cyan-num">01</div>
+                                <h4 class="comp-item-title">Abundant Zero-Interest Liquidity</h4>
+                                <p class="comp-item-text">Money is created instantly at point-of-exchange through mutual credit clearing.</p>
+                                <div class="comp-item-footer">
+                                    <strong>IOUBI Advantage:</strong> Instant Point-of-Exchange Liquidity
+                                </div>
+                            </div>
+
+                            <!-- Item 2 -->
+                            <div class="comp-box-item ioubi-item-box">
+                                <div class="comp-item-num cyan-num">02</div>
+                                <h4 class="comp-item-title">High-Velocity JIT Clearing</h4>
+                                <p class="comp-item-text">Rapid daily circulation (~1.35 turns/day) reduces required money supply to just ~<span class="deltar-font">&#xE002;</span>2,500.</p>
+                                <div class="comp-item-footer">
+                                    <strong>Velocity Efficiency:</strong> Minimal Stockpile Needed via High Turns
+                                </div>
+                            </div>
+
+                            <!-- Item 3 -->
+                            <div class="comp-box-item ioubi-item-box">
+                                <div class="comp-item-num cyan-num">03</div>
+                                <h4 class="comp-item-title">Autonomous Living Dividend</h4>
+                                <p class="comp-item-text">A 1.4% velocity fee on commerce fully finances 100% of citizens' living floors without taxes.</p>
+                                <div class="comp-item-footer">
+                                    <strong>Living Security:</strong> 100% Floor Funded by 1.4% Velocity Fee
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

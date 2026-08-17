@@ -596,268 +596,228 @@ main#app-main {
    2. KEY SPECIFICATIONS: THE FIVE FUNDAMENTAL ACCOUNTING MECHANICS
    ========================================================================== */
 
-.specs-list-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.spec-card-full {
-    display: flex;
-    flex-direction: column;
-    padding: 2.25rem;
-    border-radius: 1rem;
-    border: 1px solid var(--bg-card-border);
-    background: var(--bg-card);
-    position: relative;
-    transition: all var(--trans-mid);
-}
-
-.spec-card-full:hover {
-    border-color: rgba(0, 240, 255, 0.35);
-    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.1);
-}
-
-.spec-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 1rem;
-}
-
-.spec-card-title-group {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.spec-number-badge {
-    font-family: var(--font-mono);
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--accent-cyan);
-    background: rgba(0, 240, 255, 0.1);
-    border: 1px solid var(--accent-cyan);
-    padding: 0.35rem 0.85rem;
-    border-radius: 999px;
-}
-
-.spec-card-header h3 {
-    font-size: 1.45rem;
-    color: #fff;
-    margin: 0;
-}
-
-.spec-perspectives-grid {
+.specs-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.75rem;
-    align-items: stretch;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
 }
 
-.perspective-panel {
-    background: rgba(0, 0, 0, 0.35);
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+.spec-box-card {
+    background: #0d1117;
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    border-radius: 0.85rem;
+    padding: 2rem 1.75rem 1.5rem;
     display: flex;
     flex-direction: column;
-}
-
-.perspective-personal {
-    border-left: 3px solid var(--accent-cyan);
-}
-
-.perspective-economic {
-    border-left: 3px solid #818cf8;
-}
-
-.perspective-header {
-    display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-weight: 700;
-    font-size: 0.85rem;
-    margin-bottom: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-family: var(--font-mono);
-}
-
-.perspective-personal .perspective-header {
-    color: var(--accent-cyan);
-}
-
-.perspective-economic .perspective-header {
-    color: #818cf8;
-}
-
-.perspective-body {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.65;
-}
-
-.perspective-body p {
-    margin-bottom: 0.75rem;
-}
-
-.perspective-body p:last-child {
-    margin-bottom: 0;
-}
-
-.practice-callout {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.45);
-    border-radius: 0.5rem;
-    font-size: 0.88rem;
-    line-height: 1.55;
-    border: 1px dashed rgba(0, 240, 255, 0.25);
-}
-
-.practice-callout ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-    margin-top: 0.5rem;
-}
-
-.practice-callout li {
+    text-align: center;
     position: relative;
-    padding-left: 1.3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
 }
 
-.practice-callout li::before {
-    content: "→";
-    color: var(--accent-cyan);
-    position: absolute;
-    left: 0;
+.spec-box-card:hover {
+    border-color: #00f3ff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 243, 255, 0.15);
+}
+
+.spec-cyan-num {
+    font-family: var(--font-mono);
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #00f3ff;
+    text-shadow: 0 0 14px rgba(0, 243, 255, 0.6);
+    line-height: 1;
+    margin-bottom: 0.85rem;
+}
+
+.spec-box-title {
+    font-size: 1.15rem;
     font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    line-height: 1.35;
+}
+
+.spec-box-text {
+    font-size: 0.92rem;
+    color: #c9d1d9;
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.spec-box-footer {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: #64748b;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.85rem;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+}
+
+.spec-box-footer strong {
+    color: #94a3b8;
 }
 
 /* ==========================================================================
-   3. CORE MECHANICS BREAKDOWN (PAIRED SIDE-BY-SIDE COMPARISON GRID)
+   3. THE WHY AND WHAT: RESTRUCTURED COMPARISON CARDS
    ========================================================================== */
 
-.comparison-grid-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.comparison-row-header {
-    margin-bottom: 0.5rem;
-}
-
-.row-indicator {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    background: rgba(245, 158, 11, 0.15);
-    border: 1px solid #f59e0b;
-    color: #f59e0b;
-    padding: 0.2rem 0.65rem;
-    border-radius: 4px;
-    margin-bottom: 0.4rem;
-}
-
-.comparison-row-header h3 {
-    font-size: 1.5rem;
-    color: #fff;
-    letter-spacing: -0.01em;
-}
-
-.comparison-row {
+.comparison-systems-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
-    align-items: stretch;
 }
 
-.comparison-card {
+.comp-system-card {
+    background: rgba(13, 17, 23, 0.9);
+    border-radius: 1rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    padding: 2.5rem;
-    border-radius: 1rem;
-    position: relative;
+    gap: 1.5rem;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
 }
 
-.problem-card {
-    border-top: 4px solid #f43f5e;
-    background: rgba(20, 24, 38, 0.85);
-    border-color: rgba(244, 63, 94, 0.2);
+.comp-system-card.legacy-card-wrap {
+    border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-.problem-card:hover {
-    border-color: rgba(244, 63, 94, 0.4);
-    box-shadow: 0 12px 35px rgba(244, 63, 94, 0.2);
+.comp-system-card.ioubi-card-wrap {
+    border: 1px solid rgba(0, 240, 255, 0.35);
 }
 
-.solution-card {
-    border-top: 4px solid #10b981;
-    background: rgba(16, 30, 36, 0.85);
-    border-color: rgba(16, 185, 129, 0.25);
+.comp-system-header {
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1.25rem;
 }
 
-.solution-card:hover {
-    border-color: rgba(16, 185, 129, 0.5);
-    box-shadow: 0 12px 35px rgba(16, 185, 129, 0.2);
-}
-
-.card-status-badge {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
+.comp-system-header h3 {
+    font-size: 1.35rem;
     font-weight: 700;
+    color: #ffffff;
+    margin: 0.5rem 0 0 0;
+}
+
+.comp-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
     letter-spacing: 0.08em;
-    padding: 0.25rem 0.65rem;
-    border-radius: 4px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
     display: inline-block;
-    margin-bottom: 1rem;
-    width: fit-content;
 }
 
-.problem-badge {
-    background: rgba(244, 63, 94, 0.15);
-    border: 1px solid #f43f5e;
-    color: #fb7185;
+.legacy-badge {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #f87171;
 }
 
-.solution-badge {
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid #10b981;
-    color: #34d399;
+.ioubi-badge {
+    background: rgba(0, 255, 157, 0.15);
+    border: 1px solid rgba(0, 255, 157, 0.4);
+    color: #00ff9d;
 }
 
-.comparison-card h3 {
-    font-size: 1.6rem;
-    color: #fff;
-    margin-bottom: 0.2rem;
+.comp-items-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
-.card-subtitle {
+.comp-box-item {
+    background: #0d1117;
+    border-radius: 0.75rem;
+    padding: 1.5rem 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.legacy-item-box {
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.legacy-item-box:hover {
+    border-color: rgba(239, 68, 68, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.1);
+}
+
+.ioubi-item-box {
+    border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+.ioubi-item-box:hover {
+    border-color: #00f3ff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 243, 255, 0.12);
+}
+
+.comp-item-num {
+    font-family: var(--font-mono);
+    font-size: 1.45rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.65rem;
+}
+
+.coral-num {
+    color: #f87171;
+    text-shadow: 0 0 10px rgba(248, 113, 113, 0.5);
+}
+
+.cyan-num {
+    color: #00f3ff;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+}
+
+.comp-item-title {
     font-size: 1.05rem;
-    color: var(--accent-cyan);
-    font-weight: 600;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.comp-item-text {
+    font-size: 0.9rem;
+    color: #c9d1d9;
+    line-height: 1.6;
     margin-bottom: 1rem;
+    flex-grow: 1;
 }
 
-.comparison-card p {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.65;
-    margin-bottom: 0.85rem;
+.comp-item-footer {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #64748b;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 0.65rem;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
 }
 
-.breakdown-box {
-    margin: 1.5rem 0;
+.comp-item-footer strong {
+    color: #94a3b8;
+}
+
+@media (max-width: 900px) {
+    .comparison-systems-grid {
+        grid-template-columns: 1fr;
+    }
+}
     padding: 1.25rem;
     background: rgba(0, 0, 0, 0.35);
     border-radius: 0.75rem;
