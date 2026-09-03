@@ -1525,19 +1525,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mpElements.outRampupSub) {
             mpElements.outRampupSub.textContent = `Balance must rise by ${dailyTargetRate.toLocaleString()}/day ($${monthlyTargetRate.toLocaleString()}/mo) for a majority of last quarter`;
         }
-        if (mpElements.outRampupBadge) {
-            // Check if user has sufficient credit for this purchase:
-            // 1. Organic steady credit limit covers net overdraft needed, OR
-            // 2. Ongoing daily organic income trend meets/exceeds required trend, OR
-            // 3. User has enough cash savings to self-fund the 46-day qualification ramp-up.
-            const hasSufficientCredit = (organicSteadyPCLMagnitude >= netOverdraftNeeded) || (dailyOrganicTrend >= requiredDailyTrend) || canSelfFundRampUp;
+        // 3-Tier Pass / Insufficient / Unavailable Opportunity Status:
+        // 1. RED (Unavailable Opportunity):
+        //    - Zero or negative monthly surplus (living expenses >= income)
+        //    - Amortization payoff time exceeds 30-year protocol limit (yearsToFullPayoff > 30)
+        //    - Required daily trend exceeds the protocol 100x multiplier ceiling (requiredDailyTrend > 100)
+        // 2. GREEN (Sufficient Credit for Purchase):
+        //    - Opportunity is viable AND buyer's organic steady credit line meets or exceeds net overdraft needed
+        // 3. AMBER (Insufficient Credit):
+        //    - Opportunity is viable (within 30 years and <= 100x cap), but buyer needs additional income, savings, or community PCL gift
+        const isUnavailable = (monthlySurplus <= 0) || (yearsToFullPayoff > 30) || !isFinite(yearsToFullPayoff) || (requiredDailyTrend > 100);
+        const hasSufficientCredit = !isUnavailable && (organicSteadyPCLMagnitude >= netOverdraftNeeded);
 
-            if (hasSufficientCredit) {
+        if (mpElements.outRampupBadge) {
+            if (isUnavailable) {
+                mpElements.outRampupBadge.className = 'mp-kpi-status-badge red-badge';
+                mpElements.outRampupBadge.textContent = '✖ Unavailable Opportunity';
+            } else if (hasSufficientCredit) {
                 mpElements.outRampupBadge.className = 'mp-kpi-status-badge emerald-badge';
                 mpElements.outRampupBadge.textContent = '✓ Sufficient Credit for Purchase';
             } else {
                 mpElements.outRampupBadge.className = 'mp-kpi-status-badge amber-badge';
-                mpElements.outRampupBadge.textContent = '⚠ Requires Additional Income or PCL Gift';
+                mpElements.outRampupBadge.textContent = '⚠ Insufficient Credit';
             }
         }
         if (mpElements.outPayoffYears) {

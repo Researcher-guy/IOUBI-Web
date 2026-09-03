@@ -3480,6 +3480,12 @@ main#app-main {
     border: 1px solid rgba(245, 158, 11, 0.35);
 }
 
+.mp-kpi-status-badge.red-badge {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
 /* Time-Series Chart Container */
 .mp-chart-container {
     background: #080c14;
