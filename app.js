@@ -1516,16 +1516,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 6. Update KPI Cards in DOM
+        const dailyTargetRate = Math.round(requiredDailyTrend);
+        const monthlyTargetRate = Math.round(requiredDailyTrend * 30);
+
         if (mpElements.outDailyTrend) {
-            mpElements.outDailyTrend.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(requiredDailyTrend).toLocaleString()}/day`;
+            mpElements.outDailyTrend.innerHTML = `<span class="deltar-font">&#xE002;</span>${dailyTargetRate.toLocaleString()}/day`;
         }
         if (mpElements.outRampupSub) {
-            mpElements.outRampupSub.textContent = `46 days required at this rate ($${Math.round(cashNeededForRampUp).toLocaleString()} total transferred)`;
+            mpElements.outRampupSub.textContent = `Balance must rise by ${dailyTargetRate.toLocaleString()}/day ($${monthlyTargetRate.toLocaleString()}/mo) for a majority of last quarter`;
         }
         if (mpElements.outRampupBadge) {
-            if (canSelfFundRampUp) {
+            // Check if user has sufficient credit for this purchase:
+            // 1. Organic steady credit limit covers net overdraft needed, OR
+            // 2. Ongoing daily organic income trend meets/exceeds required trend, OR
+            // 3. User has enough cash savings to self-fund the 46-day qualification ramp-up.
+            const hasSufficientCredit = (organicSteadyPCLMagnitude >= netOverdraftNeeded) || (dailyOrganicTrend >= requiredDailyTrend) || canSelfFundRampUp;
+
+            if (hasSufficientCredit) {
                 mpElements.outRampupBadge.className = 'mp-kpi-status-badge emerald-badge';
-                mpElements.outRampupBadge.textContent = '✓ Fundable via Savings';
+                mpElements.outRampupBadge.textContent = '✓ Sufficient Credit for Purchase';
             } else {
                 mpElements.outRampupBadge.className = 'mp-kpi-status-badge amber-badge';
                 mpElements.outRampupBadge.textContent = '⚠ Requires Additional Income or PCL Gift';
