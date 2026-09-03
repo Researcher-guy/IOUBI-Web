@@ -1258,6 +1258,541 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
+    // 6B. Home & Asset Purchase Simulator (Major Purchase Engine)
+    // ----------------------------------------------------------------------
+    const mpElements = {
+        // Section 1: Your Current Finances
+        savingsSlider: document.getElementById('slider-mp-savings'),
+        savingsInput: document.getElementById('input-mp-savings'),
+        savingsVal: document.getElementById('val-mp-savings'),
+
+        incomeSlider: document.getElementById('slider-mp-income'),
+        incomeInput: document.getElementById('input-mp-income'),
+        incomeVal: document.getElementById('val-mp-income'),
+
+        housingSlider: document.getElementById('slider-mp-housing'),
+        housingInput: document.getElementById('input-mp-housing'),
+        housingVal: document.getElementById('val-mp-housing'),
+
+        expensesSlider: document.getElementById('slider-mp-expenses'),
+        expensesInput: document.getElementById('input-mp-expenses'),
+        expensesVal: document.getElementById('val-mp-expenses'),
+
+        insuranceSlider: document.getElementById('slider-mp-insurance'),
+        insuranceInput: document.getElementById('input-mp-insurance'),
+        insuranceVal: document.getElementById('val-mp-insurance'),
+
+        // Section 2: Target Purchase & Community Boosts
+        priceSlider: document.getElementById('slider-mp-price'),
+        priceInput: document.getElementById('input-mp-price'),
+        priceVal: document.getElementById('val-mp-price'),
+
+        pclGiftSlider: document.getElementById('slider-mp-pcl-gift'),
+        pclGiftInput: document.getElementById('input-mp-pcl-gift'),
+        pclGiftVal: document.getElementById('val-mp-pcl-gift'),
+
+        // Section 3: Network Defaults (Advanced)
+        baseclSlider: document.getElementById('slider-mp-basecl'),
+        baseclInput: document.getElementById('input-mp-basecl'),
+        baseclVal: document.getElementById('val-mp-basecl'),
+
+        regionalSlider: document.getElementById('slider-mp-regional'),
+        regionalInput: document.getElementById('input-mp-regional'),
+        regionalVal: document.getElementById('val-mp-regional'),
+
+        txSlider: document.getElementById('slider-mp-tx'),
+        txInput: document.getElementById('input-mp-tx'),
+        txVal: document.getElementById('val-mp-tx'),
+
+        // Output KPI Displays
+        outDailyTrend: document.getElementById('mp-out-daily-trend'),
+        outRampupSub: document.getElementById('mp-out-rampup-sub'),
+        outRampupBadge: document.getElementById('mp-out-rampup-badge'),
+        outPayoffYears: document.getElementById('mp-out-payoff-years'),
+        outSafetyYears: document.getElementById('mp-out-safety-years'),
+        outSafetySub: document.getElementById('mp-out-safety-sub'),
+        outSurplusMonthly: document.getElementById('mp-out-surplus-monthly'),
+        outSurplusSub: document.getElementById('mp-out-surplus-sub'),
+
+        // Summary Mini-Card
+        outNetOverdraft: document.getElementById('mp-out-net-overdraft'),
+        outMonthlySurplus: document.getElementById('mp-out-monthly-surplus'),
+        outSafeFloor: document.getElementById('mp-out-safe-floor'),
+
+        // Chart Canvas & Tooltip
+        canvas: document.getElementById('mp-runway-canvas'),
+        canvasWrapper: document.getElementById('mp-canvas-wrapper'),
+        tooltip: document.getElementById('mp-chart-tooltip'),
+
+        // Advanced Accordion Toggle
+        btnToggleAdvanced: document.getElementById('btn-toggle-mp-advanced'),
+        advancedDrawer: document.getElementById('mp-advanced-drawer')
+    };
+
+    let mpChartData = [];
+    let mpHoverData = null;
+    let mpMaxYears = 10;
+    let mpPurchasePrice = 200000;
+    let mpOrganicPCLMagnitude = 262600;
+
+    function syncMpPair(slider, input, badge, formatBadgeFn) {
+        if (!slider || !input) return;
+        slider.addEventListener('input', () => {
+            input.value = slider.value;
+            if (badge && formatBadgeFn) badge.innerHTML = formatBadgeFn(parseFloat(slider.value));
+            calculateMajorPurchase();
+        });
+        input.addEventListener('input', () => {
+            let val = parseFloat(input.value);
+            if (isNaN(val)) val = parseFloat(slider.min);
+            slider.value = val;
+            if (badge && formatBadgeFn) badge.innerHTML = formatBadgeFn(val);
+            calculateMajorPurchase();
+        });
+        input.addEventListener('blur', () => {
+            let val = parseFloat(input.value);
+            if (isNaN(val) || val < parseFloat(slider.min)) val = parseFloat(slider.min);
+            if (val > parseFloat(slider.max)) val = parseFloat(slider.max);
+            input.value = val;
+            slider.value = val;
+            if (badge && formatBadgeFn) badge.innerHTML = formatBadgeFn(val);
+            calculateMajorPurchase();
+        });
+    }
+
+    // Bind two-way syncs
+    syncMpPair(mpElements.savingsSlider, mpElements.savingsInput, mpElements.savingsVal, v => `$${Math.round(v).toLocaleString()}`);
+    syncMpPair(mpElements.incomeSlider, mpElements.incomeInput, mpElements.incomeVal, v => `$${Math.round(v).toLocaleString()}`);
+    syncMpPair(mpElements.housingSlider, mpElements.housingInput, mpElements.housingVal, v => `$${Math.round(v).toLocaleString()}`);
+    syncMpPair(mpElements.expensesSlider, mpElements.expensesInput, mpElements.expensesVal, v => `$${Math.round(v).toLocaleString()}`);
+    syncMpPair(mpElements.insuranceSlider, mpElements.insuranceInput, mpElements.insuranceVal, v => `$${Math.round(v).toLocaleString()}`);
+
+    syncMpPair(mpElements.priceSlider, mpElements.priceInput, mpElements.priceVal, v => `<span class="deltar-font">&#xE002;</span>${Math.round(v).toLocaleString()}`);
+    syncMpPair(mpElements.pclGiftSlider, mpElements.pclGiftInput, mpElements.pclGiftVal, v => `<span class="deltar-font">&#xE002;</span>${Math.round(v).toLocaleString()}`);
+
+    syncMpPair(mpElements.baseclSlider, mpElements.baseclInput, mpElements.baseclVal, v => `<span class="deltar-font">&#xE002;</span>${Math.round(v).toLocaleString()}`);
+    syncMpPair(mpElements.regionalSlider, mpElements.regionalInput, mpElements.regionalVal, v => `${v.toFixed(1)}x`);
+    syncMpPair(mpElements.txSlider, mpElements.txInput, mpElements.txVal, v => `${v.toFixed(1)}x`);
+
+    // Advanced accordion toggle
+    if (mpElements.btnToggleAdvanced && mpElements.advancedDrawer) {
+        mpElements.btnToggleAdvanced.addEventListener('click', () => {
+            const isOpen = mpElements.advancedDrawer.classList.contains('open');
+            if (isOpen) {
+                mpElements.advancedDrawer.classList.remove('open');
+                mpElements.btnToggleAdvanced.classList.remove('open');
+                mpElements.btnToggleAdvanced.setAttribute('aria-expanded', 'false');
+            } else {
+                mpElements.advancedDrawer.classList.add('open');
+                mpElements.btnToggleAdvanced.classList.add('open');
+                mpElements.btnToggleAdvanced.setAttribute('aria-expanded', 'true');
+            }
+        });
+    }
+
+    // Reactive Calculation Engine
+    function calculateMajorPurchase() {
+        if (!mpElements.savingsSlider) return;
+
+        const savings_usd = parseFloat(mpElements.savingsSlider.value) || 0;
+        const income_monthly = parseFloat(mpElements.incomeSlider.value) || 0;
+        const housing_cost_eliminated = parseFloat(mpElements.housingSlider.value) || 0;
+        const expenses_living = parseFloat(mpElements.expensesSlider.value) || 0;
+        const insurance_cost_eliminated = parseFloat(mpElements.insuranceSlider.value) || 0;
+
+        const purchase_price = parseFloat(mpElements.priceSlider.value) || 200000;
+        const pcl_gift = parseFloat(mpElements.pclGiftSlider.value) || 0;
+
+        const base_cl = parseFloat(mpElements.baseclSlider.value) || 3000;
+        const regional_factor = parseFloat(mpElements.regionalSlider.value) || 1.2;
+        const tx_factor = parseFloat(mpElements.txSlider.value) || 2.0;
+
+        // 1. Structural Fixed Multipliers
+        const fixedMultiplier = 1 + regional_factor + tx_factor;
+
+        // 2. Minimum Permanent Credit Line Floor (Positive scalar magnitude)
+        const safeFloorMagnitude = (base_cl * (fixedMultiplier + 1.0)) + pcl_gift;
+
+        // 3. Pre-Purchase Qualification Requirements (46-day Median Rule)
+        const netOverdraftNeeded = Math.max(0, purchase_price - savings_usd);
+        const targetPCL = Math.max(0, netOverdraftNeeded - pcl_gift);
+        const requiredDailyTrend = Math.max(1.0, (targetPCL / base_cl) - fixedMultiplier);
+
+        const rampUpDays = 46;
+        const cashNeededForRampUp = rampUpDays * requiredDailyTrend;
+        const canSelfFundRampUp = savings_usd >= cashNeededForRampUp;
+
+        // 4. Post-Purchase Monthly Cash Flow & Amortization
+        const postPurchaseExpenses = expenses_living;
+        const monthlySurplus = Math.max(0, income_monthly - postPurchaseExpenses);
+        const dailyOrganicTrend = monthlySurplus / 30;
+
+        const organicSteadyPCLMagnitude = (base_cl * (fixedMultiplier + dailyOrganicTrend)) + pcl_gift;
+
+        const annualSurplus = monthlySurplus * 12;
+        const yearsToFullPayoff = annualSurplus > 0 ? (netOverdraftNeeded / annualSurplus) : Infinity;
+
+        const debtBelowFloor = Math.max(0, netOverdraftNeeded - safeFloorMagnitude);
+        const yearsToSafeFloor = annualSurplus > 0 ? (debtBelowFloor / annualSurplus) : 0;
+
+        // 5. Dynamic Time-Series Generator (With Organic Economic Wavering)
+        const totalSteps = 120;
+        const maxYears = Math.max(5, Math.min(30, Math.ceil(isFinite(yearsToFullPayoff) ? yearsToFullPayoff * 1.15 : 30)));
+        mpMaxYears = maxYears;
+        mpPurchasePrice = purchase_price;
+        mpOrganicPCLMagnitude = organicSteadyPCLMagnitude;
+
+        mpChartData = [];
+        for (let i = 0; i <= totalSteps; i++) {
+            const t = (i / totalSteps) * maxYears;
+            const balance = Math.min(0, -netOverdraftNeeded + (annualSurplus * t));
+            const economicWave = Math.sin(t * 3.2) * 0.035 + Math.cos(t * 7.8) * 0.02 + Math.sin(t * 14.5) * 0.01;
+            const fluctuatingOrganicPCL = -(organicSteadyPCLMagnitude * (1 + economicWave));
+            const fluctuatingSafeFloor = -(safeFloorMagnitude * (1 + (economicWave * 0.6)));
+
+            mpChartData.push({
+                timeYears: parseFloat(t.toFixed(2)),
+                balance: Math.round(balance),
+                organicPCL: Math.round(fluctuatingOrganicPCL),
+                safeFloor: Math.round(fluctuatingSafeFloor)
+            });
+        }
+
+        // 6. Update KPI Cards in DOM
+        if (mpElements.outDailyTrend) {
+            mpElements.outDailyTrend.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(requiredDailyTrend).toLocaleString()}/day`;
+        }
+        if (mpElements.outRampupSub) {
+            mpElements.outRampupSub.textContent = `46 days required at this rate ($${Math.round(cashNeededForRampUp).toLocaleString()} total transferred)`;
+        }
+        if (mpElements.outRampupBadge) {
+            if (canSelfFundRampUp) {
+                mpElements.outRampupBadge.className = 'mp-kpi-status-badge emerald-badge';
+                mpElements.outRampupBadge.textContent = '✓ Fundable via Savings';
+            } else {
+                mpElements.outRampupBadge.className = 'mp-kpi-status-badge amber-badge';
+                mpElements.outRampupBadge.textContent = '⚠ Requires Additional Income or PCL Gift';
+            }
+        }
+        if (mpElements.outPayoffYears) {
+            mpElements.outPayoffYears.textContent = isFinite(yearsToFullPayoff) ? `${yearsToFullPayoff.toFixed(1)} Years` : '∞ (Zero Surplus)';
+        }
+        if (mpElements.outSafetyYears) {
+            mpElements.outSafetyYears.textContent = `${yearsToSafeFloor.toFixed(1)} Years`;
+        }
+        if (mpElements.outSafetySub) {
+            mpElements.outSafetySub.textContent = `When overdraft balance climbs above -$${Math.round(safeFloorMagnitude).toLocaleString()}, spending cannot freeze regardless of daily trend fluctuations.`;
+        }
+        if (mpElements.outSurplusMonthly) {
+            mpElements.outSurplusMonthly.textContent = `$${Math.round(monthlySurplus).toLocaleString()}/mo`;
+        }
+        if (mpElements.outSurplusSub) {
+            mpElements.outSurplusSub.textContent = `Freed from rent ($${Math.round(housing_cost_eliminated).toLocaleString()}) and interest.`;
+        }
+
+        // Summary Mini-Card
+        if (mpElements.outNetOverdraft) {
+            mpElements.outNetOverdraft.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(netOverdraftNeeded).toLocaleString()}`;
+        }
+        if (mpElements.outMonthlySurplus) {
+            mpElements.outMonthlySurplus.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(monthlySurplus).toLocaleString()}/mo`;
+        }
+        if (mpElements.outSafeFloor) {
+            mpElements.outSafeFloor.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(safeFloorMagnitude).toLocaleString()}`;
+        }
+
+        drawMajorPurchaseChart();
+    }
+
+    // Chart Renderer
+    function drawMajorPurchaseChart() {
+        const canvas = mpElements.canvas;
+        if (!canvas || !mpChartData || mpChartData.length === 0) return;
+
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width <= 0) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.resetTransform ? ctx.resetTransform() : ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+
+        const width = rect.width;
+        const height = rect.height;
+
+        const padLeft = 85;
+        const padRight = 35;
+        const padTop = 35;
+        const padBottom = 40;
+        const plotWidth = width - padLeft - padRight;
+        const plotHeight = height - padTop - padBottom;
+
+        ctx.clearRect(0, 0, width, height);
+
+        // Y-axis Depth Scaling
+        const depthMin = -Math.ceil(Math.max(mpPurchasePrice, mpOrganicPCLMagnitude * 1.1) * 1.08);
+        const yMin = depthMin;
+        const yMax = Math.max(5000, Math.round(Math.abs(yMin) * 0.05));
+        const yRange = yMax - yMin;
+
+        function getX(t) {
+            return padLeft + (t / mpMaxYears) * plotWidth;
+        }
+
+        function getY(val) {
+            return padTop + ((yMax - val) / yRange) * plotHeight;
+        }
+
+        // Draw horizontal grid lines & Y-Axis labels
+        const numTicks = 6;
+        ctx.font = '11px "JetBrains Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+
+        for (let i = 0; i <= numTicks; i++) {
+            const rawVal = yMin + (i / numTicks) * (0 - yMin);
+            const roundVal = Math.round(rawVal / 5000) * 5000;
+            const yPos = getY(roundVal);
+
+            if (yPos >= padTop && yPos <= padTop + plotHeight) {
+                ctx.beginPath();
+                ctx.strokeStyle = roundVal === 0 ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.07)';
+                ctx.lineWidth = roundVal === 0 ? 1.5 : 1;
+                ctx.setLineDash(roundVal === 0 ? [] : [4, 4]);
+                ctx.moveTo(padLeft, yPos);
+                ctx.lineTo(padLeft + plotWidth, yPos);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.fillStyle = roundVal === 0 ? '#ffffff' : 'rgba(148, 163, 184, 0.8)';
+                let labelStr = roundVal === 0 ? '0' : `-${Math.abs(roundVal).toLocaleString()}`;
+                ctx.fillText(labelStr, padLeft - 10, yPos);
+            }
+        }
+
+        // Reference Zero Line (Solid horizontal divider at y = 0)
+        const yZero = getY(0);
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+        ctx.moveTo(padLeft, yZero);
+        ctx.lineTo(padLeft + plotWidth, yZero);
+        ctx.stroke();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px "JetBrains Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('0 (Debt-Free Baseline)', padLeft + 8, yZero - 8);
+
+        // X-Axis horizontal ticks & labels
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = 'rgba(148, 163, 184, 0.8)';
+        ctx.font = '11px "JetBrains Mono", monospace';
+
+        const xStep = mpMaxYears <= 10 ? 2 : 5;
+        for (let t = 0; t <= mpMaxYears; t += xStep) {
+            const xPos = getX(t);
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.moveTo(xPos, padTop + plotHeight);
+            ctx.lineTo(xPos, padTop + plotHeight + 5);
+            ctx.stroke();
+            ctx.fillText(`${t} yr`, xPos, padTop + plotHeight + 8);
+        }
+
+        // Axis Titles
+        ctx.save();
+        ctx.translate(18, padTop + plotHeight / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(148, 163, 184, 0.9)';
+        ctx.font = '11px "JetBrains Mono", monospace';
+        ctx.fillText('Balance & Overdraft Limit (deltars)', 0, 0);
+        ctx.restore();
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(148, 163, 184, 0.85)';
+        ctx.font = '11px "JetBrains Mono", monospace';
+        ctx.fillText('Years Post-Purchase', padLeft + plotWidth / 2, height - 14);
+
+        // Series 2: Organic Dynamic Credit Line (Muted green dashed curve)
+        ctx.beginPath();
+        ctx.strokeStyle = '#00ff9d';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 4]);
+        mpChartData.forEach((pt, idx) => {
+            const x = getX(pt.timeYears);
+            const y = getY(pt.organicPCL);
+            if (idx === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+
+        // Series 3: Permanent Baseline Credit Floor (Muted amber dotted line)
+        ctx.beginPath();
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([3, 3]);
+        mpChartData.forEach((pt, idx) => {
+            const x = getX(pt.timeYears);
+            const y = getY(pt.safeFloor);
+            if (idx === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Series 1: Account Overdraft Balance (Solid line with soft area fill upward toward zero)
+        ctx.beginPath();
+        ctx.moveTo(getX(mpChartData[0].timeYears), getY(mpChartData[0].balance));
+        mpChartData.forEach(pt => {
+            ctx.lineTo(getX(pt.timeYears), getY(pt.balance));
+        });
+        ctx.lineTo(getX(mpChartData[mpChartData.length - 1].timeYears), yZero);
+        ctx.lineTo(getX(mpChartData[0].timeYears), yZero);
+        ctx.closePath();
+
+        const grad = ctx.createLinearGradient(0, getY(0), 0, getY(depthMin));
+        grad.addColorStop(0, 'rgba(0, 243, 255, 0.35)');
+        grad.addColorStop(0.5, 'rgba(0, 243, 255, 0.12)');
+        grad.addColorStop(1, 'rgba(0, 243, 255, 0.02)');
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.strokeStyle = '#00f3ff';
+        ctx.lineWidth = 3;
+        mpChartData.forEach((pt, idx) => {
+            const x = getX(pt.timeYears);
+            const y = getY(pt.balance);
+            if (idx === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+
+        // Hover Crosshair & Indicators
+        if (mpHoverData) {
+            const hx = getX(mpHoverData.timeYears);
+            const hyBal = getY(mpHoverData.balance);
+            const hyPCL = getY(mpHoverData.organicPCL);
+            const hySafe = getY(mpHoverData.safeFloor);
+
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.setLineDash([3, 3]);
+            ctx.lineWidth = 1;
+            ctx.moveTo(hx, padTop);
+            ctx.lineTo(hx, padTop + plotHeight);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Balance dot
+            ctx.beginPath();
+            ctx.arc(hx, hyBal, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#00f3ff';
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Dynamic PCL dot
+            ctx.beginPath();
+            ctx.arc(hx, hyPCL, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#00ff9d';
+            ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Safe Floor dot
+            ctx.beginPath();
+            ctx.arc(hx, hySafe, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#f59e0b';
+            ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+    }
+
+    // Canvas Mouse Interaction (Hover Tooltip)
+    if (mpElements.canvasWrapper && mpElements.canvas) {
+        mpElements.canvasWrapper.addEventListener('mousemove', (e) => {
+            const rect = mpElements.canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const padLeft = 85;
+            const padRight = 35;
+            const plotWidth = rect.width - padLeft - padRight;
+
+            if (mouseX < padLeft || mouseX > rect.width - padRight || !mpChartData || mpChartData.length === 0) {
+                mpHoverData = null;
+                if (mpElements.tooltip) mpElements.tooltip.style.display = 'none';
+                drawMajorPurchaseChart();
+                return;
+            }
+
+            const tMouse = ((mouseX - padLeft) / plotWidth) * mpMaxYears;
+            let closestPt = mpChartData[0];
+            let minDiff = Math.abs(closestPt.timeYears - tMouse);
+            for (let i = 1; i < mpChartData.length; i++) {
+                const diff = Math.abs(mpChartData[i].timeYears - tMouse);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestPt = mpChartData[i];
+                }
+            }
+
+            mpHoverData = closestPt;
+            drawMajorPurchaseChart();
+
+            if (mpElements.tooltip) {
+                mpElements.tooltip.style.display = 'block';
+                mpElements.tooltip.innerHTML = `
+                    <div class="tt-year">Year ${closestPt.timeYears.toFixed(2)} Post-Purchase</div>
+                    <div class="tt-row">
+                        <span style="color: #94a3b8;">Overdraft Balance:</span>
+                        <strong style="color: #00f3ff;">-\uE002 ${Math.abs(closestPt.balance).toLocaleString()}</strong>
+                    </div>
+                    <div class="tt-row">
+                        <span style="color: #94a3b8;">Remaining Debt:</span>
+                        <strong style="color: #ffffff;">\uE002 ${Math.max(0, -closestPt.balance).toLocaleString()}</strong>
+                    </div>
+                    <div class="tt-row">
+                        <span style="color: #94a3b8;">Dynamic Credit Limit:</span>
+                        <strong style="color: #00ff9d;">-\uE002 ${Math.abs(closestPt.organicPCL).toLocaleString()}</strong>
+                    </div>
+                    <div class="tt-row">
+                        <span style="color: #94a3b8;">Permanent Safety Floor:</span>
+                        <strong style="color: #f59e0b;">-\uE002 ${Math.abs(closestPt.safeFloor).toLocaleString()}</strong>
+                    </div>
+                `;
+
+                const tooltipWidth = 270;
+                let leftPos = mouseX + 15;
+                if (leftPos + tooltipWidth > rect.width) {
+                    leftPos = mouseX - tooltipWidth - 15;
+                }
+                const mouseY = e.clientY - rect.top;
+                let topPos = Math.max(10, mouseY - 70);
+                mpElements.tooltip.style.left = `${leftPos}px`;
+                mpElements.tooltip.style.top = `${topPos}px`;
+            }
+        });
+
+        mpElements.canvasWrapper.addEventListener('mouseleave', () => {
+            mpHoverData = null;
+            if (mpElements.tooltip) mpElements.tooltip.style.display = 'none';
+            drawMajorPurchaseChart();
+        });
+    }
+
+    window.calculateMajorPurchase = calculateMajorPurchase;
+
+    // ----------------------------------------------------------------------
     // 7. Navigation & Simulators Dropdown Controller
     // ----------------------------------------------------------------------
     const simDropdownBtn = document.getElementById('sim-dropdown-btn');
@@ -1275,7 +1810,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 simDropdown.classList.add('open');
                 simDropdownBtn.setAttribute('aria-expanded', 'true');
             }
-            switchView('view-simulators', null);
+            switchView('view-simulators', 'macro-balance-engine');
         });
 
         // Close dropdown when clicking outside
@@ -1298,21 +1833,94 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 8. Master View-Switching Navigation (Single-DOM Tab Architecture)
+    // 8. Simulator View Isolation & Master Router (Single-DOM Tab Architecture)
     // ----------------------------------------------------------------------
     const viewRoutes = {
+        '': { view: 'view-overview', anchor: null },
+        '/': { view: 'view-overview', anchor: null },
+        '#': { view: 'view-overview', anchor: null },
         '#overview': { view: 'view-overview', anchor: null },
         '#specs': { view: 'view-overview', anchor: 'specs' },
         '#mechanics': { view: 'view-overview', anchor: 'mechanics' },
         '#hero': { view: 'view-overview', anchor: 'hero' },
-        '#simulators': { view: 'view-simulators', anchor: null },
+        '#simulators': { view: 'view-simulators', anchor: 'macro-balance-engine' },
         '#macro-balance-engine': { view: 'view-simulators', anchor: 'macro-balance-engine' },
+        '#macro-economy': { view: 'view-simulators', anchor: 'macro-balance-engine' },
+        '/simulators/macro-economy': { view: 'view-simulators', anchor: 'macro-balance-engine' },
+        '#/simulators/macro-economy': { view: 'view-simulators', anchor: 'macro-balance-engine' },
         '#credit-sim-card': { view: 'view-simulators', anchor: 'credit-sim-card' },
+        '#credit-simulator': { view: 'view-simulators', anchor: 'credit-sim-card' },
+        '/simulators/credit-simulator': { view: 'view-simulators', anchor: 'credit-sim-card' },
+        '#/simulators/credit-simulator': { view: 'view-simulators', anchor: 'credit-sim-card' },
         '#fee-calc-card': { view: 'view-simulators', anchor: 'fee-calc-card' },
+        '#fee-calculator': { view: 'view-simulators', anchor: 'fee-calc-card' },
+        '/simulators/fee-calculator': { view: 'view-simulators', anchor: 'fee-calc-card' },
+        '#/simulators/fee-calculator': { view: 'view-simulators', anchor: 'fee-calc-card' },
+        '#major-purchase': { view: 'view-simulators', anchor: 'major-purchase-card' },
+        '#major-purchase-card': { view: 'view-simulators', anchor: 'major-purchase-card' },
+        '/simulators/major-purchase': { view: 'view-simulators', anchor: 'major-purchase-card' },
+        '#/simulators/major-purchase': { view: 'view-simulators', anchor: 'major-purchase-card' },
         '#docs': { view: 'view-docs', anchor: null },
         '#faq': { view: 'view-faq', anchor: null },
         '#roadmap': { view: 'view-roadmap', anchor: null }
     };
+
+    /**
+     * View Isolation Rule: When any simulator is selected, unmount all other
+     * simulator views. Only display one simulator on screen at any given time.
+     */
+    function switchSimulator(targetSimId) {
+        if (!targetSimId) targetSimId = 'macro-balance-engine';
+        let normId = targetSimId;
+        if (targetSimId === 'macro-economy') normId = 'macro-balance-engine';
+        if (targetSimId === 'credit-simulator') normId = 'credit-sim-card';
+        if (targetSimId === 'fee-calculator') normId = 'fee-calc-card';
+        if (targetSimId === 'major-purchase' || targetSimId === 'major-purchase-card' || targetSimId === '/simulators/major-purchase') normId = 'major-purchase-card';
+
+        // 1. Unmount all other simulator panels, display ONLY the target panel
+        document.querySelectorAll('.sim-panel').forEach(panel => {
+            if (panel.id === normId) {
+                panel.classList.add('active-sim');
+            } else {
+                panel.classList.remove('active-sim');
+            }
+        });
+
+        // 2. Update simulator jump pills
+        document.querySelectorAll('.sim-nav-pill').forEach(pill => {
+            const pillTarget = pill.getAttribute('data-sim-target') || (pill.getAttribute('href') || '').replace('#', '');
+            if (pillTarget === normId || pillTarget === targetSimId || (normId === 'major-purchase-card' && (pillTarget === 'major-purchase' || pillTarget === 'major-purchase-card'))) {
+                pill.classList.add('active');
+            } else {
+                pill.classList.remove('active');
+            }
+        });
+
+        // 3. Update dropdown items
+        if (simDropdownMenu) {
+            simDropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+                const itemAnchor = item.getAttribute('data-target-anchor') || (item.getAttribute('href') || '').replace('#', '');
+                if (itemAnchor === normId || itemAnchor === targetSimId || (normId === 'major-purchase-card' && (itemAnchor === 'major-purchase' || itemAnchor === 'major-purchase-card'))) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // 4. Trigger calculations and chart redraws for the active simulator
+        setTimeout(() => {
+            if (normId === 'major-purchase-card' && typeof window.calculateMajorPurchase === 'function') {
+                window.calculateMajorPurchase();
+            } else if (normId === 'credit-sim-card' && typeof window.calculateCreditEngine === 'function') {
+                window.calculateCreditEngine();
+            } else if (normId === 'macro-balance-engine' && typeof window.calculateMacroEngineV3 === 'function') {
+                window.calculateMacroEngineV3();
+            } else if (normId === 'fee-calc-card' && typeof window.calculateFeeFormula === 'function') {
+                window.calculateFeeFormula();
+            }
+        }, 50);
+    }
 
     function switchView(targetViewId, targetAnchorId) {
         if (!targetViewId) targetViewId = 'view-overview';
@@ -1348,54 +1956,54 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 4. Update simulator jump pills active state if inside simulators view
-        if (targetViewId === 'view-simulators' && targetAnchorId) {
-            document.querySelectorAll('.sim-nav-pill').forEach(pill => {
-                const href = pill.getAttribute('href');
-                if (href === '#' + targetAnchorId) {
-                    pill.classList.add('active');
-                } else {
-                    pill.classList.remove('active');
-                }
-            });
-        }
-
-        // 5. Re-render charts and calculations when entering visible container
+        // 4. If inside simulators view, enforce simulator isolation
         if (targetViewId === 'view-simulators') {
-            setTimeout(() => {
-                if (typeof window.calculateCreditEngine === 'function') window.calculateCreditEngine();
-                if (typeof window.calculateMacroEngineV3 === 'function') window.calculateMacroEngineV3();
-                if (typeof window.calculateFeeFormula === 'function') window.calculateFeeFormula();
-            }, 60);
+            const simId = targetAnchorId || 'macro-balance-engine';
+            switchSimulator(simId);
         }
 
-        // 6. Smooth scrolling
-        if (targetAnchorId) {
-            setTimeout(() => {
-                const anchorEl = document.getElementById(targetAnchorId);
-                if (anchorEl) {
-                    anchorEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            }, 70);
-        } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        // 5. Smooth scrolling
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function handleHashNavigation() {
-        const hash = window.location.hash || '#overview';
-        const route = viewRoutes[hash] || { view: 'view-overview', anchor: null };
+        const hash = window.location.hash || '';
+        const path = window.location.pathname || '';
+        let route = viewRoutes[hash];
+
+        if (!route) {
+            if (hash.includes('major-purchase') || path.includes('major-purchase')) {
+                route = viewRoutes['#major-purchase'];
+            } else if (hash.includes('credit-simulator') || path.includes('credit-simulator') || hash.includes('credit-sim-card')) {
+                route = viewRoutes['#credit-sim-card'];
+            } else if (hash.includes('fee-calculator') || path.includes('fee-calculator') || hash.includes('fee-calc-card')) {
+                route = viewRoutes['#fee-calc-card'];
+            } else if (hash.includes('macro-economy') || path.includes('macro-economy') || hash.includes('macro-balance-engine')) {
+                route = viewRoutes['#macro-balance-engine'];
+            }
+        }
+
+        if (!route) {
+            route = { view: 'view-overview', anchor: null };
+        }
         switchView(route.view, route.anchor);
     }
 
-    // Attach click listeners to all tab links
+    // Attach click listeners to all tab links and simulator pills
     document.querySelectorAll('.nav-tab-link, .sim-nav-pill').forEach(link => {
         link.addEventListener('click', (e) => {
             const targetView = link.getAttribute('data-target-view');
-            const targetAnchor = link.getAttribute('data-target-anchor');
+            const targetAnchor = link.getAttribute('data-target-anchor') || link.getAttribute('data-sim-target');
             const href = link.getAttribute('href');
+
+            if (link.classList.contains('sim-nav-pill')) {
+                e.preventDefault();
+                const simId = link.getAttribute('data-sim-target') || (href ? href.replace('#', '') : 'macro-balance-engine');
+                switchSimulator(simId);
+                const pushHash = simId === 'major-purchase-card' ? '#major-purchase' : '#' + simId;
+                window.history.pushState(null, '', pushHash);
+                return;
+            }
 
             if (targetView) {
                 e.preventDefault();
@@ -1547,6 +2155,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.calculateMacroEngineV3 === 'function') {
         window.calculateMacroEngineV3();
     }
+    if (typeof window.calculateMajorPurchase === 'function') {
+        window.calculateMajorPurchase();
+    }
 
     window.addEventListener('resize', () => {
         if (typeof window.calculateCreditEngine === 'function') {
@@ -1554,6 +2165,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (typeof window.calculateMacroEngineV3 === 'function') {
             window.calculateMacroEngineV3();
+        }
+        if (typeof window.calculateMajorPurchase === 'function') {
+            window.calculateMajorPurchase();
         }
     });
 });

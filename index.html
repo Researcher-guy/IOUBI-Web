@@ -64,6 +64,13 @@
                                     <small>Interactive dual-balance logarithmic fee simulation</small>
                                 </div>
                             </a>
+                            <a href="#major-purchase" class="dropdown-item nav-tab-link" data-target-view="view-simulators" data-target-anchor="major-purchase">
+                                <span class="dropdown-icon">🏠</span>
+                                <div class="dropdown-text">
+                                    <strong>Home & Asset Purchase Simulator</strong>
+                                    <small>Model primary homebuying, 0% overdraft limits, & 46-day qualification</small>
+                                </div>
+                            </a>
                         </div>
                     </div>
 
@@ -272,15 +279,16 @@
                     <p class="section-desc">Test protocol parameters, logarithmic balance fee scaling, enterprise crowdfunding, and macroeconomic dividend clearing in real time.</p>
                 </div>
 
-                <!-- Simulator Jump Navigation Bar -->
+                <!-- Simulator Switcher Navigation Bar (View Isolation) -->
                 <div class="simulator-nav-bar">
-                    <a href="#macro-balance-engine" class="sim-nav-pill active">⚡ Macro-Economy Personal-Enterprize Balance</a>
-                    <a href="#credit-sim-card" class="sim-nav-pill">📈 Personal & Enterprise Credit Simulator</a>
-                    <a href="#fee-calc-card" class="sim-nav-pill">⚖️ Progressive Transaction Fee Calculator</a>
+                    <a href="#macro-balance-engine" class="sim-nav-pill active" data-sim-target="macro-balance-engine">⚡ Macro-Economy Personal-Enterprize Balance</a>
+                    <a href="#credit-sim-card" class="sim-nav-pill" data-sim-target="credit-sim-card">📈 Personal & Enterprise Credit Simulator</a>
+                    <a href="#fee-calc-card" class="sim-nav-pill" data-sim-target="fee-calc-card">⚖️ Progressive Transaction Fee Calculator</a>
+                    <a href="#major-purchase" class="sim-nav-pill" data-sim-target="major-purchase-card">🏠 Home & Asset Purchase Simulator</a>
                 </div>
 
                 <!-- SIMULATOR 1: Macro-Economy Personal-Enterprize Balance -->
-                <div class="sandbox-card glass-panel span-full macro-engine-card" id="macro-balance-engine" style="margin-bottom: 3rem;">
+                <div class="sandbox-card glass-panel span-full macro-engine-card sim-panel active-sim" id="macro-balance-engine" style="margin-bottom: 3rem;">
                     <!-- Block 1: Header & Shared Inputs -->
                     <div class="macro-header-panel">
                         <div class="tool-header">
@@ -509,7 +517,7 @@
                 </div>
 
                 <!-- SIMULATOR 2: Personal & Enterprise Credit Simulator -->
-                <div class="sandbox-card glass-panel credit-sim-card" id="credit-sim-card" style="margin-bottom: 3rem;">
+                <div class="sandbox-card glass-panel credit-sim-card sim-panel" id="credit-sim-card" style="margin-bottom: 3rem;">
                     <div class="tool-header">
                         <h2>Personal & Enterprise Credit Simulator</h2>
                     </div>
@@ -707,7 +715,7 @@
                 </div>
 
                 <!-- SIMULATOR 3: Progressive Transaction Fee Calculator -->
-                <div class="sandbox-card glass-panel" id="fee-calc-card">
+                <div class="sandbox-card glass-panel fee-calc-card sim-panel" id="fee-calc-card" style="margin-bottom: 3rem;">
                     <div class="tool-header">
                         <h2>Progressive Transaction Fee Calculator</h2>
                     </div>
@@ -748,90 +756,66 @@
                             </div>
                         </div>
 
-                        <div class="two-col-inputs">
+                        <div class="transaction-detail-box">
                             <div class="form-group">
-                                <label for="input-tx-amount">Transaction Payment In Deltars (<span class="deltar-font">&#xE002;</span>):</label>
-                                <input type="number" id="input-tx-amount" value="50" min="0" step="5">
+                                <label for="input-tx-amount">Transaction Size (<span class="deltar-font">&#xE002;</span>):</label>
+                                <input type="number" id="input-tx-amount" value="50" min="1" max="10000" step="1">
+                                <input type="range" id="slider-tx-amount" min="1" max="1000" value="50" step="1" class="balance-slider">
                             </div>
 
-                            <div class="form-group">
-                                <label>Price Valued In Your Time:</label>
-                                <div class="time-equiv-badge-box" id="tx-time-equiv">2 hrs 30 mins</div>
-                            </div>
-                        </div>
-
-                        <div class="calc-results-box" id="calc-result">
-                            <div class="unified-table-box">
-                                <div class="unified-table-header">Fee Charged on this transaction</div>
-                                <div class="unified-table-container">
-                                    <table class="unified-fee-table">
-                                        <thead>
-                                            <tr>
-                                                <th class="col-metric">Item</th>
-                                                <th>Deltars</th>
-                                                <th>Your Time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="row-label">Paid</td>
-                                                <td id="tbl-paid" class="val-deltars">50.000</td>
-                                                <td id="tbl-paid-time" class="val-time">2 hrs 30 mins</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="row-label">Fee</td>
-                                                <td id="tbl-fee" class="val-deltars">1.394</td>
-                                                <td id="tbl-fee-time" class="val-time">4.18 mins</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="row-label">Received</td>
-                                                <td id="tbl-received" class="val-deltars">48.606</td>
-                                                <td id="tbl-received-time" class="val-time">2 hrs 25 mins</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="result-breakdown">
+                                <div class="result-item">
+                                    <span class="res-label">Dynamic Velocity Fee Amount:</span>
+                                    <span class="res-val highlight" id="res-fee-amount"><span class="deltar-font">&#xE002;</span>1.40</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="res-label">Net Received by Payee:</span>
+                                    <span class="res-val" id="res-net-amount"><span class="deltar-font">&#xE002;</span>48.60</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="res-label">Fee Equivalent in Your Work:</span>
+                                    <span class="res-val" id="res-time-cost">4.19 mins</span>
                                 </div>
                             </div>
 
-                            <!-- "Where this transaction's fee goes" Deep Dive Dropdown Box -->
+                            <!-- Where this transaction's fee goes: Deep Dive Dropdown Drawer -->
                             <div class="fee-pool-dropdown-wrapper">
                                 <button type="button" class="fee-pool-toggle-btn" id="btn-toggle-fee-pool" aria-expanded="false">
                                     <span class="toggle-icon">▸</span>
-                                    <strong>Where this transaction's fee goes (Deep Dive Pool Allocation)</strong>
+                                    <strong>Where this transaction's fee goes (Deep Dive)...</strong>
                                 </button>
-                                
                                 <div class="fee-pool-drawer" id="fee-pool-drawer">
                                     <div class="fee-pool-grid-3col">
-                                        <!-- Pool 1: Living Dividend (UBI) - 75% -->
+                                        <!-- Pool 1: Living Dividend Pool (UBI) (75%) -->
                                         <div class="fee-pool-card emerald-pool-card">
                                             <div class="fee-pool-card-header">
-                                                <span class="pool-badge emerald-badge">75% POOL</span>
+                                                <span class="badge ubi-badge">75%</span>
                                                 <h4>Living Dividend Pool (UBI)</h4>
                                             </div>
                                             <div class="fee-pool-stat-row">
-                                                <span class="fee-pool-val" id="pool-dividend"><span class="deltar-font">&#xE002;</span>1.046</span>
-                                                <span class="fee-pool-time" id="pool-dividend-time">3.14 mins of work</span>
+                                                <span class="fee-pool-val" id="pool-ubi"><span class="deltar-font">&#xE002;</span>1.047</span>
+                                                <span class="fee-pool-time" id="pool-ubi-time">3.14 mins of work</span>
                                             </div>
-                                            <p class="fee-pool-desc">Distributed automatically each morning to every verified citizen's account, guaranteeing unconditioned basic living security without tax bureaucracies.</p>
+                                            <p class="fee-pool-desc">Disbursed directly and equally to every active human account at the daily midnight epoch.</p>
                                         </div>
 
-                                        <!-- Pool 2: Public Goods Pool (Ins and Grants) - 20% -->
+                                        <!-- Pool 2: Public Goods Pool (Ins and Grants) (20%) -->
                                         <div class="fee-pool-card cyan-pool-card">
                                             <div class="fee-pool-card-header">
-                                                <span class="pool-badge cyan-badge">20% POOL</span>
+                                                <span class="badge social-badge">20%</span>
                                                 <h4>Public Goods Pool (Ins and Grants)</h4>
                                             </div>
                                             <div class="fee-pool-stat-row">
-                                                <span class="fee-pool-val" id="pool-public"><span class="deltar-font">&#xE002;</span>0.279</span>
-                                                <span class="fee-pool-time" id="pool-public-time">0.84 mins of work</span>
+                                                <span class="fee-pool-val" id="pool-social"><span class="deltar-font">&#xE002;</span>0.279</span>
+                                                <span class="fee-pool-time" id="pool-social-time">0.84 mins of work</span>
                                             </div>
-                                            <p class="fee-pool-desc">Directed transparently by democratic citizen voting and peer juries for healthcare, mutual insurance, clean transit, ecological restoration, and open grants.</p>
+                                            <p class="fee-pool-desc">Covers universal civic healthcare claims, insurance guarantees, and community grants.</p>
                                         </div>
 
-                                        <!-- Pool 3: Government Contribution Pool (Individually allocated) - 5% -->
+                                        <!-- Pool 3: Government Contribution Pool (5%) -->
                                         <div class="fee-pool-card indigo-pool-card">
                                             <div class="fee-pool-card-header">
-                                                <span class="pool-badge indigo-badge">5% POOL</span>
+                                                <span class="badge indigo-badge">5%</span>
                                                 <h4>Government Contribution Pool (Individually allocated)</h4>
                                             </div>
                                             <div class="fee-pool-stat-row">
@@ -840,6 +824,248 @@
                                             </div>
                                             <p class="fee-pool-desc">Directly and individually allocated by each transaction participant to municipal services and civic infrastructure of their choice.</p>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIMULATOR 4: Home & Asset Purchase Simulator -->
+                <div class="sandbox-card glass-panel major-purchase-card sim-panel" id="major-purchase-card" style="margin-bottom: 3rem;">
+                    <div class="tool-header">
+                        <h2>Home & Asset Purchase Simulator</h2>
+                    </div>
+                    <p class="tool-desc">Model primary homebuying and major capital acquisitions through zero-interest mutual credit overdraft limits and community backing.</p>
+
+                    <!-- 4 Responsive Output Summary KPI Cards (Positioned above chart) -->
+                    <div class="mp-kpi-grid">
+                        <!-- KPI 1: Qualification Daily Inflow Target -->
+                        <div class="mp-kpi-card glass-panel">
+                            <div class="mp-kpi-label">Qualification Daily Inflow Target</div>
+                            <div class="mp-kpi-value cyan-text glow-text" id="mp-out-daily-trend"><span class="deltar-font">&#xE002;</span>0/day</div>
+                            <div class="mp-kpi-subtext" id="mp-out-rampup-sub">46 days required at this rate ($0 total transferred)</div>
+                            <div class="mp-kpi-badge-wrap">
+                                <span class="mp-kpi-status-badge emerald-badge" id="mp-out-rampup-badge">✓ Fundable via Savings</span>
+                            </div>
+                        </div>
+
+                        <!-- KPI 2: Full Payoff Time -->
+                        <div class="mp-kpi-card glass-panel">
+                            <div class="mp-kpi-label">Full Payoff Time</div>
+                            <div class="mp-kpi-value emerald-text" id="mp-out-payoff-years">0.0 Years</div>
+                            <div class="mp-kpi-subtext">At 0% compounding interest, 100% of your surplus amortizes principal straight to zero.</div>
+                        </div>
+
+                        <!-- KPI 3: Time to Permanent Safety Floor -->
+                        <div class="mp-kpi-card glass-panel">
+                            <div class="mp-kpi-label">Time to Permanent Safety Floor</div>
+                            <div class="mp-kpi-value amber-text" id="mp-out-safety-years">0.0 Years</div>
+                            <div class="mp-kpi-subtext" id="mp-out-safety-sub">When overdraft balance climbs above -$0, spending cannot freeze regardless of daily trend fluctuations.</div>
+                        </div>
+
+                        <!-- KPI 4: Monthly Wealth Retained -->
+                        <div class="mp-kpi-card glass-panel">
+                            <div class="mp-kpi-label">Monthly Wealth Retained</div>
+                            <div class="mp-kpi-value emerald-text" id="mp-out-surplus-monthly">$0/mo</div>
+                            <div class="mp-kpi-subtext" id="mp-out-surplus-sub">Freed from rent ($1,500) and interest.</div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Time-Series Canvas Chart (Negative Overdraft Orientation) -->
+                    <div class="mp-chart-container glass-panel">
+                        <div class="mp-chart-header">
+                            <div class="mp-chart-title-group">
+                                <h3>Amortization & Overdraft Runway (Zero-Interest Recovery)</h3>
+                                <p class="mp-chart-subtitle">Negative overdraft balance climbing upward to the debt-free baseline</p>
+                            </div>
+                            <div class="mp-chart-legend">
+                                <span class="legend-item"><span class="legend-line line-balance"></span> Account Overdraft Balance</span>
+                                <span class="legend-item"><span class="legend-line line-organic"></span> Dynamic Credit Limit (Follows Daily Economy)</span>
+                                <span class="legend-item"><span class="legend-line line-safety"></span> Permanent Baseline Credit Floor</span>
+                            </div>
+                        </div>
+                        <div class="mp-canvas-wrapper" id="mp-canvas-wrapper">
+                            <canvas id="mp-runway-canvas" width="900" height="340"></canvas>
+                            <div class="mp-chart-tooltip" id="mp-chart-tooltip" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Input Controls Section -->
+                    <div class="mp-controls-container">
+                        <!-- Two-Column Grid: Section 1 & Section 2 -->
+                        <div class="mp-sections-grid">
+                            <!-- Section 1: Your Current Finances -->
+                            <div class="mp-panel-card glass-panel">
+                                <div class="mp-panel-header">
+                                    <span class="tier-badge emerald-badge">SECTION 1</span>
+                                    <h3>Your Current Finances (Dollar System)</h3>
+                                </div>
+                                <div class="mp-input-stack">
+                                    <!-- 1. Current Cash Savings -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-savings">Current Cash Savings ($):</label>
+                                            <span class="ctrl-val-badge emerald" id="val-mp-savings">$0</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-savings" min="0" max="250000" value="0" step="1000" class="balance-slider emerald-slider">
+                                            <input type="number" id="input-mp-savings" min="0" max="250000" value="0" step="1000" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Cash reserves you can transfer into Deltars to build your initial credit rating.</small>
+                                    </div>
+
+                                    <!-- 2. Monthly Take-Home Income -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-income">Monthly Take-Home Income ($):</label>
+                                            <span class="ctrl-val-badge emerald" id="val-mp-income">$3,000</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-income" min="0" max="20000" value="3000" step="100" class="balance-slider emerald-slider">
+                                            <input type="number" id="input-mp-income" min="0" max="20000" value="3000" step="100" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Total net earnings from work, business, or investments.</small>
+                                    </div>
+
+                                    <!-- 3. Current Rent / Dwelling Cost -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-housing">Current Rent / Dwelling Cost ($/mo):</label>
+                                            <span class="ctrl-val-badge emerald" id="val-mp-housing">$1,500</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-housing" min="0" max="10000" value="1500" step="50" class="balance-slider emerald-slider">
+                                            <input type="number" id="input-mp-housing" min="0" max="10000" value="1500" step="50" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Your current housing payment that will disappear once you buy your home through IOUBI.</small>
+                                    </div>
+
+                                    <!-- 4. Essential Living Expenses -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-expenses">Essential Living Expenses ($/mo):</label>
+                                            <span class="ctrl-val-badge emerald" id="val-mp-expenses">$500</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-expenses" min="200" max="10000" value="500" step="50" class="balance-slider emerald-slider">
+                                            <input type="number" id="input-mp-expenses" min="200" max="10000" value="500" step="50" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Food, utilities, transport, and basic necessities (excluding housing).</small>
+                                    </div>
+
+                                    <!-- 5. Insurance Cost Replaced -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-insurance">Insurance Cost Replaced ($/mo):</label>
+                                            <span class="ctrl-val-badge emerald" id="val-mp-insurance">$0</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-insurance" min="0" max="3000" value="0" step="25" class="balance-slider emerald-slider">
+                                            <input type="number" id="input-mp-insurance" min="0" max="3000" value="0" step="25" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Current insurance costs you expect to replace through IOUBI network coverage.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 2: Target Purchase & Community Boosts -->
+                            <div class="mp-panel-card glass-panel">
+                                <div class="mp-panel-header">
+                                    <span class="tier-badge cyan-badge">SECTION 2</span>
+                                    <h3>Target Purchase & Community Boosts</h3>
+                                </div>
+                                <div class="mp-input-stack">
+                                    <!-- 1. Target Home Purchase Price -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-price">Target Home Purchase Price (deltars):</label>
+                                            <span class="ctrl-val-badge cyan" id="val-mp-price"><span class="deltar-font">&#xE002;</span>200,000</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-price" min="25000" max="1500000" value="200000" step="5000" class="balance-slider cyan-slider">
+                                            <input type="number" id="input-mp-price" min="25000" max="1500000" value="200000" step="5000" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Price of your target home in Deltars.</small>
+                                    </div>
+
+                                    <!-- 2. Community PCL Gift -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-pcl-gift">Community PCL Gift (deltars):</label>
+                                            <span class="ctrl-val-badge cyan" id="val-mp-pcl-gift"><span class="deltar-font">&#xE002;</span>0</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-pcl-gift" min="0" max="200000" value="0" step="1000" class="balance-slider cyan-slider">
+                                            <input type="number" id="input-mp-pcl-gift" min="0" max="200000" value="0" step="1000" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Direct credit line capacity pledged to you by friends, family, or community backers.</small>
+                                    </div>
+
+                                    <!-- Purchase Financing Summary Mini-Card -->
+                                    <div class="mp-summary-box">
+                                        <div class="mp-summary-row">
+                                            <span>Net Overdraft Line Needed:</span>
+                                            <strong class="cyan-text" id="mp-out-net-overdraft"><span class="deltar-font">&#xE002;</span>200,000</strong>
+                                        </div>
+                                        <div class="mp-summary-row">
+                                            <span>Monthly Surplus Amortization:</span>
+                                            <strong class="emerald-text" id="mp-out-monthly-surplus"><span class="deltar-font">&#xE002;</span>2,500/mo</strong>
+                                        </div>
+                                        <div class="mp-summary-row">
+                                            <span>Permanent Credit Floor Protection:</span>
+                                            <strong class="amber-text" id="mp-out-safe-floor"><span class="deltar-font">&#xE002;</span>15,600</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Network Defaults (Advanced Settings Accordion - Closed by Default) -->
+                        <div class="mp-advanced-wrapper">
+                            <button type="button" class="mp-advanced-toggle-btn" id="btn-toggle-mp-advanced" aria-expanded="false">
+                                <span class="toggle-icon">▸</span>
+                                <strong>Network Defaults (Advanced Settings)</strong>
+                            </button>
+                            <div class="mp-advanced-drawer" id="mp-advanced-drawer">
+                                <div class="mp-advanced-grid">
+                                    <!-- 1. Network Base Credit Level (BaseCL) -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-basecl">Network Base Credit Level (BaseCL):</label>
+                                            <span class="ctrl-val-badge" id="val-mp-basecl"><span class="deltar-font">&#xE002;</span>3,000</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-basecl" min="2000" max="6000" value="3000" step="250" class="balance-slider">
+                                            <input type="number" id="input-mp-basecl" min="2000" max="6000" value="3000" step="250" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Global baseline credit floor set by macroeconomic balance.</small>
+                                    </div>
+
+                                    <!-- 2. Regional Adjustment Factor -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-regional">Regional Adjustment Factor:</label>
+                                            <span class="ctrl-val-badge" id="val-mp-regional">1.2x</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-regional" min="0.2" max="2.0" value="1.2" step="0.1" class="balance-slider">
+                                            <input type="number" id="input-mp-regional" min="0.2" max="2.0" value="1.2" step="0.1" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Multiplier for local cost of living differences.</small>
+                                    </div>
+
+                                    <!-- 3. Transaction Activity Factor -->
+                                    <div class="sim-ctrl-item">
+                                        <div class="ctrl-label-row">
+                                            <label for="input-mp-tx">Transaction Activity Factor:</label>
+                                            <span class="ctrl-val-badge" id="val-mp-tx">2.0x</span>
+                                        </div>
+                                        <div class="mp-slider-input-row">
+                                            <input type="range" id="slider-mp-tx" min="1.0" max="2.0" value="2.0" step="0.1" class="balance-slider">
+                                            <input type="number" id="input-mp-tx" min="1.0" max="2.0" value="2.0" step="0.1" class="mp-number-input">
+                                        </div>
+                                        <small class="mp-helper-text">Multiplier reflecting frequent daily economic circulation.</small>
                                     </div>
                                 </div>
                             </div>
@@ -1455,6 +1681,7 @@
                         <a href="#macro-balance-engine" class="nav-tab-link" data-target-view="view-simulators" data-target-anchor="macro-balance-engine">Macro Simulator</a>
                         <a href="#credit-sim-card" class="nav-tab-link" data-target-view="view-simulators" data-target-anchor="credit-sim-card">Credit Simulator</a>
                         <a href="#fee-calc-card" class="nav-tab-link" data-target-view="view-simulators" data-target-anchor="fee-calc-card">Fee Calculator</a>
+                        <a href="#major-purchase" class="nav-tab-link" data-target-view="view-simulators" data-target-anchor="major-purchase">Home & Asset Simulator</a>
                         <a href="#faq" class="nav-tab-link" data-target-view="view-faq">FAQ Knowledge Base</a>
                         <a href="#roadmap" class="nav-tab-link" data-target-view="view-roadmap">2026 Roadmap</a>
                         <a href="#docs" class="nav-tab-link" data-target-view="view-docs">Documentation Hub</a>
