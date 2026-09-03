@@ -81,7 +81,7 @@
 
                 <div class="nav-actions">
                     <a href="#roadmap" class="status-badge nav-tab-link" id="nav-status-badge" data-target-view="view-roadmap" style="text-decoration: none; cursor: pointer;">
-                        <span class="pulse-dot"></span> 2026 Core: 54.7% | Week 19
+                        <span class="pulse-dot"></span> 2026 Core: 53.5% | Week 19
                     </a>
                 </div>
             </div>
@@ -140,7 +140,7 @@
                         <h3 class="spec-box-title">Personal Credit Limits (PCL)</h3>
                         <p class="spec-box-text">Automatic zero-interest overdraft lines granted to every verified human. Adjusted continuously by regional cost of living, savings trend, and daily economic circulation.</p>
                         <div class="spec-box-footer">
-                            <strong>Base Overdraft Formula:</strong> PCL = (BaseCL × R) + (BaseCL × Trend × Activity)
+                            <strong>Base Overdraft Formula:</strong> PCL = BaseCL × (1 + Regional_COL + Transaction_Count + Balance_Trend)
                         </div>
                     </div>
 
@@ -615,9 +615,9 @@
                                 <div class="output-stat">
                                     <div class="stat-label-col">
                                         <span class="stat-label">Calculated Personal Credit Limit (PCL):</span>
-                                        <div class="pcl-formula-subtitle" id="out-pcl-formula">(2,000 × 1.0) + (2,000 × 2.0 × 2.0)</div>
+                                        <div class="pcl-formula-subtitle" id="out-pcl-formula">2,000 × (1 + 1.0 + 2.0 + 2.0)</div>
                                     </div>
-                                    <strong class="stat-value emerald-text" id="out-pcl"><span class="deltar-font">&#xE002;</span>10,000</strong>
+                                    <strong class="stat-value emerald-text" id="out-pcl"><span class="deltar-font">&#xE002;</span>12,000</strong>
                                 </div>
                                 <div class="output-subgrid">
                                     <div class="sub-stat">
@@ -760,7 +760,7 @@
                             <div class="form-group">
                                 <label for="input-tx-amount">Transaction Size (<span class="deltar-font">&#xE002;</span>):</label>
                                 <input type="number" id="input-tx-amount" value="50" min="1" max="10000" step="1">
-                                <input type="range" id="slider-tx-amount" min="1" max="1000" value="50" step="1" class="balance-slider">
+                                <input type="range" id="slider-tx-amount" min="1" max="10000" value="50" step="1" class="balance-slider">
                             </div>
 
                             <div class="result-breakdown">
@@ -948,8 +948,8 @@
                                             <span class="ctrl-val-badge emerald" id="val-mp-expenses">$500</span>
                                         </div>
                                         <div class="mp-slider-input-row">
-                                            <input type="range" id="slider-mp-expenses" min="200" max="10000" value="500" step="50" class="balance-slider emerald-slider">
-                                            <input type="number" id="input-mp-expenses" min="200" max="10000" value="500" step="50" class="mp-number-input">
+                                            <input type="range" id="slider-mp-expenses" min="0" max="10000" value="500" step="50" class="balance-slider emerald-slider">
+                                            <input type="number" id="input-mp-expenses" min="0" max="10000" value="500" step="50" class="mp-number-input">
                                         </div>
                                         <small class="mp-helper-text">Food, utilities, transport, and basic necessities (excluding housing).</small>
                                     </div>
@@ -980,11 +980,14 @@
                                     <div class="sim-ctrl-item">
                                         <div class="ctrl-label-row">
                                             <label for="input-mp-price">Target Home Purchase Price (deltars):</label>
-                                            <span class="ctrl-val-badge cyan" id="val-mp-price"><span class="deltar-font">&#xE002;</span>200,000</span>
+                                            <div class="mp-price-actions">
+                                                <button type="button" class="btn-mp-max" id="btn-mp-max-qualified" title="Calculate maximum purchase capacity from your current finances">Max Qualified For</button>
+                                                <span class="ctrl-val-badge cyan" id="val-mp-price"><span class="deltar-font">&#xE002;</span>200,000</span>
+                                            </div>
                                         </div>
                                         <div class="mp-slider-input-row">
-                                            <input type="range" id="slider-mp-price" min="25000" max="1500000" value="200000" step="5000" class="balance-slider cyan-slider">
-                                            <input type="number" id="input-mp-price" min="25000" max="1500000" value="200000" step="5000" class="mp-number-input">
+                                            <input type="range" id="slider-mp-price" min="1" max="1500000" value="200000" step="1000" class="balance-slider cyan-slider">
+                                            <input type="number" id="input-mp-price" min="1" max="1500000" value="200000" step="1000" class="mp-number-input">
                                         </div>
                                         <small class="mp-helper-text">Price of your target home in Deltars.</small>
                                     </div>
@@ -1471,7 +1474,7 @@
                         </h3>
                         <div class="roadmap-percent-badge">
                             <span class="pulse-dot"></span>
-                            <span id="roadmap-pct-text">54.7% Complete (Week 19 of 34)</span>
+                            <span id="roadmap-pct-text">53.5% Complete (Week 19 of 34)</span>
                         </div>
                     </div>
 
@@ -1480,12 +1483,12 @@
                         <!-- Elevated Top Start & End Labels (inside main card) -->
                         <div class="roadmap-track-top-labels">
                             <span class="track-label-start">Project Start: <strong class="emerald-text">Apr 07</strong></span>
-                            <span class="track-label-end">Estimated Pilot Launch: <strong class="cyan-text">Dec 01</strong></span>
+                            <span class="track-label-end">Estimated Pilot Launch: <strong class="cyan-text">Dec 22</strong></span>
                         </div>
 
                         <!-- 34-Week Linear Progress Bar Track with Minor Week Tic Lines -->
                         <div class="roadmap-timeline-bar-track">
-                            <div class="roadmap-timeline-bar-fill" style="width: 54.7%;"></div>
+                            <div class="roadmap-timeline-bar-fill" style="width: 53.5%;"></div>
                             <div class="roadmap-week-tics" id="roadmap-week-tics">
                                 <!-- 34 Linear Week Grid Tics -->
                             </div>
@@ -1576,7 +1579,7 @@
                             <!-- Phase 5: Week 21 (61.76%) - ACTIVE HIGHLIGHTED -->
                             <div class="roadmap-phase-node active-stage" style="left: 61.76%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Sep 01</span>
+                                    <span class="node-date">Sep 22</span>
                                 </div>
                                 <div class="node-pin">⚡</div>
                                 <div class="node-content-bottom">
@@ -1596,7 +1599,7 @@
                             <!-- Phase 6: Week 24 (70.59%) -->
                             <div class="roadmap-phase-node" style="left: 70.59%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Sep 22</span>
+                                    <span class="node-date">Oct 13</span>
                                 </div>
                                 <div class="node-pin"></div>
                                 <div class="node-content-bottom">
@@ -1616,7 +1619,7 @@
                             <!-- Phase 7: Week 28 (82.35%) -->
                             <div class="roadmap-phase-node" style="left: 82.35%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Oct 20</span>
+                                    <span class="node-date">Nov 10</span>
                                 </div>
                                 <div class="node-pin"></div>
                                 <div class="node-content-bottom">
@@ -1636,7 +1639,7 @@
                             <!-- Phase 8: Week 34 (100.0%) - PILOT TARGET -->
                             <div class="roadmap-phase-node" style="left: 100%;" tabindex="0">
                                 <div class="node-content-top">
-                                    <span class="node-date">Dec 01</span>
+                                    <span class="node-date">Dec 22</span>
                                 </div>
                                 <div class="node-pin">🚀</div>
                                 <div class="node-content-bottom">

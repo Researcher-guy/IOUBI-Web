@@ -181,7 +181,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const salaryTierInfo = document.getElementById('salary-tier-info');
 
     const inputTxAmount = document.getElementById('input-tx-amount');
+    const sliderTxAmount = document.getElementById('slider-tx-amount');
     const txTimeEquiv = document.getElementById('tx-time-equiv');
+
+    const resFeeAmount = document.getElementById('res-fee-amount');
+    const resNetAmount = document.getElementById('res-net-amount');
+    const resTimeCost = document.getElementById('res-time-cost');
+
+    const poolUbi = document.getElementById('pool-ubi') || document.getElementById('pool-dividend');
+    const poolUbiTime = document.getElementById('pool-ubi-time') || document.getElementById('pool-dividend-time');
+    const poolSocial = document.getElementById('pool-social') || document.getElementById('pool-public');
+    const poolSocialTime = document.getElementById('pool-social-time') || document.getElementById('pool-public-time');
+    const poolGov = document.getElementById('pool-gov');
+    const poolGovTime = document.getElementById('pool-gov-time');
 
     const tblPaid = document.getElementById('tbl-paid');
     const tblPaidTime = document.getElementById('tbl-paid-time');
@@ -196,8 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const tblUbiTime = document.getElementById('tbl-ubi-time');
     const tblSocial = document.getElementById('tbl-social');
     const tblSocialTime = document.getElementById('tbl-social-time');
-    const tblGov = document.getElementById('tbl-gov');
-    const tblGovTime = document.getElementById('tbl-gov-time');
 
     const MIN_LOG_RATE = Math.log10(0.041667); // -1.3802
     const MAX_LOG_RATE = Math.log10(10000);    // 4.0
@@ -254,16 +264,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Transaction payment calculation
         const txAmount = Math.max(0, parseFloat(inputTxAmount ? inputTxAmount.value : 50) || 0);
-        const txHours = txAmount / convRate;
+        const txHours = convRate > 0 ? txAmount / convRate : 0;
         if (txTimeEquiv) txTimeEquiv.textContent = formatSmartDuration(txHours);
 
         const feeAmount = txAmount * (avgFeePct / 100);
-        const receivedAmount = txAmount - feeAmount;
+        const receivedAmount = Math.max(0, txAmount - feeAmount);
 
-        const feeHours = feeAmount / convRate;
-        const receivedHours = receivedAmount / convRate;
+        const feeHours = convRate > 0 ? feeAmount / convRate : 0;
+        const receivedHours = convRate > 0 ? receivedAmount / convRate : 0;
 
-        // Transaction settlement row displays with comma separators
+        // Primary Breakdown Result Items
+        if (resFeeAmount) resFeeAmount.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(feeAmount, 2)}`;
+        if (resNetAmount) resNetAmount.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(receivedAmount, 2)}`;
+        if (resTimeCost) resTimeCost.textContent = formatSmartDuration(feeHours);
+
+        // Transaction settlement row displays with comma separators (backward compatibility)
         if (tblPaid) tblPaid.textContent = formatNumberWithCommas(txAmount, 3);
         if (tblPaidTime) tblPaidTime.textContent = formatSmartDuration(txHours);
 
@@ -287,22 +302,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tblSocial) tblSocial.textContent = formatNumberWithCommas(publicGoodsFee, 3);
         if (tblSocialTime) tblSocialTime.textContent = formatSmartDuration(publicGoodsFee / convRate);
 
-        if (tblGov) tblGov.textContent = formatNumberWithCommas(govFee, 3);
-        if (tblGovTime) tblGovTime.textContent = formatSmartDuration(govFee / convRate);
-
         // Deep Dive Pool Cards
-        const poolDividend = document.getElementById('pool-dividend');
-        const poolDividendTime = document.getElementById('pool-dividend-time');
-        const poolPublic = document.getElementById('pool-public');
-        const poolPublicTime = document.getElementById('pool-public-time');
-        const poolGov = document.getElementById('pool-gov');
-        const poolGovTime = document.getElementById('pool-gov-time');
+        if (poolUbi) poolUbi.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(ubiFee, 3)}`;
+        if (poolUbiTime) poolUbiTime.textContent = `${formatSmartDuration(ubiFee / convRate)} of work`;
 
-        if (poolDividend) poolDividend.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(ubiFee, 3)}`;
-        if (poolDividendTime) poolDividendTime.textContent = `${formatSmartDuration(ubiFee / convRate)} of work`;
-
-        if (poolPublic) poolPublic.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(publicGoodsFee, 3)}`;
-        if (poolPublicTime) poolPublicTime.textContent = `${formatSmartDuration(publicGoodsFee / convRate)} of work`;
+        if (poolSocial) poolSocial.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(publicGoodsFee, 3)}`;
+        if (poolSocialTime) poolSocialTime.textContent = `${formatSmartDuration(publicGoodsFee / convRate)} of work`;
 
         if (poolGov) poolGov.innerHTML = `<span class="deltar-font">&#xE002;</span>${formatNumberWithCommas(govFee, 3)}`;
         if (poolGovTime) poolGovTime.textContent = `${formatSmartDuration(govFee / convRate)} of work`;
@@ -357,7 +362,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (inputTxAmount) {
+    // Bidirectional sync for Transaction Size
+    if (inputTxAmount && sliderTxAmount) {
+        ['input', 'change'].forEach(evt => {
+            inputTxAmount.addEventListener(evt, () => {
+                let val = parseFloat(inputTxAmount.value);
+                if (isNaN(val) || val < 0) val = 0;
+                sliderTxAmount.value = val;
+                calculatePerZero();
+            });
+            sliderTxAmount.addEventListener(evt, () => {
+                inputTxAmount.value = sliderTxAmount.value;
+                calculatePerZero();
+            });
+        });
+    } else if (inputTxAmount) {
         ['input', 'change'].forEach(evt => {
             inputTxAmount.addEventListener(evt, () => {
                 if (parseFloat(inputTxAmount.value) < 0) inputTxAmount.value = 0;
@@ -656,7 +675,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 3. Personal Credit Limit (PCL) Calculation
-        const PCL = (baseCL * R) + (baseCL * trendMultiplier * activity);
+        // Formula: PCL = BaseCL * (1 + Regional_COL + Transaction_Count + Balance_Trend)
+        const PCL = baseCL * (1 + R + activity + trendMultiplier);
         const dailySCLRate = PCL / 365;
 
         // Dynamic max on Accumulated Unused SCL Balance (double the PCL currently shown)
@@ -759,7 +779,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Tier 1 Summary Cards & Active PCL Formula (Concise, no leading prefix)
         if (outPCL) outPCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(PCL).toLocaleString()}`;
         if (outPCLFormula) {
-            outPCLFormula.textContent = `(${Math.round(baseCL).toLocaleString()} × ${R.toFixed(1)}) + (${Math.round(baseCL).toLocaleString()} × ${trendMultiplier.toFixed(1)} × ${activity.toFixed(1)})`;
+            outPCLFormula.textContent = `${Math.round(baseCL).toLocaleString()} × (1 + ${R.toFixed(1)} + ${activity.toFixed(1)} + ${trendMultiplier.toFixed(1)})`;
         }
         if (outSCLRate) outSCLRate.innerHTML = `<span class="deltar-font">&#xE002;</span>${dailySCLRate.toFixed(1)}/day`;
         if (outAvailSCL) outAvailSCL.innerHTML = `<span class="deltar-font">&#xE002;</span>${Math.round(unusedSCL).toLocaleString()}`;
@@ -1373,6 +1393,43 @@ document.addEventListener('DOMContentLoaded', () => {
     syncMpPair(mpElements.baseclSlider, mpElements.baseclInput, mpElements.baseclVal, v => `<span class="deltar-font">&#xE002;</span>${Math.round(v).toLocaleString()}`);
     syncMpPair(mpElements.regionalSlider, mpElements.regionalInput, mpElements.regionalVal, v => `${v.toFixed(1)}x`);
     syncMpPair(mpElements.txSlider, mpElements.txInput, mpElements.txVal, v => `${v.toFixed(1)}x`);
+
+    // "Max Qualified For" button calculation
+    const btnMpMaxQualified = document.getElementById('btn-mp-max-qualified');
+    if (btnMpMaxQualified) {
+        btnMpMaxQualified.addEventListener('click', () => {
+            const savings_usd = parseFloat(mpElements.savingsSlider ? mpElements.savingsSlider.value : 0) || 0;
+            const income_monthly = parseFloat(mpElements.incomeSlider ? mpElements.incomeSlider.value : 3000) || 0;
+            const expenses_living = parseFloat(mpElements.expensesSlider ? mpElements.expensesSlider.value : 500) || 0;
+            const pcl_gift = parseFloat(mpElements.pclGiftSlider ? mpElements.pclGiftSlider.value : 0) || 0;
+            const base_cl = parseFloat(mpElements.baseclSlider ? mpElements.baseclSlider.value : 3000) || 3000;
+            const regional_factor = parseFloat(mpElements.regionalSlider ? mpElements.regionalSlider.value : 1.2) || 1.2;
+            const tx_factor = parseFloat(mpElements.txSlider ? mpElements.txSlider.value : 2.0) || 2.0;
+
+            const fixedMultiplier = 1 + regional_factor + tx_factor;
+            const monthlySurplus = Math.max(0, income_monthly - expenses_living);
+            const dailyOrganicTrend = monthlySurplus / 30;
+
+            // Sustainable organic ongoing credit capacity
+            const organicSteadyPCLMagnitude = (base_cl * (fixedMultiplier + dailyOrganicTrend)) + pcl_gift;
+
+            // Maximum asset purchase size: cash savings + maximum sustainable zero-interest overdraft line
+            const maxQualified = Math.max(1, Math.round(savings_usd + organicSteadyPCLMagnitude));
+
+            if (mpElements.priceSlider && mpElements.priceInput) {
+                if (maxQualified > parseFloat(mpElements.priceSlider.max)) {
+                    mpElements.priceSlider.max = Math.max(1500000, Math.ceil(maxQualified / 50000) * 50000);
+                    mpElements.priceInput.max = mpElements.priceSlider.max;
+                }
+                mpElements.priceSlider.value = maxQualified;
+                mpElements.priceInput.value = maxQualified;
+                if (mpElements.priceVal) {
+                    mpElements.priceVal.innerHTML = `<span class="deltar-font">&#xE002;</span>${maxQualified.toLocaleString()}`;
+                }
+                calculateMajorPurchase();
+            }
+        });
+    }
 
     // Advanced accordion toggle
     if (mpElements.btnToggleAdvanced && mpElements.advancedDrawer) {
@@ -2088,20 +2145,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Project Start: April 7, 2026
         const projectStartDate = new Date(2026, 3, 7);
-        const now = new Date(); // Current date (2026-08-14)
+        const now = new Date(); // Current date
         const totalWeeks = 34;
         const totalWorkdays = totalWeeks * 5; // 170 workdays
 
-        // Calculate elapsed calendar days
+        // Account for 3-week (22-calendar-day) development delay between Phase 4 and Phase 5
+        const delayCalendarDays = 22;
+
+        // Calculate elapsed calendar days accounting for 3-week delay
         const diffTime = now.getTime() - projectStartDate.getTime();
-        const elapsedCalendarDays = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+        const rawCalendarDays = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+        const elapsedCalendarDays = Math.max(0, rawCalendarDays - delayCalendarDays);
 
         // Convert calendar days to working days (5 working days per 7 calendar days)
         const elapsedFullWeeks = Math.floor(elapsedCalendarDays / 7);
         const remainingDays = elapsedCalendarDays % 7;
         const elapsedWorkdays = (elapsedFullWeeks * 5) + Math.min(5, remainingDays);
 
-        // Progress percentage & current week
+        // Progress percentage & current week (Day 1 of Week 19 => 53.5%, Week 19)
         const progressPct = Math.min(100, Math.max(0, (elapsedWorkdays / totalWorkdays) * 100));
         const currentWeekNum = Math.min(totalWeeks, Math.max(1, Math.floor(elapsedCalendarDays / 7) + 1));
 
