@@ -1908,6 +1908,95 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
+    // 7b. Future Expansion Projects Dropdown & Sub-Topic Controller
+    // ----------------------------------------------------------------------
+    const expansionDropdownBtn = document.getElementById('expansion-dropdown-btn');
+    const expansionDropdown = document.getElementById('expansion-dropdown');
+    const expansionDropdownMenu = document.getElementById('expansion-dropdown-menu');
+
+    if (expansionDropdownBtn && expansionDropdown) {
+        expansionDropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = expansionDropdown.classList.contains('open');
+            if (isOpen) {
+                expansionDropdown.classList.remove('open');
+                expansionDropdownBtn.setAttribute('aria-expanded', 'false');
+            } else {
+                expansionDropdown.classList.add('open');
+                expansionDropdownBtn.setAttribute('aria-expanded', 'true');
+            }
+            switchView('view-expansion', 'expansion-jury');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!expansionDropdown.contains(e.target)) {
+                expansionDropdown.classList.remove('open');
+                expansionDropdownBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close dropdown when selecting an item
+        if (expansionDropdownMenu) {
+            expansionDropdownMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    expansionDropdown.classList.remove('open');
+                    expansionDropdownBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+    }
+
+    /**
+     * Future Expansion Projects Sub-Topic Switcher:
+     * Pre-rendered DOM: Only the selected sub-topic section is visible (display: block);
+     * the other 3 remain hidden (display: none / hidden attribute) with instantaneous switching.
+     */
+    function switchExpansionSub(targetSubId) {
+        if (!targetSubId) targetSubId = 'expansion-jury';
+        let normId = targetSubId;
+        if (targetSubId === 'jury' || targetSubId === 'peer-jury' || targetSubId === 'insurance-grant-peer-jury') normId = 'expansion-jury';
+        if (targetSubId === 'receipts' || targetSubId === 'receipt-revolution' || targetSubId === 'the-receipt-revolution') normId = 'expansion-receipts';
+        if (targetSubId === 'vault' || targetSubId === 'sovereign-vault' || targetSubId === 'the-sovereign-data-vault') normId = 'expansion-vault';
+        if (targetSubId === 'forum' || targetSubId === 'world-forum' || targetSubId === 'the-world-forum') normId = 'expansion-forum';
+
+        // 1. Toggle visibility of the 4 sub-topic panels
+        document.querySelectorAll('.expansion-panel').forEach(panel => {
+            if (panel.id === normId) {
+                panel.style.display = 'block';
+                panel.classList.add('active-expansion');
+                panel.removeAttribute('hidden');
+            } else {
+                panel.style.display = 'none';
+                panel.classList.remove('active-expansion');
+                panel.setAttribute('hidden', '');
+            }
+        });
+
+        // 2. Update persistent in-view navigation pills
+        document.querySelectorAll('.expansion-nav-pill').forEach(pill => {
+            const pillTarget = pill.getAttribute('data-expansion-target');
+            if (pillTarget === normId) {
+                pill.classList.add('active');
+            } else {
+                pill.classList.remove('active');
+            }
+        });
+
+        // 3. Update dropdown items
+        if (expansionDropdownMenu) {
+            expansionDropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+                const itemSub = item.getAttribute('data-target-sub');
+                if (itemSub === normId) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    // ----------------------------------------------------------------------
     // 8. Simulator View Isolation & Master Router (Single-DOM Tab Architecture)
     // ----------------------------------------------------------------------
     const viewRoutes = {
@@ -1935,6 +2024,20 @@ document.addEventListener('DOMContentLoaded', () => {
         '#major-purchase-card': { view: 'view-simulators', anchor: 'major-purchase-card' },
         '/simulators/major-purchase': { view: 'view-simulators', anchor: 'major-purchase-card' },
         '#/simulators/major-purchase': { view: 'view-simulators', anchor: 'major-purchase-card' },
+        '#expansion': { view: 'view-expansion', anchor: 'expansion-jury' },
+        '#future-expansion': { view: 'view-expansion', anchor: 'expansion-jury' },
+        '#future-expansion-projects': { view: 'view-expansion', anchor: 'expansion-jury' },
+        '#expansion-jury': { view: 'view-expansion', anchor: 'expansion-jury' },
+        '#insurance-grant-peer-jury': { view: 'view-expansion', anchor: 'expansion-jury' },
+        '#expansion-receipts': { view: 'view-expansion', anchor: 'expansion-receipts' },
+        '#receipt-revolution': { view: 'view-expansion', anchor: 'expansion-receipts' },
+        '#the-receipt-revolution': { view: 'view-expansion', anchor: 'expansion-receipts' },
+        '#expansion-vault': { view: 'view-expansion', anchor: 'expansion-vault' },
+        '#sovereign-data-vault': { view: 'view-expansion', anchor: 'expansion-vault' },
+        '#the-sovereign-data-vault': { view: 'view-expansion', anchor: 'expansion-vault' },
+        '#expansion-forum': { view: 'view-expansion', anchor: 'expansion-forum' },
+        '#world-forum': { view: 'view-expansion', anchor: 'expansion-forum' },
+        '#the-world-forum': { view: 'view-expansion', anchor: 'expansion-forum' },
         '#docs': { view: 'view-docs', anchor: null },
         '#faq': { view: 'view-faq', anchor: null },
         '#roadmap': { view: 'view-roadmap', anchor: null }
@@ -2031,13 +2134,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 4. If inside simulators view, enforce simulator isolation
+        // 4. Highlight Future Expansion Projects dropdown toggle if inside expansion view
+        if (expansionDropdownBtn) {
+            if (targetViewId === 'view-expansion') {
+                expansionDropdownBtn.classList.add('active');
+            } else {
+                expansionDropdownBtn.classList.remove('active');
+            }
+        }
+
+        // 5. If inside simulators view, enforce simulator isolation
         if (targetViewId === 'view-simulators') {
             const simId = targetAnchorId || 'macro-balance-engine';
             switchSimulator(simId);
         }
 
-        // 5. Smooth scrolling
+        // 6. If inside expansion view, enforce sub-topic isolation
+        if (targetViewId === 'view-expansion') {
+            const subId = targetAnchorId || 'expansion-jury';
+            switchExpansionSub(subId);
+        }
+
+        // 7. Smooth scrolling
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -2055,6 +2173,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 route = viewRoutes['#fee-calc-card'];
             } else if (hash.includes('macro-economy') || path.includes('macro-economy') || hash.includes('macro-balance-engine')) {
                 route = viewRoutes['#macro-balance-engine'];
+            } else if (hash.includes('expansion-receipts') || hash.includes('receipt-revolution')) {
+                route = viewRoutes['#expansion-receipts'];
+            } else if (hash.includes('expansion-vault') || hash.includes('sovereign-data-vault')) {
+                route = viewRoutes['#expansion-vault'];
+            } else if (hash.includes('expansion-forum') || hash.includes('world-forum')) {
+                route = viewRoutes['#expansion-forum'];
+            } else if (hash.includes('expansion') || hash.includes('future-expansion') || hash.includes('peer-jury')) {
+                route = viewRoutes['#expansion-jury'];
             }
         }
 
@@ -2064,11 +2190,12 @@ document.addEventListener('DOMContentLoaded', () => {
         switchView(route.view, route.anchor);
     }
 
-    // Attach click listeners to all tab links and simulator pills
-    document.querySelectorAll('.nav-tab-link, .sim-nav-pill').forEach(link => {
+    // Attach click listeners to all tab links, simulator pills, and expansion pills
+    document.querySelectorAll('.nav-tab-link, .sim-nav-pill, .expansion-nav-pill').forEach(link => {
         link.addEventListener('click', (e) => {
             const targetView = link.getAttribute('data-target-view');
-            const targetAnchor = link.getAttribute('data-target-anchor') || link.getAttribute('data-sim-target');
+            const targetSub = link.getAttribute('data-target-sub');
+            const targetAnchor = link.getAttribute('data-target-anchor') || link.getAttribute('data-sim-target') || targetSub;
             const href = link.getAttribute('href');
 
             if (link.classList.contains('sim-nav-pill')) {
@@ -2077,6 +2204,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 switchSimulator(simId);
                 const pushHash = simId === 'major-purchase-card' ? '#major-purchase' : '#' + simId;
                 window.history.pushState(null, '', pushHash);
+                return;
+            }
+
+            if (link.classList.contains('expansion-nav-pill')) {
+                e.preventDefault();
+                const subId = link.getAttribute('data-expansion-target') || 'expansion-jury';
+                switchExpansionSub(subId);
+                window.history.pushState(null, '', '#' + subId);
                 return;
             }
 
