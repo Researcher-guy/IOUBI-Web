@@ -2327,7 +2327,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const navStatusBadge = document.getElementById('nav-status-badge');
         if (navStatusBadge) {
-            navStatusBadge.innerHTML = `<span class="pulse-dot"></span> 2026 Core: ${progressPct.toFixed(1)}% | Week ${currentWeekNum}`;
+            navStatusBadge.innerHTML = `<span class="pulse-dot"></span> Research & Architecture: ${progressPct.toFixed(1)}% | Week ${currentWeekNum}`;
         }
 
         const barFill = document.querySelector('.roadmap-timeline-bar-fill');
